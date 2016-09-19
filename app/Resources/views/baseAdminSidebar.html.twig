@@ -1,0 +1,41 @@
+{% set active = 'active' %}
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+{#            <li class="header">MAIN NAVIGATION</li>#}
+            <li class="{% if app.request.get('_route') == 'yon_user_homepage' %}active{% endif %} treeview">
+                <a href="{{ path('yon_user_homepage') }}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="treeview {% if menuUsers is defined %}{{ active }}{% endif %}">
+                <a href="#">
+                    <i class="fa fa-bell"></i>
+                    <span>Users</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if menuUsersAll is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('yon_user_homepage') }}"><i class="fa fa-circle-o"></i> All Users</a>
+                    </li>
+                    <li class="{% if menuUsersIntern is defined %}{{ active }}{% endif %}">
+                        <a href="#"><i class="fa fa-circle-o"></i> Administrateur interne à YoN</a>
+                    </li>
+                    <li class="{% if menuUsersExtern is defined %}{{ active }}{% endif %}">
+                        <a href="#"><i class="fa fa-circle-o"></i> Administrateur externe à YoN</a>
+                    </li>
+                    <li class="{% if menuUsersCommercial is defined %}{{ active }}{% endif %}">
+                        <a href="#"><i class="fa fa-circle-o"></i> Partenaire commercial</a>
+                    </li>
+                    <li class="{% if menuUsersJouer is defined %}{{ active }}{% endif %}">
+                        <a href="#"><i class="fa fa-circle-o"></i> Le joueur.</a>
+                    </li>
+                </ul>
+            </li>
+            
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

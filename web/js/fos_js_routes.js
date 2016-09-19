@@ -1,0 +1,1 @@
+fos.Router.setData({"base_url":"","routes":{"yon_user_login_ajax":{"tokens":[["text","\/login-ajax"]],"defaults":[],"requirements":[],"hosttokens":[]}},"prefix":"","host":"localhost","scheme":"http"});

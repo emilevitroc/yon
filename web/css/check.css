@@ -1,0 +1,16 @@
+.custom-label { display: inline-block; margin-right: 40px; cursor: pointer; position: relative;  font-size: 12px; min-width: 100px; margin-bottom: 4px;  color:#3c3c3c}
+.custom-radio,
+.custom-check { vertical-align: middle; display: inline-block; position: relative; top: -.15em; /* Adjust to for best fit */ margin: 0 10px 0 0; width: 20px; height: 18px; background-repeat:no-repeat; background-position:top center;  }
+.custom-radio { background-position: bottom center; }
+.custom-check.focus { background-position: bottom center; }
+.custom-radio.focus { background-position: bottom center; }
+.custom-check.checked { background-position: bottom center; }
+.custom-radio.checked { background-position: top center; }
+.custom-label input { left: -1px !important; position: absolute; top: 2px !important; visibility: hidden; }
+
+.bleu .custom-check { background-image:url(../images/check-bleu.png);}
+.vert .custom-check { background-image:url(../images/check-vert.png)}
+.noir .custom-check { background-image:url(../images/check-noir.png)}
+.bleugris .custom-check { background-image:url(../images/check-bleugris.png)}
+.violet .custom-check { background-image:url(../images/check-violet.png)}
+.bleu-m .custom-check { background-image:url(../images/check-bleu-m.png)}

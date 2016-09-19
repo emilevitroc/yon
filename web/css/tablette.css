@@ -1,0 +1,92 @@
+ @media screen and (max-width:1199px) {
+.blc-splash { background-image: url(../images/img-splash-1024.jpg); }
+.lst-bottom li:nth-child(2n+2) { padding-left: 40px; }
+.r-tabs .r-tabs-nav .r-tabs-tab { margin-left: -1px; width: 33.1%; display: inline-table; }
+.blc-search .blc-chp .chp { width: 65%; }
+.blc-search .blc-chp .btn-search { width: 27%; background-position: 24px center }
+.blc-search .blc-chp { width: 70% }
+.lst-bottom { padding: 30px 15px }
+.lst-bottom li a::after { right: -20% }
+.blc-rs { width: 100%; min-width: inherit; }
+.blc-contact .contact .blc-lst-contact { width: 100%; }
+.blc-rs li { float: none; height: 88px; margin-bottom: 10px; margin-right: 0; width: 100%; text-align: center }
+.contact a.logo { float: none; height: auto; margin: 0 auto 20px }
+.contact a.logo img { width: auto; margin: 0 auto }
+.lst-contact { min-width: inherit; width: 49%; margin-right: 2% }
+}
+@media screen and (max-width:1023px) {
+.blc-splash { background-image: url(../images/img-splash-700.jpg); }
+.blc-login .wrapper { padding: 60px 30px; }
+/* HEADER */
+.left-col { background-color: #2b3d53; height: 115px; padding: 20px 30px; position: relative; width: 100%; }
+.right-col { margin-left: 0; padding: 20px 30px }
+.logo { display: block; height: auto; left: 0; margin: auto; position: absolute; right: 0; top: 11px; width: 80px; }
+.logo img { width: 100%; }
+.profil-info { float: right; margin: 0; padding: 0 }
+.blc-deconex { float: right; clear: both }
+.blc-deconex li { float: left; }
+.blc-deconex li a { background-color: transparent; color: #fff; padding: 16px 0 10px 8px }
+.blc-deconex li a span { background-position: bottom center }
+.blc-deconex { display: block !important; height: 61px !important }
+.profil-info .name::after { display: none }
+/* MENU */
+.btn-nav-mobile { background: url(../images/nav_mobile.png) no-repeat; color: #fff; cursor: pointer; display: block; font-size: 20px; height: 35px; line-height: 35px; padding-left: 36px; text-transform: uppercase; width: 89px; display: block; float: right; position: relative; margin-right: 5px; }
+.btn-nav-mobile.open { background-position: 0 bottom }
+.blc-menu { float: left; margin-top: -15px; }
+ul.lst-menu { display: none; position: absolute; top: 115px; width: 100%; left: 0; z-index: 5; background-color: #14afff; }
+ul.lst-menu li { border-right: 0; clear: both; display: block; padding: 0; float: none; margin: 0; border-bottom: #fff solid 1px; height: auto }
+ul.lst-menu li.active a { color: #fff }
+ul.lst-menu > li > ul { padding: 0; }
+ul.lst-menu > li a { padding-left: 30px; font-size: 18px; text-align: left; height: auto; line-height: normal; padding: 10px 30px }
+ul.lst-menu li ul { background: #14afff; border-top: 1px solid #fff; opacity: 1; filter: alpha(opacity=100); position: static; visibility: visible; width: 100%; display: none }
+ul.lst-menu > li > ul > li { padding-left: 25px; border-bottom: #fff solid 1px }
+ul.lst-menu > li > ul > li a { color: #444 !important }
+/* END MENU */
+/* END HEADER */
+.legende { max-width: 310px; }
+.lst-bottom li { width: 100%; height: auto; min-height: 30px }
+.chrome .lst-bottom li { height: auto; min-height: 30px }
+.lst-bottom li:nth-child(2n+2) { padding-left: 0; }
+.lst-bottom li:after { display: none }
+.lst-bottom li a { display: block; max-width: none; width: 100%; padding-right: 30px }
+.lst-bottom li a::after { left: auto; right: 0; }
+.custom-label { min-width: inherit !important; margin-right: 13px !important }
+/* END WELCOME */
+
+/* AIRPORT TOP5 */
+.r-tabs .r-tabs-nav .r-tabs-anchor { padding: 10px 5px }
+/* END AIRPORT TOP5 */
+
+/* AIRPORT LATEST MONTH */
+.lat-month .blc-hide .blc-graphe { width: 100%; }
+.blc-search .blc-chp .chp { width: 66% }
+.blc-search .titre { float: none; }
+.blc-search .blc-chp { margin-top: 20px; float: none; width: 100% }
+.blc-search .blc-chp .btn-search { margin-left: 3%; width: 30%; background-position: 44px center }
+.page-int .blc-hide .blc-graphe { width: 100% }
+body.page .cont-section { display: block; height: 100%; position: inherit; width: 100%; }
+.r-tabs .r-tabs-nav .r-tabs-anchor { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+/* AIRPORT LATEST MONTH */
+
+/* COUNTRY MAP */
+.blc-content.map { padding: 38px 30px; }
+.blc-map img { width: 100% }
+/* END COUNTRY MAP */
+
+/* COUNTRY LATEST */
+.page-int.country .blc-hide .blc-table { width: 100%; }
+/* END COUNTRY LATEST */
+
+/* NEWS */
+.lst-publication li .blc-btn { margin-left: 0; }
+.lst-publication li span.date::before { margin-right: 7px; }
+.lst-publication li .s-titre { max-width: 184px; }
+/* END NEWS */
+
+/* CONTACT */
+.contact a.logo { position: inherit; width: auto; }
+.lst-contact { padding: 20px 25px 0 60px; }
+.lst-contact li span { font-size: 16px; }
+/* END CONTACT */
+body.page .cont-section.setting { display: table }
+}

@@ -1,0 +1,14 @@
+yon_user_homepage:
+    path:     /
+    defaults: { _controller: YonUserBundle:User:index }
+yon_bo_logout:
+    path:     /logout
+    defaults: { _controller: YonUserBundle:User:logout }
+yon_user_login:
+    path:     /login
+    defaults: { _controller: YonUserBundle:User:login }
+yon_user_login_ajax:
+    path:     /login-ajax
+    defaults: { _controller: YonUserBundle:User:loginAjax }
+    options:
+        expose: true

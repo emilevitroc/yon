@@ -1,0 +1,3 @@
+yon_user:
+    resource: "@YonUserBundle/Resources/config/routing.yml"
+    prefix:   /

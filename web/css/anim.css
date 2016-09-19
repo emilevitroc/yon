@@ -1,0 +1,24 @@
+@media (min-width:1025px) {
+.btn-bleu,
+.blc-form .txt-info,
+.blc-submit::before,
+.blc-submit::after,
+.btn-jaune,
+.btn-back,
+.lst-menu li a,
+.lst-menu li,
+.lst-menu li a span,
+.blc-deconex li a,
+.blc-deconex li a span,
+.btn,
+.lst-bottom li a:after,
+.lst-bottom li a,
+.lst-contact li a,
+.lst-contact li a:before,
+.blc-rs li a,
+.blc-rs li a i,
+.blc-rs li a span:after ,.btn-delete span, .btn-add a, .lst-compte li a, .lst-compte li a span{ -o-transition: .5s; -ms-transition: .5s; -moz-transition: .5s; -webkit-transition: .5s; transition: .5s }
+/* fade */
+.fadeIn { opacity: 1; transition-delay: .3s; }
+.fadeOut { opacity: 0; }
+}

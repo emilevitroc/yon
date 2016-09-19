@@ -1,0 +1,71 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block title %}{{ parent() }} Users list {% endblock %}
+{% set menuUsers = true %}
+{% set menuUsersAll = true %}
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+        
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Users list</h3>
+
+                    {#<div class="box-tools">
+                        <div style="width: 150px;" class="input-group input-group-sm">
+                            <input type="text" placeholder="Search" class="form-control pull-right" name="table_search">
+
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>#}
+                </div>
+                <!-- /.box-header -->
+   
+                <div class="box-body table-responsive no-padding">
+                    <table id="list-users" class="table  table-bordered table-striped">
+                        <thead >
+                             <tr>
+                                <th>Id</th>
+                                <th>Username</th>
+                                <th>Phone number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if utilisateurs.items|length > 0 %}
+                                {% for utilisateur in utilisateurs.items %}
+                                    <tr>
+                                        <td><a href="#">{{ utilisateur.id }}</a></td>
+                                        <td>{% if utilisateur.username is defined %}{{ utilisateur.username }}{% endif %}</td>
+                                        <td>{% if utilisateur.phone_number is defined %}{{ utilisateur.phone_number }}{% endif %}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+              {#  <div class="box-footer">
+                    <a class="btn btn-primary" href="#">Create a new entry</a>
+                    <a class="btn btn-success" href="#">Export to csv/excel</a>
+                </div>     #}   
+               
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">                
+            $('#list-users').DataTable();
+	</script>
+{% endblock %}

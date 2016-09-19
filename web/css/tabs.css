@@ -1,0 +1,15 @@
+.r-tabs .r-tabs-nav { margin: 0; padding: 0; border-bottom: 2px solid #dad9d9; white-space:nowrap }
+.r-tabs .r-tabs-tab { display: inline-block; margin: 0; list-style: none; }
+.r-tabs .r-tabs-panel { display: none; }
+.r-tabs .r-tabs-accordion-title { display: none; }
+.r-tabs .r-tabs-panel.r-tabs-state-active { display: block; }
+
+
+/* Accordion responsive breakpoint */
+@media only screen and (max-width: 767px) {
+.r-tabs .r-tabs-nav { display: none; }
+.r-tabs .r-tabs-accordion-title { display: block; border-bottom: #dad9d9 solid 2px; position: relative }
+.r-tabs .r-tabs-accordion-title a{ position:relative}
+.r-tabs .r-tabs-accordion-title a:after { content: ''; background: url(../images/picto-plus.png) no-repeat top right; width: 27px; height: 27px; display: block; position: absolute; right: 20px; top: 0; bottom:0; margin:auto }
+.r-tabs-accordion-title.r-tabs-state-active a:after { background-position: bottom right; }
+}
