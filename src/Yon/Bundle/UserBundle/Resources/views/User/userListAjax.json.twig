@@ -1,0 +1,25 @@
+{% spaceless %}
+    {% set aaData = {} %}
+    {% for apiuser in values %}
+        {% 
+        set value = [ 
+            apiuser.id,
+            apiuser.user.username,
+            apiuser.phoneNumber,
+            apiuser.rank,
+            apiuser.challengesCount,
+            apiuser.followersCount,
+            apiuser.followingsCount,
+            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Voir</button></a>' ~ 
+            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>' ~ 
+            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Désactiver</button></a>' ~ 
+            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Bannir</button></a>' ~ 
+            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Voir les paris</button></a>'
+        ]
+        %}
+        
+        {% set aaData = aaData|merge({ (loop.index0): value }) %}
+    {% endfor %}
+{% endspaceless %}
+{% set data = data|merge({ 'aaData': aaData} ) %}
+{{ data|json_encode|raw }}

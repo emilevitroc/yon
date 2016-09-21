@@ -12,3 +12,8 @@ yon_user_login_ajax:
     defaults: { _controller: YonUserBundle:User:loginAjax }
     options:
         expose: true
+yon_user_list_ajax:
+    path:   /user/list-ajax
+    defaults: { _controller: "YonUserBundle:User:userListAjax" }
+    options:
+        expose: true

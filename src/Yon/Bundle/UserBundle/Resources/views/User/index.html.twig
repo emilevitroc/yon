@@ -1,7 +1,18 @@
 {% extends 'baseAdmin.html.twig' %}
-{% block title %}{{ parent() }} Users list {% endblock %}
+{% block title %}{{ parent() }} Utillisateurs {% endblock %}
 {% set menuUsers = true %}
 {% set menuUsersAll = true %}
+{% block stylesheets %}
+    {{ parent() }}
+<style type="text/css">
+    #list-users_length, #list-users_filter {
+        margin: 10px;
+    }
+    .btn-mini-rectif{
+        margin-right: 5px;
+    }
+</style>
+{% endblock %}
 {% block body %}
     {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="callout callout-success">
@@ -18,7 +29,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Users list</h3>
+                    <h3 class="box-title">Utillisateurs</h3>
 
                     {#<div class="box-tools">
                         <div style="width: 150px;" class="input-group input-group-sm">
@@ -38,11 +49,16 @@
                              <tr>
                                 <th>Id</th>
                                 <th>Username</th>
-                                <th>Phone number</th>
+                                <th>Tél n°</th>
+                                <th>Rang</th>
+                                <th>Nb challenges</th>
+                                <th>Nb suiveurs</th>
+                                <th>Nb suivants</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% if utilisateurs.items|length > 0 %}
+                           {# {% if utilisateurs.items|length > 0 %}
                                 {% for utilisateur in utilisateurs.items %}
                                     <tr>
                                         <td><a href="#">{{ utilisateur.id }}</a></td>
@@ -50,7 +66,7 @@
                                         <td>{% if utilisateur.phone_number is defined %}{{ utilisateur.phone_number }}{% endif %}</td>
                                     </tr>
                                 {% endfor %}
-                            {% endif %}
+                            {% endif %}#}
                         </tbody>
                     </table>
                 </div>
@@ -65,7 +81,21 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-	<script type="text/javascript">                
-            $('#list-users').DataTable();
+	<script type="text/javascript">
+            $(function () {
+                $('#list-users').DataTable(
+                {
+                    "aoColumns": [{"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": false}],
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "bFilter": true,
+                    "sDom": '<""lf><"H"p>rt<"F"p>',
+                    "sAjaxSource": "{{ path('yon_user_list_ajax') }}",
+                    "oLanguage": {
+                        "sProcessing": "traitement..."
+                    }
+                });
+            });
+            
 	</script>
 {% endblock %}
