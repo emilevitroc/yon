@@ -17,3 +17,7 @@ yon_user_list_ajax:
     defaults: { _controller: "YonUserBundle:User:userListAjax" }
     options:
         expose: true
+yon_user_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "YonUserBundle:User:edit" }
+    methods:  [GET, POST]

@@ -7,9 +7,57 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Yon\Bundle\UserBundle\Entity\ApiUserprofile;
 
 class UserController extends Controller
 {
+    
+    public function editAction(Request $request, ApiUserprofile $utilisateur)
+    {
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $post_data = array(
+            'token' => $session->get ( 'yon_token')
+        );
+        $tBreadcrumbs = array();
+        $oBreadcrumb = new \stdClass();
+        $oBreadcrumb->label= 'Utilisateur';
+        $oBreadcrumb->href = '';
+        $tBreadcrumbs[] = $oBreadcrumb;
+        
+//        //get User by WS
+//        $userUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('users').'/'.$id ;
+//        
+//        $curlService = $this->get('yon_user.data');
+//        
+//        $result = $curlService->curlGet($userUrl, $post_data);
+//        $utilisateur = json_decode($result);
+        
+        if ($request->isMethod("POST")) {
+            $data = $request->request->all();
+            $utilisateur->setLocale($data['locale']);
+            $utilisateur->setType($data['type']);
+            $utilisateur->getUser()->setFirstName($data['name']);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($utilisateur);
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', sprintf('Utilisateur a été bien modifié!.'));
+            return $this->redirectToRoute('yon_user_edit', array('id' => $utilisateur->getId()));
+        }
+
+        return $this->render('YonUserBundle:User:edit.html.twig', array(
+            'utilisateur' => $utilisateur,
+            'tBreadcrumbs' => $tBreadcrumbs,
+            'tType' => \Yon\Bundle\UserBundle\Entity\ApiUserprofile::$USER_TYPE
+        ));
+    }
+    
     public function indexAction(Request $request)
     {
         $session = $request->getSession ();
@@ -48,6 +96,7 @@ class UserController extends Controller
             'u.challengesCount',
             'u.followersCount',
             'u.followingsCount',
+            'u.type',
         ));
 //        $customerUid = $request->get('cust');
         

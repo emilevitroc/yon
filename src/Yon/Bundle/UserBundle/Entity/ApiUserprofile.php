@@ -12,6 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ApiUserprofile
 {
+    static $USER_TYPE = array (
+                    0 => 'Joueur',
+                    1 => 'Super Administrateur',
+                    2 => 'Admin Interne',
+                    3 => 'Admin Externe',
+                    4 => 'Partenaire Commercial',
+    );
+    
     /**
      * @var integer
      *
@@ -132,11 +140,18 @@ class ApiUserprofile
      * @ORM\Column(name="state", type="smallint", nullable=false)
      */
     private $state;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="smallint", nullable=false)
+     */
+    private $type = 0;
 
     /**
      * @var \AuthUser
      *
-     * @ORM\ManyToOne(targetEntity="AuthUser")
+     * @ORM\ManyToOne(targetEntity="AuthUser", cascade ={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -521,6 +536,39 @@ class ApiUserprofile
     public function getState()
     {
         return $this->state;
+    }
+    
+    /**
+     * Set type
+     *
+     * @param integer $type
+     * @return ApiUserprofile
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+    
+    /**
+    * Get status
+    *
+    * @return interger
+    */
+    public function getTypeString() {
+
+        return self::$USER_TYPE[$this->type];
     }
 
     /**
