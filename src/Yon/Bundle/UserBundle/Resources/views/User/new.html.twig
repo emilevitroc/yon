@@ -1,0 +1,118 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block title %}{{ parent() }} Ajout Utilisateur {% endblock %}
+{% set menuUsers = true %}
+{% set menuUsersCreate = true %}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <form role="form" class="form-edit-new form-horizontal" method="POST" action="" id="create-new-user">
+
+                    <div class="box-header">
+                        <h3 class="box-title">Ajout Utilisateur</h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div id="utilisateurs">
+                            <div class="form-groups">
+                                <label for="name" class="col-sm-2 control-label required">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"  name="name" id="utilisateurs_name" value="">
+                                </div>
+                            </div>
+                            <div class="form-groups">
+                                <label for="name" class="col-sm-2 control-label required">Username</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"  name="username" id="utilisateurs_username" value="">
+                                </div>
+                            </div>
+                            <div class="form-groups">
+                                <label for="password" class="col-sm-2 control-label required">Mot de passe</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"  name="password" id="utilisateurs_password" value="">
+                                </div>
+                            </div>
+                            <div class="form-groups">
+                                <label for="utilisateurs_phone_number" class="col-sm-2 control-label required">Tél n°</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"  name="phone_number" id="utilisateurs_phone_number" value="">
+                                </div>
+                            </div>
+                            {#<div class="form-groups">
+                                <label for="conf_password" class="col-sm-2 control-label required">Mot de passe</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"  name="conf_password" id="utilisateurs_conf_password" value="">
+                                </div>
+                            </div>#}
+                            <div class="form-groups">
+                                <label for="utilisateurs_locale" class="col-sm-2 control-label required">Langue</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="locale" id="utilisateurs_locale">
+                                        <option value="en">Anglais</option>
+                                        <option value="fr">Français</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-groups">
+                                <label for="utilisateurs_type" class="col-sm-2 control-label required">Type</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" required="required" name="type" id="utilisateur_type">
+                                        {% for key,type in tType %}
+                                            <option value="{{ key }}" {% if utilisateur.type is defined and key == utilisateur.type %}selected="selected"{% endif %}>{{ type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                                 
+                        </div>
+                    </div>
+
+                    <div class="box-footer">
+                        <input type="button" value="Créer" class="btn btn-primary" id="btn-submit-create-new-user">
+                        <a class="btn btn-default pull-left" href="{{ path('yon_user_homepage') }}">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">
+            $(function () {
+                $("#btn-submit-create-new-user").click(function(event){
+                    event.preventDefault();
+                    $('input.error').removeClass('error');
+                    if ($("#utilisateurs_username").val() == "") {
+                        $("#utilisateurs_username").addClass('error').focus();
+                        return false;
+                    }
+                    if ($("#utilisateurs_phone_number").val() == "") {
+                        $("#utilisateurs_phone_number").addClass('error').focus();
+                        return false;
+                    }
+                    if ($("#utilisateurs_password").val() == "") {
+                        $("#utilisateurs_password").addClass('error').focus();
+                        return false;
+                    }
+                    
+                    $('#create-new-user').unbind('submit');
+                    $('#create-new-user').submit()
+                    
+                });
+            });
+            
+	</script>
+{% endblock %}

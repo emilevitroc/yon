@@ -1,5 +1,5 @@
 {% extends 'baseAdmin.html.twig' %}
-{% block title %}{{ parent() }} Edit User {% endblock %}
+{% block title %}{{ parent() }} Modification Utilisateur {% endblock %}
 {% set menuUsers = true %}
 
 {% block body %}
@@ -25,6 +25,12 @@
                     <div class="box-body">
                         <div id="utilisateurs">
                             <div class="form-groups">
+                                <label for="name" class="col-sm-2 control-label required">Username</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"  name="name" id="utilisateurs_username" value="{% if utilisateur.user is defined %} {{ utilisateur.user.firstName }}{% endif %}">
+                                </div>
+                            </div>
+                            <div class="form-groups">
                                 <label for="name" class="col-sm-2 control-label required">Name</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control"  name="name" id="utilisateurs_name" value="{% if utilisateur.user is defined %} {{ utilisateur.user.firstName }}{% endif %}">
@@ -36,6 +42,15 @@
                                     <select class="form-control" name="locale" id="utilisateurs_locale">
                                         <option value="en" {% if 'en' == utilisateur.locale %}selected="selected"{% endif %}>Anglais</option>
                                         <option value="fr" {% if 'fr' == utilisateur.locale %}selected="selected"{% endif %}>Français</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-groups">
+                                <label for="utilisateurs_star" class="col-sm-2 control-label required">Star</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="star" id="utilisateurs_star">
+                                        <option value="0" {% if 0 == utilisateur.star %}selected="selected"{% endif %}>Non</option>
+                                        <option value="1" {% if 1 == utilisateur.star %}selected="selected"{% endif %}>Oui</option>
                                     </select>
                                 </div>
                             </div>

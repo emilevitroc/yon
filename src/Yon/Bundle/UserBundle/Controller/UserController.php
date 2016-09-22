@@ -12,6 +12,67 @@ use Yon\Bundle\UserBundle\Entity\ApiUserprofile;
 class UserController extends Controller
 {
     
+    public function newAction(Request $request)
+    {
+        
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        
+        $post_data = array(
+            'token' => $session->get ( 'yon_token')
+        );
+        
+        $tBreadcrumbs = array();
+        $oBreadcrumb = new \stdClass();
+        $oBreadcrumb->label= 'Utilisateur';
+        $oBreadcrumb->href = '';
+        $tBreadcrumbs[] = $oBreadcrumb;
+        
+//        //get User by WS
+//        $userUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('users').'/'.$id ;
+//        
+//        $curlService = $this->get('yon_user.data');
+//        
+//        $result = $curlService->curlGet($userUrl, $post_data);
+//        $utilisateur = json_decode($result);
+        
+        if ($request->isMethod("POST")) {
+            $data = $request->request->all();
+            $connectUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('users') ;
+        
+            $curlService = $this->get('yon_user.data');
+        
+            $result = $curlService->curlPost($connectUrl, $data);
+        
+            
+            $response = json_decode($result);
+            if($response && isset($response->id) && $response->id > 0){
+                $userId = $response->id;
+                $utilisateur = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:ApiUserprofile')->find($userId);
+                
+                $utilisateur->setLocale($data['locale']);
+                $utilisateur->setType($data['type']);
+                $utilisateur->getUser()->setFirstName($data['name']);
+                
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($utilisateur);
+                $em->flush();
+            }
+            
+            $this->get('session')->getFlashBag()->add('success', sprintf('un utilisateur a été enregistré!.'));
+            return $this->redirectToRoute('yon_user_homepage');
+        }
+
+        return $this->render('YonUserBundle:User:new.html.twig', array(
+            'tBreadcrumbs' => $tBreadcrumbs,
+            'tType' => \Yon\Bundle\UserBundle\Entity\ApiUserprofile::$USER_TYPE
+        ));
+    }
+    
     public function editAction(Request $request, ApiUserprofile $utilisateur)
     {
         $session = $request->getSession ();
@@ -40,6 +101,7 @@ class UserController extends Controller
         if ($request->isMethod("POST")) {
             $data = $request->request->all();
             $utilisateur->setLocale($data['locale']);
+            $utilisateur->setStar($data['star']);
             $utilisateur->setType($data['type']);
             $utilisateur->getUser()->setFirstName($data['name']);
             

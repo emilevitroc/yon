@@ -51,9 +51,9 @@
                                 <th>Username</th>
                                 <th>Tél n°</th>
                                 <th>Rang</th>
-                                <th>Nb challenges</th>
-                                <th>Nb suiveurs</th>
-                                <th>Nb suivants</th>
+                                <th>Nb Paris Crées</th>
+                                <th>Nb Followers</th>
+                                <th>Nb Followed</th>
                                 <th>Type</th>
                                 <th>Actions</th>
                             </tr>
@@ -93,7 +93,14 @@
                     "sDom": '<""lf><"H"p>rt<"F"p>',
                     "sAjaxSource": "{{ path('yon_user_list_ajax') }}",
                     "oLanguage": {
-                        "sProcessing": "traitement..."
+                        "sProcessing": "traitement...",
+                        "oPaginate": {
+                            "sPrevious": "Précédante", // This is the link to the previous page
+                            "sNext": "Suivante", // This is the link to the next page
+                        },
+                        "sSearch": "Filtrer: ",
+                        "sLengthMenu": "Afficher _MENU_ enregistrement par page",
+                        
                     }
                 });
             });
