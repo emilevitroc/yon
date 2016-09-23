@@ -56,6 +56,9 @@ class UserController extends Controller
                 
                 $utilisateur->setLocale($data['locale']);
                 $utilisateur->setType($data['type']);
+                $utilisateur->setStar($data['star']);
+                $utilisateur->setBalance($data['balance']);
+                
                 $utilisateur->getUser()->setFirstName($data['name']);
                 
                 $em = $this->getDoctrine()->getManager();
@@ -100,9 +103,13 @@ class UserController extends Controller
         
         if ($request->isMethod("POST")) {
             $data = $request->request->all();
+            $utilisateur->getUser()->setUsername($data['username']);
             $utilisateur->setLocale($data['locale']);
+            $utilisateur->setPhoneNumber(str_replace(' ','',$data['phone_number']));
+            $utilisateur->setBalance($data['balance']);
             $utilisateur->setStar($data['star']);
             $utilisateur->setType($data['type']);
+            $utilisateur->setDisplayUsername($data['name']);
             $utilisateur->getUser()->setFirstName($data['name']);
             
             $em = $this->getDoctrine()->getManager();
@@ -158,6 +165,7 @@ class UserController extends Controller
             'u.challengesCount',
             'u.followersCount',
             'u.followingsCount',
+            'u.balance',
             'u.type',
         ));
 //        $customerUid = $request->get('cust');
