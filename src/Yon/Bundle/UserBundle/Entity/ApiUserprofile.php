@@ -147,6 +147,13 @@ class ApiUserprofile
      * @ORM\Column(name="type", type="smallint", nullable=false)
      */
     private $type = 0;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="to_belong_to_user", type="integer", nullable=true)
+     */
+    private $toBelongToUser;
 
     /**
      * @var \AuthUser
@@ -237,6 +244,28 @@ class ApiUserprofile
     public function getBalance()
     {
         return $this->balance;
+    }
+    /**
+     * Set toBelongToUser
+     *
+     * @param integer $toBelongToUser
+     * @return ApiUserprofile
+     */
+    public function setToBelongToUser($toBelongToUser)
+    {
+        $this->toBelongToUser = $toBelongToUser;
+
+        return $this;
+    }
+
+    /**
+     * Get toBelongToUser
+     *
+     * @return integer 
+     */
+    public function getToBelongToUser()
+    {
+        return $this->toBelongToUser;
     }
 
     /**

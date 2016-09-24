@@ -1,0 +1,1 @@
+ALTER TABLE `api_userprofile` ADD `to_belong_to_user` INT(11) NULL DEFAULT NULL AFTER `type`;

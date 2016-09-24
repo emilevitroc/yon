@@ -17,6 +17,11 @@ yon_user_list_ajax:
     defaults: { _controller: "YonUserBundle:User:userListAjax" }
     options:
         expose: true
+yon_user_autocomplete:
+    path:   /user/autocomplete
+    defaults: { _controller: "YonUserBundle:User:userAutocomplete" }
+    options:
+        expose: true
 yon_user_edit:
     path:     /{id}/edit
     defaults: { _controller: "YonUserBundle:User:edit" }

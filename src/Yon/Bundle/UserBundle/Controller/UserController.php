@@ -59,6 +59,10 @@ class UserController extends Controller
                 $utilisateur->setStar($data['star']);
                 $utilisateur->setBalance($data['balance']);
                 
+                if( (int)$data['to_belong_to_user'] > 0 ){
+                    $utilisateur->setToBelongToUser($data['to_belong_to_user']);
+                }
+                
                 $utilisateur->getUser()->setFirstName($data['name']);
                 
                 $em = $this->getDoctrine()->getManager();
@@ -107,6 +111,9 @@ class UserController extends Controller
             $utilisateur->setLocale($data['locale']);
             $utilisateur->setPhoneNumber(str_replace(' ','',$data['phone_number']));
             $utilisateur->setBalance($data['balance']);
+            if( (int)$data['to_belong_to_user'] > 0 ){
+                $utilisateur->setToBelongToUser($data['to_belong_to_user']);
+            }
             $utilisateur->setStar($data['star']);
             $utilisateur->setType($data['type']);
             $utilisateur->setDisplayUsername($data['name']);
@@ -197,6 +204,40 @@ class UserController extends Controller
         return $response;
     }
     
+    public function userAutocompleteAction(Request $request) {
+
+        $names = array();
+        $term = trim(strip_tags($request->get('term')));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $users = $em->getRepository('YonUserBundle:ApiUserprofile')->createQueryBuilder('u')->join('u.user', 'uh')
+                ->where('u.id = :name OR uh.username like :name OR u.phoneNumber like :name')
+                ->setParameter('name', '%'.$term . '%')->setFirstResult(0)->setMaxResults(10);
+        
+        
+        $users = $users->getQuery();
+        $users = $users->getResult();
+        
+        foreach ($users as $entity) {
+
+            $name = new \stdClass();
+            $name->id = $entity->getId();
+//            $name->value = $entity->getUser()->getUsername() . ' (' . $entity->getPhoneNumber().')';
+            $name->value = $entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';
+            
+//            $name->label = $entity->getUser()->getUsername();
+            $name->label = $entity->getDisplayUsername();
+            $names[] = $name;
+            
+        }
+
+        $response = new JsonResponse();
+        $response->setData($names);
+
+        return $response;
+    }
+
     private function getDataJson($request, $nbTotal, $nbDisplayed, $values, $template)
     {
         $data['sEcho']                = $request->query->get('sEcho');
