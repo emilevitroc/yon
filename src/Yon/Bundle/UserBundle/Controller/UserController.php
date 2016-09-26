@@ -220,14 +220,14 @@ class UserController extends Controller
         $users = $users->getResult();
         
         foreach ($users as $entity) {
-
+            
             $name = new \stdClass();
             $name->id = $entity->getId();
 //            $name->value = $entity->getUser()->getUsername() . ' (' . $entity->getPhoneNumber().')';
-            $name->value = $entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';
+            $name->value = $entity->getId().'-'.$entity->getUser()->getUsername().'-'.$entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';
             
 //            $name->label = $entity->getUser()->getUsername();
-            $name->label = $entity->getDisplayUsername();
+            $name->label = $entity->getId().'-'.$entity->getUser()->getUsername().'-'.$entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';
             $names[] = $name;
             
         }
