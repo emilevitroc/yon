@@ -1,0 +1,71 @@
+{% extends '::baseAdmin.html.twig' %}
+{% form_theme form ':Form:fields.html.twig' %}
+{% block title %}{{ parent() }} Ajout Fonctionnalité {% endblock %}
+{% set menuPrivileges = true %}
+{% set menuFeatureCreate = true %}
+{% block stylesheets %}
+    {{ parent() }}
+	<style>
+            .inputfile {
+                /* visibility: hidden etc. wont work */
+                width: 0.1px;
+                height: 0.1px;
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+                z-index: -1;
+              }
+              .inputfile:focus + label {
+                /* keyboard navigation */
+                outline: 1px dotted #000;
+                outline: -webkit-focus-ring-color auto 5px;
+              }
+              .inputfile + label * {
+                pointer-events: none;
+              }
+              .inputfile-text {
+                    left: 15px;
+                    position: relative;
+                    top: 6px;
+                }
+        </style>
+{% endblock %}
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+                <form action="" {{ form_enctype(form) }} method="POST" class="form-edit-new form-horizontal" role="form">
+
+                    <div class="box-header">
+                        <h3 class="box-title">Ajout Fonctionnalité</h3>
+                    </div>
+                    {{ form_start(form) }}
+                        <div class="box-body">
+                            {{ form_widget(form) }}
+                        </div>
+
+                        <div class="box-footer">
+                            <input type="submit" class="btn btn-primary" value="Créer" />
+                            {{ form_end(form) }}
+                            <a href="{{ path('apifeature_index') }}" class="btn btn-default pull-left" >Retour à la liste</a>
+                        </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

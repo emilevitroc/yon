@@ -1,0 +1,9 @@
+yon_privilege_apimodule:
+    resource: "@YonPrivilegeBundle/Resources/config/routing/apimodule.yml"
+    prefix:   /apimodule
+    
+yon_privilege_apifeature:
+    resource: "@YonPrivilegeBundle/Resources/config/routing/apifeature.yml"
+    prefix:   /apifeature
+
+

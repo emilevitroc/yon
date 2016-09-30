@@ -1,0 +1,72 @@
+{% extends '::baseAdmin.html.twig' %}
+{% form_theme edit_form ':Form:fields.html.twig' %}
+{% block title %}{{ parent() }} Edition Fonctionnalité {% endblock %}
+{% set menuPrivileges = true %}
+{% set menuFeatureList = true %}
+{% block stylesheets %}
+    {{ parent() }}
+	<style>
+            .inputfile {
+                /* visibility: hidden etc. wont work */
+                width: 0.1px;
+                height: 0.1px;
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+                z-index: -1;
+              }
+              .inputfile:focus + label {
+                /* keyboard navigation */
+                outline: 1px dotted #000;
+                outline: -webkit-focus-ring-color auto 5px;
+              }
+              .inputfile + label * {
+                pointer-events: none;
+              }
+              .inputfile-text {
+                    left: 15px;
+                    position: relative;
+                    top: 6px;
+                }
+        </style>
+{% endblock %}
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+                <form action="" {{ form_enctype(edit_form) }} method="POST" class="form-edit-new form-horizontal" role="form">
+
+                    <div class="box-header">
+                        <h3 class="box-title">Edition Fonctionnalité</h3>
+                    </div>
+                    {{ form_start(edit_form) }}
+                        <div class="box-body">
+                            {{ form_widget(edit_form) }}
+                        </div>
+
+                        <div class="box-footer">
+                            <input type="submit" class="btn btn-primary" value="Enregistrer" />
+                            {{ form_end(edit_form) }}
+                            <a href="{{ path('apifeature_index') }}" class="btn btn-default pull-left" >Retour à la liste</a>
+                            {{ form_start(delete_form) }}
+                                <input type="submit" value="Supprimer" class="btn btn-danger pull-right delete-btn" >
+                            {{ form_end(delete_form) }}
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+

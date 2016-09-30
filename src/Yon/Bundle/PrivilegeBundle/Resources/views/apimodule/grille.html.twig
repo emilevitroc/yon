@@ -1,0 +1,63 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}{{ parent() }}Grille des fonctionnalités{% endblock %}
+{% set menuPrivileges = true %}
+{% set menuPrivilegeManage = true %}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-xs-12">
+            <form id="form-grille" action="" method="POST">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Grille des fonctionnalités</h3>
+
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>Module</th>
+                                    <th>Fonctionnalités</th>
+                                    <th>SuperAdmin</th>
+                                    <th>Admin Interne</th>
+                                    <th>Admin Externe</th>
+                                    <th>Partenaire commercial</th>
+                                </tr>
+
+                                    {% for apiFeature in apiFeatures %}
+                                        <tr>
+                                            <td> <input type="hidden" name="feature[{{ apiFeature.id }}][id]" value="{{ apiFeature.id }}"/>{{ apiFeature.apiModule.title }}</td>
+                                            <td>{{ apiFeature.title }}</td>
+                                            <td><input type="checkbox" name="feature[{{ apiFeature.id }}][isSuperAdmin]" {% if apiFeature.isSuperAdmin %} checked="checked"{% endif %}/></td>
+                                            <td><input type="checkbox" name="feature[{{ apiFeature.id }}][isAdminIntern]" {% if apiFeature.isAdminIntern %} checked="checked"{% endif %}/></td>
+                                            <td><input type="checkbox" name="feature[{{ apiFeature.id }}][isAdminExtern]" {% if apiFeature.isAdminExtern %} checked="checked"{% endif %}/></td>
+                                            <td><input type="checkbox" name="feature[{{ apiFeature.id }}][isPartenaireCommercial]" {% if apiFeature.isPartenaireCommercial %} checked="checked"{% endif %}/></td>
+                                        </tr>
+                                    {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="submit" class="btn btn-primary" value="Enregistrer" />
+                    </div>
+                </div>
+            </form>
+            <!-- /.box -->
+        </div>
+    </div>
+                    
+{% endblock %}

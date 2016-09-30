@@ -1,0 +1,3 @@
+yon_paris_homepage:
+    path:     /paris
+    defaults: { _controller: YonParisBundle:Default:index }

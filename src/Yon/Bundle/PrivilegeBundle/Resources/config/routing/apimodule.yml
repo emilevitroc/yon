@@ -1,0 +1,28 @@
+apimodule_index:
+    path:     /
+    defaults: { _controller: "YonPrivilegeBundle:ApiModule:index" }
+    methods:  GET
+apimodule_grille:
+    path:     /grille
+    defaults: { _controller: "YonPrivilegeBundle:ApiModule:grille" }
+    methods:  [GET, POST]
+
+apimodule_show:
+    path:     /{id}/show
+    defaults: { _controller: "YonPrivilegeBundle:ApiModule:show" }
+    methods:  GET
+
+apimodule_new:
+    path:     /new
+    defaults: { _controller: "YonPrivilegeBundle:ApiModule:new" }
+    methods:  [GET, POST]
+
+apimodule_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "YonPrivilegeBundle:ApiModule:edit" }
+    methods:  [GET, POST]
+
+apimodule_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "YonPrivilegeBundle:ApiModule:delete" }
+    methods:  DELETE

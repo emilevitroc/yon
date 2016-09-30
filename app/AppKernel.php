@@ -16,6 +16,8 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Yon\Bundle\UserBundle\YonUserBundle(),
+            new Yon\Bundle\PrivilegeBundle\YonPrivilegeBundle(),
+            new Yon\Bundle\ParisBundle\YonParisBundle(),
         );
         $bundles[] = new Circle\RestClientBundle\CircleRestClientBundle();
         $bundles[] = new FOS\JsRoutingBundle\FOSJsRoutingBundle();

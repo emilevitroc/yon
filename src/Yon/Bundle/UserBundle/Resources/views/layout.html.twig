@@ -15,7 +15,26 @@
     <!-- Theme style -->
     <link href="{{ asset('AdminLTE/dist/css/AdminLTE.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- iCheck -->
-    <link href="{{ asset('AdminLTE/plugins/iCheck/square/blue.css') }}" rel="stylesheet" type="text/css" />
+{#    <link href="{{ asset('AdminLTE/plugins/iCheck/square/blue.css') }}" rel="stylesheet" type="text/css" />#}
+    <link href="{{ asset('AdminLTE/plugins/iCheck/square/orange.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        .custom-btn-yon{
+            background-color: #fb8a6e;
+        }
+        .custom-btn-yon:hover{
+            background-color: #fb8a6e;
+            border-color: #fff;
+        }
+        .login-logo > img {
+            width: 120px;
+        }
+        .login-box-body .form-control-feedback, .register-box-body .form-control-feedback{
+            color: #fb8a6e;
+        }
+        .login-box-body, .register-box-body{
+           color: #fb8a6e; 
+        }
+    </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -26,8 +45,11 @@
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
+    <div class="login-logo">
+        <img src="/images/logo.png" alt="logo" />
+    </div>
     <div class="login-box-body">
-        <p class="login-box-msg">Page de connexion</p>
+        <p class="login-box-msg">Accès Back Office YoN</p>
         {% for type, messages in app.session.flashBag.all %}
             {% for message in messages %}
                 <div class="{{ type }}">

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>ApiFeature</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ apiFeature.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ apiFeature.title }}</td>
+            </tr>
+            <tr>
+                <th>Issuperadmin</th>
+                <td>{% if apiFeature.isSuperAdmin %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Isadminintern</th>
+                <td>{% if apiFeature.isAdminIntern %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Isadminextern</th>
+                <td>{% if apiFeature.isAdminExtern %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Ispartenairecommercial</th>
+                <td>{% if apiFeature.isPartenaireCommercial %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('apifeature_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('apifeature_edit', { 'id': apiFeature.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

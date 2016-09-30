@@ -1,0 +1,32 @@
+<?php
+
+namespace Yon\Bundle\PrivilegeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ApiModule
+ *
+ * @ORM\Table(name="api_module")
+ * @ORM\Entity
+ */
+class ApiModule
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=100, nullable=false)
+     */
+    private $title;
+
+
+}

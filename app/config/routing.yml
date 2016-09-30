@@ -1,3 +1,11 @@
+yon_paris:
+    resource: "@YonParisBundle/Resources/config/routing.yml"
+    prefix:   /
+
+yon_privilege:
+    resource: "@YonPrivilegeBundle/Resources/config/routing.yml"
+    prefix:   /
+
 yon_user:
     resource: "@YonUserBundle/Resources/config/routing.yml"
     prefix:   /

@@ -1,0 +1,59 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}{{ parent() }} liste Module {% endblock %}
+{% set menuPrivileges = true %}
+{% set menuModuleList = true %}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">liste des modules</h3>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <th>Titre</th>
+                                <th>Actions</th>
+                            </tr>
+                            {% for apiModule in apiModules %}
+                                <tr>
+                                    <td>{{ apiModule.id }}</td>
+                                    <td>{{ apiModule.title }}</td>
+                                    <td>
+                                        <ul class="list-inline">
+                                            <li>
+                                                <a href="{{ path('apimodule_edit', { 'id': apiModule.id }) }}">Editer</a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+               {# <div class="box-footer">
+                    <a href="{{ path('apimodule_new') }}"  class="btn btn-primary">Create a new entry</a>
+                </div>#}
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+                    
+{% endblock %}

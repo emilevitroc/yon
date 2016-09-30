@@ -25,6 +25,30 @@
                     </li>
                 </ul>
             </li>
+            <li class="treeview {% if menuPrivileges is defined %}{{ active }}{% endif %}">
+                <a href="#">
+                    <i class="fa fa-bell"></i>
+                    <span>Privilèges</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if menuModuleList is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apimodule_index') }}"><i class="fa fa-circle-o"></i> Liste module</a>
+                    </li>
+                    <li class="{% if menuModuleCreate is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apimodule_new') }}"><i class="fa fa-circle-o"></i> Créer un module</a>
+                    </li>
+                    <li class="{% if menuFeatureList is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apifeature_index') }}"><i class="fa fa-circle-o"></i> Liste fonctionnalité</a>
+                    </li>
+                    <li class="{% if menuFeatureCreate is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apifeature_new') }}"><i class="fa fa-circle-o"></i> Créer une fonctionnalité</a>
+                    </li>
+                    <li class="{% if menuPrivilegeManage is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apimodule_grille') }}"><i class="fa fa-circle-o"></i> Gérer les privilèges</a>
+                    </li>
+                </ul>
+            </li>
             
         </ul>
     </section>
