@@ -649,7 +649,6 @@ class ApiChallenge
     public function __construct()
     {
         $this->contestChallenge = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->bets = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setCreation ( new \DateTime () );
         $this->setCancelled(0);
         $this->setResultPublished(0);
@@ -691,54 +690,4 @@ class ApiChallenge
     {
         return $this->contestChallenge;
     }
-
-    /**
-     * Add bets
-     *
-     * @param \Yon\Bundle\ParisBundle\Entity\ApiBet $bets
-     * @return ApiChallenge
-     */
-    public function addBet(\Yon\Bundle\ParisBundle\Entity\ApiBet $bets)
-    {
-        $this->bets[] = $bets;
-
-        return $this;
-    }
-
-    /**
-     * Remove bets
-     *
-     * @param \Yon\Bundle\ParisBundle\Entity\ApiBet $bets
-     */
-    public function removeBet(\Yon\Bundle\ParisBundle\Entity\ApiBet $bets)
-    {
-        $this->bets->removeElement($bets);
-    }
-
-    /**
-     * Get bets
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getBets()
-    {
-        return $this->bets;
-    }
-    
-     public function getBetsStatistics()
-    {
-         $yes = 0;
-         $no = 0;
-         $total = count($this->bets) ? count($this->bets) : 1;
-         foreach ($this->bets as $bet) {
-             if($bet->getResult() == 'yes') {
-                 $yes++;
-             } else {
-                 $no++;
-             }
-         }
-         $retu = 'Yes: '.number_format(round( (($yes/$total)*100), 2 )).'% | No: '.number_format(round( (($no/$total)*100), 2 )).'%';
-        return $retu;
-    }
-    
 }

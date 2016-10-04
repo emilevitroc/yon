@@ -89,7 +89,7 @@ class ApiContestchallenge
      * @param \Yon\Bundle\UserBundle\Entity\ApiChallenge $challenge
      * @return ApiContestchallenge
      */
-    public function setChallenge(\Yon\Bundle\UserBundle\Entity\ApiChallenge $challenge = null)
+    public function setChallenge(\Yon\Bundle\ParisBundle\Entity\ApiChallenge $challenge = null)
     {
         $this->challenge = $challenge;
 
@@ -99,7 +99,7 @@ class ApiContestchallenge
     /**
      * Get challenge
      *
-     * @return \Yon\Bundle\UserBundle\Entity\ApiChallenge 
+     * @return \Yon\Bundle\ParisBundle\Entity\ApiChallenge 
      */
     public function getChallenge()
     {
@@ -112,7 +112,7 @@ class ApiContestchallenge
      * @param \Yon\Bundle\UserBundle\Entity\ApiContest $contest
      * @return ApiContestchallenge
      */
-    public function setContest(\Yon\Bundle\UserBundle\Entity\ApiContest $contest = null)
+    public function setContest(\Yon\Bundle\ParisBundle\Entity\ApiContest $contest = null)
     {
         $this->contest = $contest;
 
@@ -122,7 +122,7 @@ class ApiContestchallenge
     /**
      * Get contest
      *
-     * @return \Yon\Bundle\UserBundle\Entity\ApiContest 
+     * @return \Yon\Bundle\ParisBundle\Entity\ApiContest 
      */
     public function getContest()
     {

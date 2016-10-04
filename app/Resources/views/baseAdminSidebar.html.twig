@@ -12,7 +12,7 @@
             </li>
             <li class="treeview {% if menuUsers is defined %}{{ active }}{% endif %}">
                 <a href="#">
-                    <i class="fa fa-bell"></i>
+                    <i class="fa fa-users"></i>
                     <span>Utilisateurs</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -27,7 +27,7 @@
             </li>
             <li class="treeview {% if menuPrivileges is defined %}{{ active }}{% endif %}">
                 <a href="#">
-                    <i class="fa fa-bell"></i>
+                    <i class="fa fa-cogs"></i>
                     <span>Privilèges</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -46,6 +46,21 @@
                     </li>
                     <li class="{% if menuPrivilegeManage is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('apimodule_grille') }}"><i class="fa fa-circle-o"></i> Gérer les privilèges</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview {% if menuParis is defined %}{{ active }}{% endif %}">
+                <a href="#">
+                    <i class="fa fa-puzzle-piece"></i>
+                    <span>Paris</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if menuParisAll is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apichallenge_index') }}"><i class="fa fa-circle-o"></i> Liste</a>
+                    </li>
+                    <li class="{% if menuParisCreate is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apichallenge_new') }}"><i class="fa fa-circle-o"></i> Créer</a>
                     </li>
                 </ul>
             </li>

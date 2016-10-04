@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>ApiChallenge</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ apiChallenge.id }}</td>
+            </tr>
+            <tr>
+                <th>Creation</th>
+                <td>{% if apiChallenge.creation %}{{ apiChallenge.creation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ apiChallenge.title }}</td>
+            </tr>
+            <tr>
+                <th>Enddate</th>
+                <td>{% if apiChallenge.endDate %}{{ apiChallenge.endDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Result</th>
+                <td>{{ apiChallenge.result }}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{ apiChallenge.color }}</td>
+            </tr>
+            <tr>
+                <th>Cancelled</th>
+                <td>{% if apiChallenge.cancelled %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Resultpublished</th>
+                <td>{% if apiChallenge.resultPublished %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Prize</th>
+                <td>{{ apiChallenge.prize }}</td>
+            </tr>
+            <tr>
+                <th>Betprice</th>
+                <td>{{ apiChallenge.betPrice }}</td>
+            </tr>
+            <tr>
+                <th>Alertmessage</th>
+                <td>{{ apiChallenge.alertMessage }}</td>
+            </tr>
+            <tr>
+                <th>Betscount</th>
+                <td>{{ apiChallenge.betsCount }}</td>
+            </tr>
+            <tr>
+                <th>Commentscount</th>
+                <td>{{ apiChallenge.commentsCount }}</td>
+            </tr>
+            <tr>
+                <th>Winnerscount</th>
+                <td>{{ apiChallenge.winnersCount }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ apiChallenge.status }}</td>
+            </tr>
+            <tr>
+                <th>Popularityscore</th>
+                <td>{{ apiChallenge.popularityScore }}</td>
+            </tr>
+            <tr>
+                <th>Startdate</th>
+                <td>{% if apiChallenge.startDate %}{{ apiChallenge.startDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Delayedresult</th>
+                <td>{{ apiChallenge.delayedResult }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('apichallenge_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('apichallenge_edit', { 'id': apiChallenge.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

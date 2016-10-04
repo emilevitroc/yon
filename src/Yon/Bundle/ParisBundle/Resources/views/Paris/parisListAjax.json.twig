@@ -1,0 +1,33 @@
+{% spaceless %}
+    {% set aaData = {} %}
+    {% for apiChallenge in values %}
+        {% set zhash = ( ( apiChallenge.hashtag is defined and apiChallenge.hashtag is not empty)? '#'~apiChallenge.hashtag.tag : '') %}
+        {% set concours = '' %}
+        {% for absensi in apiChallenge.contestChallenge %}
+                {% set concours = absensi.contest.name %}
+        {% endfor %}
+        {% 
+        set value = [
+            apiChallenge.id,
+            apiChallenge.title,
+            apiChallenge.user.username,
+            apiChallenge.startDate|date('d/m/Y H:i:s'),
+            apiChallenge.endDate|date('d/m/Y H:i:s'),
+            zhash,
+            apiChallenge.betsCount,
+            apiChallenge.getBetsStatistics(),
+            concours,
+            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>'
+        ]
+        %}
+        
+        {% set aaData = aaData|merge({ (loop.index0): value }) %}
+    {% endfor %}
+{% endspaceless %}
+{% set data = data|merge({ 'aaData': aaData} ) %}
+{{ data|json_encode|raw }}
+
+{# '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Voir</button></a>' ~ 
+ '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>' ~ 
+ '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Désactiver</button></a>' ~ 
+ '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Bannir</button></a>'#}

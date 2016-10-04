@@ -1,3 +1,9 @@
-yon_paris_homepage:
-    path:     /paris
-    defaults: { _controller: YonParisBundle:Default:index }
+yon_paris_apichallenge:
+    resource: "@YonParisBundle/Resources/config/routing/apichallenge.yml"
+    prefix:   /paris
+    
+yon_paris_list_ajax:
+    path:   /paris/list-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:parisListAjax" }
+    options:
+        expose: true

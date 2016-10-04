@@ -1,4 +1,10 @@
+parameters:
+    yon_paris.paris_manager.class: Yon\Bundle\ParisBundle\Manager\ParisManager
+    
 services:
 #    yon_paris.example:
 #        class: Yon\Bundle\ParisBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
+    yon_paris.paris_manager:
+        class: %yon_paris.paris_manager.class%
+        arguments: [@doctrine.orm.entity_manager]
