@@ -131,12 +131,40 @@ class ApiChallengeController extends Controller
      */
     public function newAction(Request $request)
     {
+        
         $session = $request->getSession ();
         
         if(!$session->get ( 'yon_token')){
             $url = $this->container->get('router')->generate('yon_user_login');
             $response = new RedirectResponse($url);
             return $response;
+        }
+        
+        //gerer si duplicated
+        $duplicateFrom = $request->get('duplicateFrom');
+        $baseParis = null;
+        if($duplicateFrom){
+            $entity = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiChallenge')->find((int)$duplicateFrom);
+            if($entity){
+                $name = new \stdClass();
+                $concours = "";
+                foreach ( $entity->getContestChallenge() as $absensi  ){
+                    $concours = $absensi->getContest()->getId();
+                }
+
+                $name->value = $entity->getTitle();
+    //            $name->label = $entity->getUser()->getUsername();
+                $name->label = $entity->getTitle();
+                $name->title = $entity->getTitle();
+                $name->endDate = date_format($entity->getEndDate(), 'd/m/Y H:i');
+                $name->result = $entity->getResult();
+                $name->color = $entity->getColor();
+                $name->concours = $concours;
+                $name->startDate = date_format($entity->getStartDate(), 'd/m/Y H:i');
+                $name->hashtag = $entity->getHashtag() ? $entity->getHashtag()->getId() : 0;
+                $name->user = $entity->getUser()->getId();
+                $baseParis = $name;
+            }
         }
         
         $apiChallenge = new ApiChallenge();
@@ -171,14 +199,14 @@ class ApiChallengeController extends Controller
                 
             }
             
+            /*
             $startDate1 = $apiChallenge->getStartDate();
             $startDate2 = $apiChallenge->getStartDate();
             $apiChallenge->setStartDate($startDate1);
             $endDate = clone $apiChallenge->getStartDate();
             $endDate = $endDate->add(new \DateInterval('PT'.$duration.'H'));
-           
             $apiChallenge->setEndDate($endDate);
-            
+            */
             $em = $this->getDoctrine()->getManager();
             $em->persist($apiChallenge);
             $em->flush();
@@ -203,6 +231,7 @@ class ApiChallengeController extends Controller
         return $this->render('YonParisBundle:Paris:new.html.twig', array(
             'apiChallenge' => $apiChallenge,
             'form' => $form->createView(),
+            'baseParis' => json_encode((array)$baseParis)
         ));
     }
 
@@ -228,6 +257,10 @@ class ApiChallengeController extends Controller
     {
         $deleteForm = $this->createDeleteForm($apiChallenge);
         $editForm = $this->createForm('Yon\Bundle\ParisBundle\Form\ApiChallengeType', $apiChallenge);
+        foreach ( $apiChallenge->getContestChallenge() as $absensi  ){
+            $editForm->get('contest')->setData($absensi->getContest());
+        }
+        
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -277,5 +310,49 @@ class ApiChallengeController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    public function parisAutocompleteAction(Request $request) {
+
+        $names = array();
+        $term = trim(strip_tags($request->get('term')));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $paris = $em->getRepository('YonParisBundle:ApiChallenge')->createQueryBuilder('c')
+                ->where('c.title like :name')
+                ->setParameter('name', '%'.$term . '%')->setFirstResult(0)->setMaxResults(10);
+        
+        $paris = $paris->getQuery();
+        $paris = $paris->getResult();
+        
+        foreach ($paris as $entity) {
+            
+            $name = new \stdClass();
+            $concours = "";
+            foreach ( $entity->getContestChallenge() as $absensi  ){
+                $concours = $absensi->getContest()->getId();
+            }
+            
+            $name->value = $entity->getTitle();
+//            $name->label = $entity->getUser()->getUsername();
+            $name->label = $entity->getTitle();
+            $name->title = $entity->getTitle();
+            $name->endDate = date_format($entity->getEndDate(), 'd/m/Y H:i');
+            $name->result = $entity->getResult();
+            $name->color = $entity->getColor();
+            $name->concours = $concours;
+            $name->startDate = date_format($entity->getStartDate(), 'd/m/Y H:i');
+            $name->hashtag = $entity->getHashtag() ? $entity->getHashtag()->getId() : 0;
+            $name->user = $entity->getUser()->getId();
+            
+            $names[] = $name;
+            
+        }
+
+        $response = new JsonResponse();
+        $response->setData($names);
+
+        return $response;
     }
 }

@@ -1,9 +1,17 @@
 yon_paris_apichallenge:
     resource: "@YonParisBundle/Resources/config/routing/apichallenge.yml"
     prefix:   /paris
+yon_paris_apicontest:
+        resource: "@YonParisBundle/Resources/config/routing/apicontest.yml"
+        prefix:   /apicontest
     
 yon_paris_list_ajax:
     path:   /paris/list-ajax
     defaults: { _controller: "YonParisBundle:ApiChallenge:parisListAjax" }
+    options:
+        expose: true
+yon_paris_autocomplete:
+    path:   /paris/autocomplete
+    defaults: { _controller: "YonParisBundle:ApiChallenge:parisAutocomplete" }
     options:
         expose: true

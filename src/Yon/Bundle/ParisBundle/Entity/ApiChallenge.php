@@ -20,7 +20,16 @@ class ApiChallenge
         3 => 'paris expiré',
         4 => 'paris à venir',
     );
-    
+    static $COLOR = array (
+        'orange' => 'Orange',
+        'blue' => 'Blue',
+        'green' => 'Green',
+        'red' => 'Red',
+    );
+    static $RESULT = array (
+        'yes' => 'yes',
+        'no' => 'no'
+    );
     static $DURATION = array (
         1 => '1 heure',
         2 => '2 heures',
@@ -657,6 +666,8 @@ class ApiChallenge
         $this->setCommentsCount(0);
         $this->setWinnersCount(0);
         $this->setPopularityScore(0);
+        $this->setStatus(0);
+        $this->setBetPrice(50);
     }
 
     /**

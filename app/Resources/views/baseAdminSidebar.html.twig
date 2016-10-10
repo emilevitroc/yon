@@ -64,6 +64,21 @@
                     </li>
                 </ul>
             </li>
+            <li class="treeview {% if menuConcours is defined %}{{ active }}{% endif %}">
+                <a href="#">
+                    <i class="fa fa-puzzle-piece"></i>
+                    <span>Concours</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if menuConcoursAll is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apicontest_index') }}"><i class="fa fa-circle-o"></i> Liste</a>
+                    </li>
+                    <li class="{% if menuConcoursCreate is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apicontest_new') }}"><i class="fa fa-circle-o"></i> Créer</a>
+                    </li>
+                </ul>
+            </li>
             
         </ul>
     </section>

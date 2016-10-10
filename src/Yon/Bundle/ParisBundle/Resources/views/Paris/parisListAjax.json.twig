@@ -17,7 +17,8 @@
             apiChallenge.betsCount,
             apiChallenge.getBetsStatistics(),
             concours,
-            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>'
+            '<a href="'~path('apichallenge_edit', { id: apiChallenge.id} )~'"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>'~
+            '<a href="'~path('apichallenge_new', { duplicateFrom: apiChallenge.id} )~'"><button class="btn btn-mini btn-mini-rectif"> Dupliquer</button></a>'
         ]
         %}
         

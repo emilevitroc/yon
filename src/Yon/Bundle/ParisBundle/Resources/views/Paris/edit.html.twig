@@ -1,6 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends '::baseAdmin.html.twig' %}
+{% form_theme edit_form ':Form:fields.html.twig' %}
+{% block title %}{{ parent() }} Edition Paris {% endblock %}
+{% set menuParis = true %}
+{% set menuParisList = true %}
 
-{% block body %}
+{#{% block body %}
     <h1>ApiChallenge edit</h1>
 
     {{ form_start(edit_form) }}
@@ -18,4 +22,73 @@
             {{ form_end(delete_form) }}
         </li>
     </ul>
+{% endblock %}#}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <form role="form" class="form-edit-new form-horizontal" method="POST" action="">
+
+                    <div class="box-header">
+                        <h3 class="box-title">Edition Paris</h3>
+                    </div>
+                    {{ form_start(edit_form) }}
+                    <div class="box-body">
+                        {{ form_widget(edit_form) }}
+                    </div>
+
+                    <div class="box-footer">
+                        <input type="submit" value="Enregistrer" class="btn btn-primary">
+                        <a class="btn btn-default pull-left" href="{{ path('apichallenge_index') }}">Retour à la liste</a>
+                    </div>
+                    {{ form_end(edit_form) }}
+                </form>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">
+            $(function () {
+                /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
+                $('#api_challenge_startDate').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                    //defaultDate: "11/1/2013",
+                    /*disabledDates: [
+                        moment("12/25/2013"),
+                        new Date(2013, 11 - 1, 21),
+                        "11/22/2013 00:53"
+                    ]*/
+                });
+                $('#api_challenge_endDate').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                });
+                $("#api_challenge_endDate").on("dp.change", function(e) {
+                    
+                    var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
+                    var end = e.date.utc();
+                    zdiff = moment(end.diff(moment(start))).format('HH:mm');
+                    $('#api_challenge_duration').val(zdiff);
+                });
+                 var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
+                var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
+                zdiff = moment.utc(end.diff(start)).format('HH:mm');
+                $('#api_challenge_duration').val(zdiff);
+            });
+            
+	</script>
 {% endblock %}
