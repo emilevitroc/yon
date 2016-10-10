@@ -1,0 +1,119 @@
+{% extends '::baseAdmin.html.twig' %}
+{% form_theme form ':Form:fields.html.twig' %}
+{% block title %}{{ parent() }} Ajout Paris {% endblock %}
+{% set menuConcours = true %}
+{% set menuConcoursCreate = true %}
+{% block stylesheets %}
+    {{ parent() }}
+	<style>
+            .inputfile {
+                /* visibility: hidden etc. wont work */
+                width: 0.1px;
+                height: 0.1px;
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+                z-index: -1;
+              }
+              .inputfile:focus + label {
+                /* keyboard navigation */
+                outline: 1px dotted #000;
+                outline: -webkit-focus-ring-color auto 5px;
+              }
+              .inputfile + label * {
+                pointer-events: none;
+              }
+              .inputfile-text {
+                    left: 15px;
+                    position: relative;
+                    top: 6px;
+                }
+        </style>
+{% endblock %}
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+                <form action="" {{ form_enctype(form) }} method="POST" class="form-edit-new form-horizontal" role="form">
+
+                    <div class="box-header">
+                        <h3 class="box-title">Ajout Concours</h3>
+                    </div>
+                    {{ form_start(form) }}
+                        <div class="box-body">
+                            <div class="form-groups">
+                                <label for="name" class="col-sm-2 control-label required">Partenaire</label>
+                                <div class="col-sm-5">
+                                    <input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user">
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
+                                </div>
+                            </div>
+                            {{ form_widget(form) }}
+                        </div>
+
+                        <div class="box-footer">
+                            <input type="submit" class="btn btn-primary" value="Créer" />
+                            {{ form_end(form) }}
+                            <a href="{{ path('apicontest_index') }}" class="btn btn-default pull-left" >Retour à la liste</a>
+                        </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">
+            $(function () {
+                //Date picker
+               {# $('#api_challenge_startDate').datepicker({
+                  autoclose: true,
+                  format:'dd-mm-yyyy'
+                });#}
+
+                function log( message ) {
+                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
+                }
+                
+                $( "#to_belong_to_user" ).autocomplete({
+                    source: "{{ path('yon_user_autocomplete') }}",
+                    minLength: 2,
+                    select: function( event, ui ) {
+                      setTimeout(log(ui), 100);
+                    },
+                    open: function() {
+                        $('.ui-menu').width(350);
+                    }
+                });
+                
+                /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
+                $('#api_contest_startDate').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                    //defaultDate: "11/1/2013",
+                    /*disabledDates: [
+                        moment("12/25/2013"),
+                        new Date(2013, 11 - 1, 21),
+                        "11/22/2013 00:53"
+                    ]*/
+                });
+                $('#api_contest_endDate').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                });
+            });
+            
+	</script>
+{% endblock %}

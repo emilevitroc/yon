@@ -1,0 +1,24 @@
+apicontest_index:
+    path:     /
+    defaults: { _controller: "YonParisBundle:ApiContest:index" }
+    methods:  GET
+
+apicontest_show:
+    path:     /{id}/show
+    defaults: { _controller: "YonParisBundle:ApiContest:show" }
+    methods:  GET
+
+apicontest_new:
+    path:     /new
+    defaults: { _controller: "YonParisBundle:ApiContest:new" }
+    methods:  [GET, POST]
+
+apicontest_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "YonParisBundle:ApiContest:edit" }
+    methods:  [GET, POST]
+
+apicontest_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "YonParisBundle:ApiContest:delete" }
+    methods:  DELETE
