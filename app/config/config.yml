@@ -12,6 +12,7 @@ parameters:
     api_url: "http://yesorno-api.elasticbeanstalk.com/"
     authentification: "/sessions"
     users: "/users"
+    challenges: "/challenges"
 
 framework:
     #esi:             ~

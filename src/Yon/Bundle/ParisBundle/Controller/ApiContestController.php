@@ -119,10 +119,22 @@ class ApiContestController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            $data = $request->request->all();
+            if( (int)$data['to_belong_to_user'] > 0 ){
+                $authUserId = $data['to_belong_to_user'];
+                
+            } else {
+                $currentAuthUser = $session->get ( 'user_infos');
+                $authUserId = $currentAuthUser->id;
+            }
+            $authUser = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:AuthUser')->find($authUserId);
+            $apiContest->setUser($authUser);
+            
             $em->persist($apiContest);
             $em->flush();
 
-            return $this->redirectToRoute('apicontest_edit', array('id' => $apiContest->getId()));
+            return $this->redirectToRoute('apicontest_index');
         }
 
         return $this->render('YonParisBundle:Apicontest:edit.html.twig', array(

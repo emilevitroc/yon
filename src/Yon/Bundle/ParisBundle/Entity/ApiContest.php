@@ -357,7 +357,7 @@ class ApiContest
     /**
      * Set user
      *
-     * @param \Yon\Bundle\ParisBundle\Entity\AuthUser $user
+     * @param \Yon\Bundle\UserBundle\Entity\AuthUser $user
      * @return ApiContest
      */
     public function setUser(\Yon\Bundle\UserBundle\Entity\AuthUser $user = null)

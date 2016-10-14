@@ -45,7 +45,7 @@ class ApiHashtag
     /**
      * @var float
      *
-     * @ORM\Column(name="range", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="`range`", type="float", precision=10, scale=0, nullable=true)
      */
     private $range;
 
@@ -56,7 +56,15 @@ class ApiHashtag
      */
     private $visible;
 
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->setCreation ( new \DateTime () );
+        $this->setLocation('0.0,0.0');
+        $this->setVisible(1);
+    }
 
     /**
      * Get id

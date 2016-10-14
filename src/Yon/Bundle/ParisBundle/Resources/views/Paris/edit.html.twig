@@ -45,6 +45,15 @@
                     </div>
                     {{ form_start(edit_form) }}
                     <div class="box-body">
+                        <div class="form-groups">
+                            <label for="name" class="col-sm-2 control-label required">Auteur</label>
+                            <div class="col-sm-5">
+                                <input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiChallenge.user is defined %}{{ apiChallenge.user.id }} {% endif %}">
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
+                            </div>
+                        </div>
                         {{ form_widget(edit_form) }}
                     </div>
 
@@ -64,6 +73,22 @@
     {{ parent() }}
 	<script type="text/javascript">
             $(function () {
+                
+                function log( message ) {
+                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
+                }
+                
+                $( "#to_belong_to_user" ).autocomplete({
+                    source: "{{ path('yon_user_autocomplete') }}",
+                    minLength: 2,
+                    select: function( event, ui ) {
+                      setTimeout(log(ui), 100);
+                    },
+                    open: function() {
+                        $('.ui-menu').width(350);
+                    }
+                });
+                
                 /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
                 $('#api_challenge_startDate').datetimepicker({
                     format: 'DD/MM/YYYY HH:mm'

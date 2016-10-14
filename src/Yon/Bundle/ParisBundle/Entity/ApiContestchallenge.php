@@ -48,7 +48,13 @@ class ApiContestchallenge
      */
     private $contest;
 
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->setCreation ( new \DateTime () );
+    }
 
     /**
      * Get id

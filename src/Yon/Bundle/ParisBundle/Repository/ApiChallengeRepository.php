@@ -32,10 +32,16 @@ class ApiChallengeRepository extends EntityRepository
                 ->setParameter('status', $options['status']);
             }
         }
+        
+        if (isset($options['coucoursId']) && $options['coucoursId'] != "") {
+            $qb
+                ->andWhere('pc.id = :coucoursId')
+                ->setParameter('coucoursId', $options['coucoursId']);
+        }
 
         if (isset($options['search'])) {
             $qb
-                ->andWhere('p.id = :searchId OR pu.username like :searchName OR p.title like :searchName OR ph.tag like :searchName' )
+                ->andWhere('p.id = :searchId OR pu.username like :searchName OR pu.firstName like :searchName OR p.title like :searchName OR ph.tag like :searchName' )
                 ->setParameter('searchId', $options['search'])
                 ->setParameter('searchName', '%'.$options['search'].'%');
         }

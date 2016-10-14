@@ -4,7 +4,7 @@
         {% set zhash = ( ( apiChallenge.hashtag is defined and apiChallenge.hashtag is not empty)? '#'~apiChallenge.hashtag.tag : '') %}
         {% set concours = '' %}
         {% for absensi in apiChallenge.contestChallenge %}
-                {% set concours = absensi.contest.name %}
+                {% set concours = absensi.contest %}
         {% endfor %}
         {% 
         set value = [
@@ -16,10 +16,8 @@
             zhash,
             apiChallenge.betsCount,
             apiChallenge.getBetsStatistics(),
-            concours,
-            '<a href="javascript:;" onclick="addChallengeToContest('~apiChallenge.id~');" title="Ajouter à un councours"><i class="fa fa-plus btn-mini-rectif" aria-hidden="true"></i></a>'~
-            '<a href="'~path('apichallenge_edit', { id: apiChallenge.id} )~'"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>'~
-            '<a href="'~path('apichallenge_new', { duplicateFrom: apiChallenge.id} )~'"><button class="btn btn-mini btn-mini-rectif"> Dupliquer</button></a>'
+            concours.name,
+            '<a href="#" onclick="confirmDelInConcours('~apiChallenge.id~','~concours.id~');"><button class="btn btn-mini btn-mini-rectif">Supprimer du concours</button></a>'
         ]
         %}
         

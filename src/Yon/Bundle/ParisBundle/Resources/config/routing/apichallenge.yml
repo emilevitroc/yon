@@ -22,3 +22,13 @@ apichallenge_delete:
     path:     /{id}/delete
     defaults: { _controller: "YonParisBundle:ApiChallenge:delete" }
     methods:  DELETE
+    
+apichallenge_reset_concours_ajax:
+    path:     /reset-concours-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:resetConcoursAjax" }
+    methods:  POST
+    
+apichallenge_add_challenge_to_contest_ajax:
+    path:     /add-challenge-to-contest-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:addChallengeToContestAjax" }
+    methods:  POST

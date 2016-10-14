@@ -43,7 +43,7 @@
                 <div class="box-header">
                     <h3 class="box-title">Liste des paris</h3>
                     <div class="list-count">
-                        <span class="title-count-text"> TOTAL: </span><span class="title-count"> TOTAL: </span>
+                        <span class="title-count-text"> TOTAL: </span><span class="title-count"></span>
                     </div>
 
                     {#<div class="box-tools">
@@ -103,6 +103,7 @@
 {% block javascripts %}
     {{ parent() }}
 	<script type="text/javascript">
+            var datat = null;
             $(function () {
                 $('#list-users').DataTable(
                 {
@@ -129,6 +130,7 @@
                         //do whatever  
                      },
                 });
+                datat = $("#list-users").DataTable();
                 $('#status').change(function() {
                 
                     oTable = $('#list-users').dataTable();
@@ -140,6 +142,35 @@
                 } );
             });
             
+            function addChallengeToContest(chalengeId){
+                    bootbox.prompt({
+                        title: "Choisir le concours à associer au paris",
+                        inputType: 'select',
+                        inputOptions: JSON.parse('{{ apiContests|raw }}'),
+                        callback: function (contestId) {
+                            if(contestId){
+                                if(contestId != ""){
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '{{ path('apichallenge_add_challenge_to_contest_ajax')}}',
+                                        cache: false,
+                                        data: {challenge: chalengeId, contest: contestId},
+                                        success: function(response){
+                                            if(response.code == 'success') {
+                                                console.log('success');
+                                                datat.draw();
+                                            } else {
+                                                console.log(response.message);  
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    bootbox.alert("Vous devez choisir un concours");
+                                }
+                            }
+                        }
+                    });
+            }
 	</script>
 {% endblock %}
 

@@ -53,7 +53,7 @@ class ApiChallengeType extends AbstractType
                 'class' => 'YonParisBundle:ApiHashtag',
                 'property' => 'tag',
                 'required' => false,
-                'label' => 'Hashtag',
+                'label' => 'Trending topic',
                 'query_builder' => function ($repository) use($options) {
                         return $repository->createQueryBuilder ( 'sh' )
                                 ->andWhere('sh.visible = 1')
@@ -63,7 +63,7 @@ class ApiChallengeType extends AbstractType
             )
             ->add('hashtag_user', null, array(
                 'mapped' => false,
-                'label' => 'Votre propre hashtags',
+                'label' => 'Votre propre hashtag',
                 'required' => false,
                 'label_attr' => $options ['label_attr'],
                 )

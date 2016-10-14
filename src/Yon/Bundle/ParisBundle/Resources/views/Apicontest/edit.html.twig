@@ -1,21 +1,210 @@
-{% extends 'base.html.twig' %}
+{% extends '::baseAdmin.html.twig' %}
+{% form_theme edit_form ':Form:fields.html.twig' %}
+{% block title %}{{ parent() }} Edition Paris {% endblock %}
+{% set menuConcours = true %}
+{% set menuConcoursAll = true %}
+{% block stylesheets %}
+    {{ parent() }}
+<style type="text/css">
+    #list-users_length, #list-users_filter {
+        margin: 10px;
+    }
+    .btn-mini-rectif{
+        margin-right: 5px;
+    }
+    .status-filter {
+            bottom: -37px;
+            left: 330px;
+            position: relative;
+            width: 400px;
+            z-index: 2;
+        }
+    .list-count {
+        font-size: 2.1em;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-    <h1>ApiContest edit</h1>
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <form role="form" class="form-edit-new form-horizontal" method="POST" action="">
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+                    <div class="box-header">
+                        <h3 class="box-title">Edition Concours</h3>
+                    </div>
+                    {{ form_start(edit_form) }}
+                    <div class="box-body">
+                        <div class="form-groups">
+                            <label for="name" class="col-sm-2 control-label required">Partenaire</label>
+                            <div class="col-sm-5">
+                                <input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiContest.user %}{{ apiContest.user.id }} {% endif %}">
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
+                            </div>
+                        </div>
+                        {{ form_widget(edit_form) }}
+                    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('apicontest_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                    <div class="box-footer">
+                        <input type="submit" value="Enregistrer" class="btn btn-primary">
+                        <a class="btn btn-default pull-left" href="{{ path('apicontest_index') }}">Retour à la liste</a>
+                    </div>
+                    {{ form_end(edit_form) }}
+                </form>
+            </div>
+            <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Liste des paris associés à ce concours</h3>
+                <div class="list-count">
+                    <span class="title-count-text"> TOTAL: </span><span class="title-count"></span>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="list-paris" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Intitulé</th>
+                    <th>Auteur</th>
+                    <th>Heure de début</th>
+                    <th>Heure de fin</th>
+                    <th>hashtag</th>
+                    <th>Nb de participants</th>
+                    <th>Taux de réponse des différents choix</th>
+                    <th>Concours</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+    </div>
+    
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">
+            var datat = null;
+            $(function () {
+                //Date picker
+               {# $('#api_challenge_startDate').datepicker({
+                  autoclose: true,
+                  format:'dd-mm-yyyy'
+                });#}
+
+                function log( message ) {
+                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
+                }
+                
+                $( "#to_belong_to_user" ).autocomplete({
+                    source: "{{ path('yon_user_autocomplete') }}",
+                    minLength: 2,
+                    select: function( event, ui ) {
+                      setTimeout(log(ui), 100);
+                    },
+                    open: function() {
+                        $('.ui-menu').width(350);
+                    }
+                });
+                
+                /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
+                $('#api_contest_startDate').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                    //defaultDate: "11/1/2013",
+                    /*disabledDates: [
+                        moment("12/25/2013"),
+                        new Date(2013, 11 - 1, 21),
+                        "11/22/2013 00:53"
+                    ]*/
+                });
+                $('#api_contest_endDate').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                });
+                
+                $("#list-paris").DataTable({
+                    "aoColumns": [
+                        {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true},
+                        {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": false}
+                    ],
+                    "order": [[ 0, "desc" ]],
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "bFilter": true,
+                    "sDom": '<""lf><"H"p>rt<"F"p>',
+                    "sAjaxSource": "{{ path('yon_paris_list_ajax', {coucoursId: apiContest.id, from: 'editConcours'}) }}",
+                    "oLanguage": {
+                        "sProcessing": "traitement...",
+                        "oPaginate": {
+                            "sPrevious": "Précédante", // This is the link to the previous page
+                            "sNext": "Suivante", // This is the link to the next page
+                        },
+                        "sSearch": "Filtrer: ",
+                        "sLengthMenu": "Afficher _MENU_ enregistrement par page",
+                        "sEmptyTable": "Aucun paris trouvé"
+                    },
+                    "drawCallback": function(settings) {
+                        $('.title-count').html(settings.json.iTotalRecords);
+                        //do whatever  
+                     },
+                });
+                datat = $("#list-paris").DataTable();
+            });
+            function confirmDelInConcours(parisId, contest){
+                    
+                    bootbox.confirm({
+                        title: "Voulez vous vraiment supprimer le paris du concours?",
+                        message: "Le paris sera definitivement supprimer du concours",
+                        buttons: {
+                            cancel: {
+                                label: '<i class="fa fa-times"></i> Non'
+                            },
+                            confirm: {
+                                label: '<i class="fa fa-check"></i> Oui'
+                            }
+                        },
+                        callback: function (result) {
+                            if(result){
+                                $.ajax({
+                                    type: "POST",
+                                    url: '{{ path('apichallenge_reset_concours_ajax')}}',
+                                    cache: false,
+                                    data: {challenge: parisId, contest: contest},
+                                    success: function(response){
+                                        if(response.code == 'success') {
+                                            datat.draw();
+                                        } else {
+                                          console.log(response.message);  
+                                        }
+                                    }
+                                });
+                                
+                            }
+                        }
+                    });
+            }
+            
+	</script>
+{% endblock %}
+
