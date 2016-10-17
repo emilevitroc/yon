@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use Yon\Bundle\ParisBundle\Entity\ApiContest;
 use Yon\Bundle\ParisBundle\Form\ApiContestType;
+use Yon\Bundle\ParisBundle\Entity\ApiHashtag;
 
 /**
  * ApiContest controller.
@@ -73,6 +74,13 @@ class ApiContestController extends Controller
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($apiContest);
+            $em->flush();
+            
+            //create hashtag
+            $newHashtag = new ApiHashtag();
+            $newHashtag->setTag(str_replace('#', '', $apiContest->getName()));
+
+            $em->persist($newHashtag);
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', sprintf('un concours a été bien ajouté!.'));

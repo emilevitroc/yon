@@ -260,8 +260,10 @@ class ApiChallengeController extends Controller
             $em->persist($apiChallenge);
             $em->flush();
             
-            $em->persist($contestChallenge);
-            $em->flush();
+            if($concours){
+                $em->persist($contestChallenge);
+                $em->flush();
+            }
             
             $this->get('session')->getFlashBag()->add('success', sprintf('un paris a été bien ajouté!.'));
 

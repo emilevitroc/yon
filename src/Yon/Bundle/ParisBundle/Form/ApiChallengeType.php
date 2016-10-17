@@ -94,10 +94,10 @@ class ApiChallengeType extends AbstractType
                 'choices' => ApiChallenge::$RESULT
                 )
             )
-//            ->add('betPrice', null, array(
-//                    'label' => 'Prix Paris',
-//                )
-//            )
+            ->add('betPrice', null, array(
+                    'label' => 'Prix du paris',
+                )
+            )
 //            ->add('status', 'choice', array (
 //                'label' => 'Statut',
 //                'empty_value' => 'Définir un statut',
