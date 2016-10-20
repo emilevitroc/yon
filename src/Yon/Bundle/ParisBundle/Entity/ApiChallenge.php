@@ -30,6 +30,10 @@ class ApiChallenge
         'yes' => 'yes',
         'no' => 'no'
     );
+    static $DRAFT_CHOICE = array (
+        0 => 'non',
+        1 => 'oui'
+    );
     static $DURATION = array (
         1 => '1 heure',
         2 => '2 heures',

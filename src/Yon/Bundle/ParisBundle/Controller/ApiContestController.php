@@ -45,7 +45,7 @@ class ApiContestController extends Controller
      * Creates a new ApiContest entity.
      *
      */
-    public function newAction(Request $request)
+    public function newWithoutAPIAction(Request $request)
     {
         $session = $request->getSession ();
         
@@ -92,6 +92,62 @@ class ApiContestController extends Controller
             'form' => $form->createView(),
         ));
     }
+    
+    public function newAction(Request $request)
+    {
+        $session = $request->getSession ();
+        
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        
+        $apiContest = new ApiContest();
+        $form = $this->createForm('Yon\Bundle\ParisBundle\Form\ApiContestType', $apiContest);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $data = $request->request->all();
+            
+            //prepare parametre pour envoyer vers api
+            $tParams = array();
+            $tParams['name'] = $data['api_contest']['name'];
+            $tParams['description'] = $data['api_contest']['description'];
+            $tParams['planned_challenges_count'] = $data['api_contest']['plannedChallengesCount'];
+            
+            $tParams['start_date'] = $apiContest->getStartDate()->format(\DateTime::ISO8601);
+            $tParams['end_date'] = $apiContest->getEndDate()->format(\DateTime::ISO8601);
+            
+            //set api header
+            $customerHeader = array('Authorization: '. $session->get ( 'yon_token'));
+            if( (int)$data['to_belong_to_user'] > 0 ){
+                $customerHeader[] = 'X-YESorNO-UserID: '.$data['to_belong_to_user'];
+            }
+            
+            $contestseUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('contests') ;
+            $curlService = $this->get('yon_user.data');
+            
+            $result = $curlService->curlPost($contestseUrl, $tParams, $customerHeader);
+            
+            //traitement des redirection si OK ou pas
+            $response = json_decode($result);
+//            var_dump($response);die;
+            if($response && isset($response->id) && $response->id > 0){
+               $this->get('session')->getFlashBag()->add('success', sprintf('un concours a été bien ajouté!.'));
+            } else {
+               $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
+            }
+            
+            return $this->redirectToRoute('apicontest_index');
+        }
+
+        return $this->render('YonParisBundle:Apicontest:new.html.twig', array(
+            'apiContest' => $apiContest,
+            'form' => $form->createView(),
+        ));
+    }
 
     /**
      * Finds and displays a ApiContest entity.
@@ -126,22 +182,37 @@ class ApiContestController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            
             $data = $request->request->all();
-            if( (int)$data['to_belong_to_user'] > 0 ){
-                $authUserId = $data['to_belong_to_user'];
-                
-            } else {
-                $currentAuthUser = $session->get ( 'user_infos');
-                $authUserId = $currentAuthUser->id;
-            }
-            $authUser = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:AuthUser')->find($authUserId);
-            $apiContest->setUser($authUser);
             
-            $em->persist($apiContest);
-            $em->flush();
-
+            //prepare parametre pour envoyer vers api
+            $tParams = array();
+            $tParams['name'] = $data['api_contest']['name'];
+            $tParams['description'] = $data['api_contest']['description'];
+            $tParams['planned_challenges_count'] = $data['api_contest']['plannedChallengesCount'];
+            
+            $tParams['start_date'] = $apiContest->getStartDate()->format(\DateTime::ISO8601);
+            $tParams['end_date'] = $apiContest->getEndDate()->format(\DateTime::ISO8601);
+            
+            //set api header
+            $customerHeader = array('Authorization: '. $session->get ( 'yon_token'));
+            if( (int)$data['to_belong_to_user'] > 0 ){
+                $customerHeader[] = 'X-YESorNO-UserID: '.$data['to_belong_to_user'];
+            }
+            
+            $editContestseUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('contests').'/'. $apiContest->getId();
+            $curlService = $this->get('yon_user.data');
+            
+            $result = $curlService->curlPatch($editContestseUrl, $tParams, $customerHeader);
+            
+            //traitement des redirection si OK ou pas
+            $response = json_decode($result);
+//            var_dump($response);die;
+            if($response && isset($response->id) && $response->id > 0){
+               $this->get('session')->getFlashBag()->add('success', sprintf('le concours a été bien modifié!.'));
+            } else {
+               $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
+            }
+            
             return $this->redirectToRoute('apicontest_index');
         }
 

@@ -320,6 +320,7 @@ class UserController extends Controller
                 $session = $request->getSession ();
 		$session->set ( 'yon_token', $response->token );
 		$session->set ( 'user_infos', $response->user );
+		//$session->set ( 'user_profil_id', $response->id );
             }
             $response->redirect_url =  $this->generateUrl('yon_user_homepage');
         }

@@ -166,7 +166,7 @@ class ApiChallengeController extends Controller
      * Creates a new ApiChallenge entity.
      *
      */
-    public function newAction(Request $request)
+    public function newWithoutAPIAction(Request $request)
     {
         
         $session = $request->getSession ();
@@ -290,7 +290,7 @@ class ApiChallengeController extends Controller
      * Creates a new ApiChallenge entity via API.
      *
      */
-    public function newWithAPIAction(Request $request)
+    public function newAction(Request $request)
     {
         
         $session = $request->getSession ();
@@ -340,81 +340,57 @@ class ApiChallengeController extends Controller
             $tParams = array();
             $tParams['title'] = $data['api_challenge']['title'];
             $tParams['color'] = $data['api_challenge']['color'];
+            $tParams['delayed_result'] = $data['api_challenge']['result'];
             
             if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
                 $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
+            } elseif ($apiChallenge->getHashtag()) {
+                $tParams['hashtag'] =  $apiChallenge->getHashtag()->getTag();
             }
             
 //            $tParams['time_to_end'] = floatval($data['api_challenge']['time_to_end']);
             $tParams['start_date'] = $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
             $tParams['end_date'] = $apiChallenge->getEndDate()->format(\DateTime::ISO8601);
 //            $tParams['delayed_result'] = $data['api_challenge']['delayed_result'];
-            $tParams['draft'] = 1;
+            $tParams['bet_price'] = $data['api_challenge']['betPrice'];
+            if((int)$data['api_challenge']['status'] == 1){
+                $tParams['draft'] = 1;
+            }
+//            $tParams['draft'] = 1;
 //            echo $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
            // var_dump( $tParams);
             $challengeUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('challenges') ;
             
             $curlService = $this->get('yon_user.data');
-        
-            $result = $curlService->curlPost($challengeUrl, $tParams);
-
+            
+            //set api header
+            $customerHeader = array('Authorization: '. $session->get ( 'yon_token'));
+            if( (int)$data['to_belong_to_user'] > 0 ){
+                $customerHeader[] = 'X-YESorNO-UserID: '.$data['to_belong_to_user'];
+            }
+                
+            $result = $curlService->curlPost($challengeUrl, $tParams, $customerHeader);
+            
             //traitement des redirection si OK ou pas
             $response = json_decode($result);
-            if($response && isset($response->id) && $response->id > 0){
-                $challengeId = $response->id;
-                $oChallenge = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiChallenge')->find($challengeId);
-                
-                
             
-                if( (int)$data['to_belong_to_user'] > 0 ){
-                    $authUserId = $data['to_belong_to_user'];
-
-                } else {
-                    $currentAuthUser = $session->get ( 'user_infos');
-                    $authUserId = $currentAuthUser->id;
-                }
-                $authUser = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:AuthUser')->find($authUserId);
-                $oChallenge->setUser($authUser);
-
-                // durée
-                //$duration = isset($data['api_challenge']['duration']) ? $data['api_challenge']['duration'] : 1;
-
+            if($response && isset($response->id) && $response->id > 0){
+                
+                //add to contest if need
                 $concours = isset($data['api_challenge']['contest']) ? $data['api_challenge']['contest'] : null;
-
                 if($concours){
-                    $contestChallenge = new \Yon\Bundle\ParisBundle\Entity\ApiContestchallenge();
-
-                    $oContest = $authUser = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiContest')->find($concours);
-                    $contestChallenge->setCreation(new \DateTime());
-                    $contestChallenge->setContest($oContest);
-                    $contestChallenge->setChallenge($oChallenge);
-
+                    $ContestChallengeUrl = $this->container->getParameter('api_url').'/contests/'.$concours.'/challenges';
+                    $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
+                    $tParamsContestChallenge = array('challenge_id' => $response->id);
+                    
+                    $result = $curlService->curlPost($ContestChallengeUrl, $tParamsContestChallenge, $custHeaderContent);
                 }
                 
-                if( !(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '') ){
-                    $oChallenge->setHashtag($apiChallenge->getHashtag());
-                }
-
-                /*
-                $startDate1 = $apiChallenge->getStartDate();
-                $startDate2 = $apiChallenge->getStartDate();
-                $apiChallenge->setStartDate($startDate1);
-                $endDate = clone $apiChallenge->getStartDate();
-                $endDate = $endDate->add(new \DateInterval('PT'.$duration.'H'));
-                $apiChallenge->setEndDate($endDate);
-                */
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($oChallenge);
-                $em->flush();
-
-                $em->persist($contestChallenge);
-                $em->flush();
-
-                $this->get('session')->getFlashBag()->add('success', sprintf('un paris a été bien ajouté!.'));
+               $this->get('session')->getFlashBag()->add('success', sprintf('un paris a été bien ajouté!.')); 
+            } else {
+               $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
             }
             
-            
-
             return $this->redirectToRoute('apichallenge_index');
         } else {
 //            var_dump($form->getErrorsAsString());
@@ -463,55 +439,79 @@ class ApiChallengeController extends Controller
             return $response;
         }
         
+        $currentAuthUser = $session->get ( 'user_profil_id');
+        //echo $currentAuthUser;
+        
+//        $authUserId = $currentAuthUser->id;
+//        echo $authUserId;
+        
         $deleteForm = $this->createDeleteForm($apiChallenge);
         $editForm = $this->createForm('Yon\Bundle\ParisBundle\Form\ApiChallengeType', $apiChallenge);
         foreach ( $apiChallenge->getContestChallenge() as $absensi  ){
             $editForm->get('contest')->setData($absensi->getContest());
         }
+        $editForm->get('result')->setData($apiChallenge->getDelayedResult());
         
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            
             $data = $request->request->all();
-            $em = $this->getDoctrine()->getManager();
             
-            if( (int)$data['to_belong_to_user'] > 0 ){
-                $authUserId = $data['to_belong_to_user'];
+            //prepare parametre pour envoyer vers api
+            $tParams = array();
+            $tParams['title'] = $data['api_challenge']['title'];
+            $tParams['color'] = $data['api_challenge']['color'];
+            $tParams['delayed_result'] = $data['api_challenge']['result'];
+            
+            if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
+                $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
+            } elseif ($apiChallenge->getHashtag()) {
+                $tParams['hashtag'] =  $apiChallenge->getHashtag()->getTag();
+            }
+            
+//            $tParams['time_to_end'] = floatval($data['api_challenge']['time_to_end']);
+            $tParams['start_date'] = $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
+            $tParams['end_date'] = $apiChallenge->getEndDate()->format(\DateTime::ISO8601);
+//            $tParams['delayed_result'] = $data['api_challenge']['delayed_result'];
+            $tParams['bet_price'] = $data['api_challenge']['betPrice'];
+             if((int)$data['api_challenge']['status'] == 1){
+                $tParams['draft'] = 1;
+            }
+//            echo $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
+           // var_dump( $tParams);
+            $editChallengeUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('challenges').'/'. $apiChallenge->getId();
+            
+            $curlService = $this->get('yon_user.data');
+            
+            //set api header
+            $customerHeader = array('Authorization: '. $session->get ( 'yon_token'));
+            if( (int)$data['to_belong_to_user'] > 0  ){
+                $customerHeader[] = 'X-YESorNO-UserID: '.$data['to_belong_to_user'];
+            }
                 
+            $result = $curlService->curlPatch($editChallengeUrl, $tParams, $customerHeader);
+            
+            //traitement des redirection si OK ou pas
+            $response = json_decode($result);
+//            var_dump($result);die;
+            
+            if($response && isset($response->id) && $response->id > 0){
+                
+                //add to contest if need
+                $concours = isset($data['api_challenge']['contest']) ? $data['api_challenge']['contest'] : null;
+                if($concours){
+                    $ContestChallengeUrl = $this->container->getParameter('api_url').'/contests/'.$concours.'/challenges';
+                    $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
+                    $tParamsContestChallenge = array('challenge_id' => $response->id);
+                    
+                    $result = $curlService->curlPost($ContestChallengeUrl, $tParamsContestChallenge, $custHeaderContent);
+                }
+                
+               $this->get('session')->getFlashBag()->add('success', sprintf('un paris a été bien modifié!.')); 
             } else {
-                $currentAuthUser = $session->get ( 'user_infos');
-                $authUserId = $currentAuthUser->id;
-            }
-            $authUser = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:AuthUser')->find($authUserId);
-            $apiChallenge->setUser($authUser);
-            
-            //create hashtag
-             if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
-                $newHashtag = new ApiHashtag();
-                $newHashtag->setTag($data['api_challenge']['hashtag_user']);
-                
-                $em->persist($newHashtag);
-                $em->flush();
-                
-                $apiChallenge->setHashtag($newHashtag);
+               $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
             }
             
-            $em->persist($apiChallenge);
-            $em->flush();
-            if(isset($data['api_challenge']['contest']) && $data['api_challenge']['contest'] != '' ){
-                $contestId = $data['api_challenge']['contest'];
-                $contest = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiContest')->find($contestId);
-                $apiContestchallenge = new \Yon\Bundle\ParisBundle\Entity\ApiContestchallenge();
-                $apiContestchallenge->setChallenge($apiChallenge);
-                $apiContestchallenge->setContest($contest);
-                
-                $em->persist($apiContestchallenge);
-                $em->flush();
-                
-            }
-
-            $this->get('session')->getFlashBag()->add('success', sprintf('un paris a été bien modifié!.'));
             return $this->redirectToRoute('apichallenge_index');
         }
 
@@ -624,7 +624,7 @@ class ApiChallengeController extends Controller
         return new JsonResponse(array('code' => 'success'));
     }
     
-    public function addChallengeToContestAjaxAction(Request $request)
+    public function WithoutAPIaddChallengeToContestAjaxAction(Request $request)
     {
         
         $em = $this->getDoctrine()->getEntityManager();
@@ -662,4 +662,31 @@ class ApiChallengeController extends Controller
         
         return new JsonResponse(array('code' => 'success'));
     }
+    
+    public function addChallengeToContestAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        $curlService = $this->get('yon_user.data');
+        $data = $request->request->all();
+        
+        if( !(isset($data['challenge']) && isset($data['contest'])) ) {
+            return new JsonResponse(array('code' => 'eroor', 'messate' => 'parameter missing challenge, contest')); 
+        }
+        
+        $ContestChallengeUrl = $this->container->getParameter('api_url').'/contests/'.$data['contest'].'/challenges';
+        
+        $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
+        $tParamsContestChallenge = array('challenge_id' => $data['challenge']);
+
+        $result = $curlService->curlPost($ContestChallengeUrl, $tParamsContestChallenge, $custHeaderContent);
+        
+        $response = json_decode($result);
+        
+        if($response && isset($response->message)) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => $response->message)); 
+        }
+        
+        return new JsonResponse(array('code' => 'success'));
+    }
+    
 }

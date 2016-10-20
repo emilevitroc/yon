@@ -98,6 +98,13 @@ class ApiChallengeType extends AbstractType
                     'label' => 'Prix du paris',
                 )
             )
+            ->add('status', 'choice', array (
+                'label' => 'Brouillons',
+                'label_attr' => $options ['label_attr'],
+                'required' => false,
+                'choices' => ApiChallenge::$DRAFT_CHOICE 
+                )
+            )
 //            ->add('status', 'choice', array (
 //                'label' => 'Statut',
 //                'empty_value' => 'Définir un statut',

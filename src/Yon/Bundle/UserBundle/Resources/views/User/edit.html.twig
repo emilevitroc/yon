@@ -36,20 +36,20 @@
                             <div class="form-groups">
                                 <label for="name" class="col-sm-2 control-label required">Name</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control"  name="name" id="utilisateurs_name" value="{% if utilisateur.user is defined %} {{ utilisateur.user.firstName }}{% endif %}">
+                                    <input type="text" class="form-control"  name="name" id="utilisateurs_name" value="{% if utilisateur.user is defined %}{{ utilisateur.user.firstName }}{% endif %}">
                                 </div>
                             </div>
                                 
                             <div class="form-groups">
                                 <label for="utilisateurs_username" class="col-sm-2 control-label required">Username</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control"  name="username" id="utilisateurs_username" value="{% if utilisateur.user.username is defined %} {{ utilisateur.user.username }}{% endif %}">
+                                    <input type="text" class="form-control"  name="username" id="utilisateurs_username" value="{% if utilisateur.user.username is defined %}{{ utilisateur.user.username }}{% endif %}">
                                 </div>
                             </div>
                             <div class="form-groups">
                                 <label for="utilisateurs_phone_number" class="col-sm-2 control-label required">Tél n°</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control"  name="phone_number" id="utilisateurs_phone_number" value="{% if utilisateur.phoneNumber is defined %} {{ utilisateur.phoneNumber }}{% endif %}">
+                                    <input type="text" class="form-control"  name="phone_number" id="utilisateurs_phone_number" value="{% if utilisateur.phoneNumber is defined %}{{ utilisateur.phoneNumber }}{% endif %}">
                                 </div>
                             </div>
                                 
@@ -74,7 +74,7 @@
                             <div class="form-groups">
                                 <label for="utilisateurs_balance" class="col-sm-2 control-label required">Nb points</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control"  name="balance" id="utilisateurs_balance" value="{% if utilisateur.balance is defined %} {{ utilisateur.balance }}{% endif %}">
+                                    <input type="text" class="form-control"  name="balance" id="utilisateurs_balance" value="{% if utilisateur.balance is defined %}{{ utilisateur.balance }}{% endif %}">
                                 </div>
                             </div>
                             <div class="form-groups">

@@ -10,9 +10,11 @@ imports:
 parameters:
     locale: en
     api_url: "http://yesorno-api.elasticbeanstalk.com/"
+#    api_url: "http://yesorno-api-dev.us-east-1.elasticbeanstalk.com/"
     authentification: "/sessions"
     users: "/users"
     challenges: "/challenges"
+    contests: "/contests"
 
 framework:
     #esi:             ~
