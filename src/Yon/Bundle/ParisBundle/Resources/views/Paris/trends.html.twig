@@ -1,0 +1,307 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block title %}{{ parent() }}Liste des concours{% endblock %}
+{% set menuParis = true %}
+{% set menuParisTrends = true %}
+{% block stylesheets %}
+    {{ parent() }}
+<style type="text/css">
+    #list-users_length, #list-users_filter {
+        margin: 10px;
+    }
+    .btn-mini-rectif{
+        margin-right: 5px;
+    }
+    .add-trnds-manuel {
+            bottom: -37px;
+            left: 330px;
+            position: relative;
+            width: 400px;
+            z-index: 2;
+        }
+    .list-count {
+        font-size: 2.1em;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+        
+    <div class="row">
+        <div class="col-md-6 col-lg-6 col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Liste depuis twitter</h3>
+                    <div class="list-count">
+                        <span class="title-count-text"> TOTAL: </span><span class="title-count-twitter"></span>
+                    </div>
+
+                </div>
+                <!-- /.box-header -->
+
+                <div class="box-body">
+                    <table id="twitter-tag" class="table  table-bordered table-striped ">
+                        <thead >
+                            <tr>
+                                <th>Rang</th>
+                                <th>Hastag</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for twitterTopCinquant in twitterTopCinquants %}
+                                {% set strTag = twitterTopCinquant.name|replace({'#': "", "," : "."}) %}
+                                {% if  strTag matches '{^[a-zA-Z0-9]*$}' %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>#{{ strTag }}</td>
+                                        <td><a href="#" onclick="confirmTrendingsTopics('{{ strTag }}');"><button class="btn btn-mini btn-mini-rectif">Définir comme trending topics </button></a></td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Liste des populaires</h3>
+                    <div class="list-count">
+                        <span class="title-count-text"> TOTAL: </span><span class="title-count-popular"></span>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+
+                <div class="box-body">
+                    <table id="popular-tag" class="table  table-bordered table-striped">
+                        <thead >
+                            <tr>
+                                <th>Rang</th>
+                                <th>Hastag</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for apiHashtag in apiHashtags %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>#{{ apiHashtag.tag }}</td>
+                                    <td><a href="#" onclick="confirmTrendingsTopics('{{ apiHashtag.tag }}');"><button class="btn btn-mini btn-mini-rectif">Définir comme trending topics </button></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Liste des trending topics</h3>
+                    <div class="list-count">
+                        <span class="title-count-text"> TOTAL: </span><span class="title-count"></span>
+                    </div>
+
+                    {#<div class="box-tools">
+                        <div style="width: 150px;" class="input-group input-group-sm">
+                            <input type="text" placeholder="Search" class="form-control pull-right" name="table_search">
+
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>#}
+                </div>
+                <!-- /.box-header -->
+                <div class="add-trnds-manuel">
+                    <a href="#" onclick="addTrendingsTopics();"><button class="btn btn-mini btn-mini-rectif">Ajouter un trending topics </button></a>
+                </div>
+                <div class="box-body">
+                    <table id="trending-tag" class="table  table-bordered table-striped">
+                        <thead >
+                            <tr>
+                                <th>Id</th>
+                                <th>Hastag</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for apiTrendingTopic in apiTrendingTopics %}
+                                <tr>
+                                    <td>{{ apiTrendingTopic.id }}</td>
+                                    <td>{{ apiTrendingTopic.tag }}</td>
+                                    <td><a href="#" onclick="confirmDelTrendingsTopics('{{ apiTrendingTopic.id }}');"><button class="btn btn-mini btn-mini-rectif">Supprimer du trending topics </button></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">
+            $(function () {
+                $('#twitter-tag').DataTable(
+                {
+                    //"order": [[ 0, "desc" ]],
+                    "bProcessing": true,
+                    "bFilter": true,
+                    "oLanguage": {
+                        "sProcessing": "traitement...",
+                        "oPaginate": {
+                            "sPrevious": "Précédante", // This is the link to the previous page
+                            "sNext": "Suivante", // This is the link to the next page
+                        },
+                        "sSearch": "Filtrer: ",
+                        "sLengthMenu": "Afficher _MENU_ enregistrement par page",
+                        "sEmptyTable": "le service du twitter est indisponible pour le moment",
+                    },
+                    "footerCallback": function ( row, data, start, end, display ) {
+                        $('.title-count-twitter').html(display.length);
+                    }
+                });
+                $('#popular-tag').DataTable(
+                {
+                    //"order": [[ 0, "desc" ]],
+                    "bProcessing": true,
+                    "bFilter": true,
+                    "oLanguage": {
+                        "sProcessing": "traitement...",
+                        "oPaginate": {
+                            "sPrevious": "Précédante", // This is the link to the previous page
+                            "sNext": "Suivante", // This is the link to the next page
+                        },
+                        "sSearch": "Filtrer: ",
+                        "sLengthMenu": "Afficher _MENU_ enregistrement par page",
+                        "sEmptyTable": "Aucun trending topics trouvé",
+                    },
+                    "footerCallback": function ( row, data, start, end, display ) {
+                        $('.title-count-popular').html(display.length);
+                    }
+                });
+                $('#trending-tag').DataTable(
+                {
+                    "order": [[ 0, "desc" ]],
+                    "bProcessing": true,
+                    "bFilter": true,
+                    "oLanguage": {
+                        "sProcessing": "traitement...",
+                        "oPaginate": {
+                            "sPrevious": "Précédante", // This is the link to the previous page
+                            "sNext": "Suivante", // This is the link to the next page
+                        },
+                        "sSearch": "Filtrer: ",
+                        "sLengthMenu": "Afficher _MENU_ enregistrement par page",
+                        "sEmptyTable": "Aucun trending topics trouvé",
+                    },
+                    "footerCallback": function ( row, data, start, end, display ) {
+                        $('.title-count').html(display.length);
+                    }
+                });
+            });
+            
+            function confirmTrendingsTopics(tag){
+                    
+                bootbox.confirm({
+                    title: "Voulez vous vraiment définir le hashtag comme trending topics?",
+                    message: "Le hastag sera proposé comme trending topics dans la création des paris",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Non'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Oui'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result){
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('apichallenge_add_to_trends_ajax')}}',
+                                cache: false,
+                                data: {tag: tag},
+                                success: function(response){
+                                    if(response.code == 'success') {
+                                        location.reload();
+                                    } else {
+                                      console.log(response.message);  
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            function confirmDelTrendingsTopics(id){
+                    
+                bootbox.confirm({
+                    title: "Voulez vous vraiment supprimer le hashtag du trending topics?",
+                    message: "Le hastag ne sera plus proposé comme trending topics dans la création des paris",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Non'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Oui'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result){
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('apichallenge_del_to_trends_ajax')}}',
+                                cache: false,
+                                data: {id: id},
+                                success: function(response){
+                                    if(response.code == 'success') {
+                                        location.reload();
+                                    } else {
+                                      console.log(response.message);  
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            
+            function addTrendingsTopics(){
+                bootbox.prompt(
+                    "Entrer le nom du trending topics", 
+                    function(tag){ 
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ path('apichallenge_add_to_trends_ajax')}}',
+                            cache: false,
+                            data: {tag: tag},
+                            success: function(response){
+                                if(response.code == 'success') {
+                                    location.reload();
+                                } else {
+                                  console.log(response.message);  
+                                }
+                            }
+                        }); 
+                    }
+                );
+            }
+            
+	</script>
+{% endblock %}

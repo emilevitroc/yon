@@ -18,4 +18,5 @@ return array(
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib'),
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib'),
     'Circle\\RestClientBundle' => array($vendorDir . '/ci/restclientbundle'),
+    'Buzz' => array($vendorDir . '/kriswallsmith/buzz/lib'),
 );

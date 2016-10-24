@@ -15,7 +15,12 @@ parameters:
     users: "/users"
     challenges: "/challenges"
     contests: "/contests"
-
+endroid_twitter:
+    consumer_key: frBrEbA9VRNOFiiGVnIXfqwrq
+    consumer_secret: mTjDFO29o1CbJTua6mVNHzfvfUE0wfCBUFU7a6aLxinAUzApBn
+    access_token: 703244566460243968-t8Q7Mz35j3yzrW9UJfxpTAFBtN3YQSp
+    access_token_secret: X7toxGpsghFJ1fwHAjwQKCeK5WoRve95qf95amZuuwZQv
+    timeout: 45645
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }

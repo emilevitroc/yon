@@ -23,7 +23,17 @@
         </li>
     </ul>
 {% endblock %}#}
-
+{% block stylesheets %}
+    {{ parent() }}
+        <style>
+            #api_challenge_choice_hashtag_1 {
+                margin-left: 10px;
+            }
+            .toggleHashtag{
+                display: none;
+            }
+        </style>
+{% endblock %}
 {% block body %}
     {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="callout callout-success">
@@ -54,12 +64,30 @@
                                 <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
                             </div>
                         </div>
-                        {{ form_widget(edit_form) }}
+{#                        {{ form_widget(edit_form) }}#}
+                        {{ form_row(edit_form.title) }}
+                        {{ form_row(edit_form.duration) }}
+                        {{ form_row(edit_form.startDate) }}
+                        {{ form_row(edit_form.endDate) }}
+                        {{ form_row(edit_form.choice_hashtag) }}
+                        <div id="trends-container" class="toggleHashtag">
+                            {{ form_row(edit_form.trendingTopics) }}
+                        </div>
+                        <div id="manual-container" class="toggleHashtag">
+                            {{ form_row(edit_form.hashtag_user) }}
+                        </div>
+                        {{ form_row(edit_form.contest) }}
+                        {{ form_row(edit_form.color) }}
+                        {{ form_row(edit_form.result) }}
+                        {{ form_row(edit_form.betPrice) }}
+                        {{ form_row(edit_form.prize) }}
+                        {{ form_row(edit_form.status) }}
                     </div>
 
                     <div class="box-footer">
                         <input type="submit" value="Enregistrer" class="btn btn-primary">
                         <a class="btn btn-default pull-left" href="{{ path('apichallenge_index') }}">Retour à la liste</a>
+                        <input type="button" value="Supprimer" class="btn btn-danger pull-right" onclick="confirmDelChallenge('{{ apiChallenge.id }}');">
                     </div>
                     {{ form_end(edit_form) }}
                 </form>
@@ -73,6 +101,20 @@
     {{ parent() }}
 	<script type="text/javascript">
             $(function () {
+                {% if isTrending %}
+                    $('#trends-container').show();
+                {% else %}
+                    $('#manual-container').show();
+                {% endif %}
+                $('input[name="api_challenge[choice_hashtag]"]').change(function() {
+                    $('.toggleHashtag').hide();
+                    if (this.value == 'trends') {
+                        $('#trends-container').show();
+                    }
+                    else if (this.value == 'manuel') {
+                        $('#manual-container').show();
+                    }
+                });
                 
                 function log( message ) {
                     $( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
@@ -114,6 +156,38 @@
                 zdiff = moment.utc(end.diff(start)).format('HH:mm');
                 $('#api_challenge_duration').val(zdiff);
             });
+            
+            function confirmDelChallenge(challengeId){
+                bootbox.confirm({
+                    title: "Voulez vous vraiment supprimer le paris?",
+                    message: "Le paris sera supprimer definitivement dans la base",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Non'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Oui'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result){
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('apichallenge_delete_ajax')}}',
+                                cache: false,
+                                data: {challengeId: challengeId},
+                                success: function(response){
+                                    if(response.code == 'success') {
+                                        window.location.href = '{{ path('apichallenge_index') }}';
+                                    } else {
+                                      console.log(response.message);  
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
             
 	</script>
 {% endblock %}

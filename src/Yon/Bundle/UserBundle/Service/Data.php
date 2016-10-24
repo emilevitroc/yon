@@ -112,5 +112,36 @@ class Data {
         }
     }
     
+    public function curlDelete($_zUrl, $_custom_header = null) {
+
+        if ($_zUrl) {
+            
+            $headers = array(
+                'Accept-Language: fr',
+                'Content-Type: application/json'
+            );
+            if($_custom_header){
+                $headers = array_merge($headers, $_custom_header);
+            }
+            
+//            var_dump($_zUrl);
+//            var_dump($headers);
+//            var_dump($post_data);
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $_zUrl);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+//            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post_data));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            
+            $response = curl_exec($curl);
+            curl_close($curl);
+            
+            return $response;
+        } else {
+            return null;
+        }
+    }
+    
 }
 ?>

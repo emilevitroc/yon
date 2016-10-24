@@ -56,6 +56,12 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
         array (
             'FOS\\JsRoutingBundle\\' => 20,
         ),
+        'E' => 
+        array (
+            'Endroid\\Twitter\\Tests\\' => 22,
+            'Endroid\\Twitter\\' => 16,
+            'Endroid\\Bundle\\TwitterBundle\\' => 29,
+        ),
         'D' => 
         array (
             'Doctrine\\Common\\Cache\\' => 22,
@@ -157,6 +163,19 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
         array (
             0 => __DIR__ . '/..' . '/friendsofsymfony/jsrouting-bundle',
         ),
+        'Endroid\\Twitter\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/twitter/tests',
+        ),
+        'Endroid\\Twitter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/twitter/src',
+        ),
+        'Endroid\\Bundle\\TwitterBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/twitter-bundle/src',
+            1 => __DIR__ . '/..' . '/endroid/twitter-bundle/tests',
+        ),
         'Doctrine\\Common\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
@@ -240,6 +259,13 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
             'Circle\\RestClientBundle' => 
             array (
                 0 => __DIR__ . '/..' . '/ci/restclientbundle',
+            ),
+        ),
+        'B' => 
+        array (
+            'Buzz' => 
+            array (
+                0 => __DIR__ . '/..' . '/kriswallsmith/buzz/lib',
             ),
         ),
     );

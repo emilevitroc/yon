@@ -1,0 +1,16 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: yesorno-api-dev.cidmiie6ykgu.us-east-1.rds.amazonaws.com
+#    database_host: 127.0.0.1
+    database_port: null
+    database_name: yesorno
+#    database_name: remote_yon
+    database_user: yesmaster
+#    database_user: root
+    database_password: ouimaitre
+#    database_password: admin
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: ThisTokenIsNotSoSecretChangeIt

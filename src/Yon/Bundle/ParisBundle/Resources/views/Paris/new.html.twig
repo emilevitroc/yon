@@ -5,7 +5,7 @@
 {% set menuParisCreate = true %}
 {% block stylesheets %}
     {{ parent() }}
-	<style>
+        <style>
             .inputfile {
                 /* visibility: hidden etc. wont work */
                 width: 0.1px;
@@ -14,20 +14,26 @@
                 overflow: hidden;
                 position: absolute;
                 z-index: -1;
-              }
-              .inputfile:focus + label {
+            }
+            .inputfile:focus + label {
                 /* keyboard navigation */
                 outline: 1px dotted #000;
                 outline: -webkit-focus-ring-color auto 5px;
-              }
-              .inputfile + label * {
-                pointer-events: none;
-              }
-              .inputfile-text {
-                    left: 15px;
-                    position: relative;
-                    top: 6px;
-                }
+            }
+            .inputfile + label * {
+              pointer-events: none;
+            }
+            .inputfile-text {
+                left: 15px;
+                position: relative;
+                top: 6px;
+            }
+            #api_challenge_choice_hashtag_1 {
+                margin-left: 10px;
+            }
+            .toggleHashtag{
+                display: none;
+            }
         </style>
 {% endblock %}
 {% block body %}
@@ -61,7 +67,24 @@
                                     <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
                                 </div>
                             </div>
-                            {{ form_widget(form) }}
+{#                            {{ form_widget(form) }}#}
+                            {{ form_row(form.title) }}
+                            {{ form_row(form.duration) }}
+                            {{ form_row(form.startDate) }}
+                            {{ form_row(form.endDate) }}
+                            {{ form_row(form.choice_hashtag) }}
+                            <div id="trends-container" class="toggleHashtag">
+                                {{ form_row(form.trendingTopics) }}
+                            </div>
+                            <div id="manual-container" class="toggleHashtag">
+                                {{ form_row(form.hashtag_user) }}
+                            </div>
+                            {{ form_row(form.contest) }}
+                            {{ form_row(form.color) }}
+                            {{ form_row(form.result) }}
+                            {{ form_row(form.betPrice) }}
+                            {{ form_row(form.prize) }}
+                            {{ form_row(form.status) }}
                         </div>
 
                         <div class="box-footer">
@@ -84,7 +107,15 @@
                   autoclose: true,
                   format:'dd-mm-yyyy'
                 });#}
-
+                $('input[name="api_challenge[choice_hashtag]"]').change(function() {
+                    $('.toggleHashtag').hide();
+                    if (this.value == 'trends') {
+                        $('#trends-container').show();
+                    }
+                    else if (this.value == 'manuel') {
+                        $('#manual-container').show();
+                    }
+                });
                 function log( message ) {
                     $( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
                 }
@@ -151,6 +182,8 @@
                     {% if baseParis is defined %}
                         presetParisList( { item: JSON.parse('{{ baseParis|raw }}') });
                     {% endif %}
+                        
+                 
                 
             });
             

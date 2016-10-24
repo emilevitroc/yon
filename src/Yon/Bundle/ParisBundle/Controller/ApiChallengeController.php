@@ -12,6 +12,7 @@ use Yon\Bundle\ParisBundle\Entity\ApiContest;
 use Yon\Bundle\ParisBundle\Entity\ApiHashtag;
 use Yon\Bundle\ParisBundle\Entity\ApiContestchallenge;
 use Yon\Bundle\ParisBundle\Form\ApiChallengeType;
+use Yon\Bundle\ParisBundle\Entity\ApiTrendingTopics;
 
 /**
  * ApiChallenge controller.
@@ -341,12 +342,31 @@ class ApiChallengeController extends Controller
             $tParams['title'] = $data['api_challenge']['title'];
             $tParams['color'] = $data['api_challenge']['color'];
             $tParams['delayed_result'] = $data['api_challenge']['result'];
+            $tParams['prize'] = $data['api_challenge']['prize'];
             
-            if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
-                $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
-            } elseif ($apiChallenge->getHashtag()) {
-                $tParams['hashtag'] =  $apiChallenge->getHashtag()->getTag();
+            //hashatag
+//            if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
+//                $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
+//            } elseif ($apiChallenge->getHashtag()) {
+//                $tParams['hashtag'] =  $apiChallenge->getHashtag()->getTag();
+//            }
+            
+            if(isset($data['api_challenge']['choice_hashtag']) && $data['api_challenge']['choice_hashtag'] != '' ){
+                if($data['api_challenge']['choice_hashtag'] == 'manuel'){
+                    if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
+                       $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
+                    }
+                } elseif ($data['api_challenge']['choice_hashtag'] == 'trends') {
+                    if(isset($data['api_challenge']['trendingTopics']) && $data['api_challenge']['trendingTopics'] != '' ){
+                        $oTrendingTopic = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->find($data['api_challenge']['trendingTopics']);
+                        if($oTrendingTopic){
+                            $tParams['hashtag'] = $oTrendingTopic->getTag();
+                        }
+                    }
+                }
             }
+            
+            
             
 //            $tParams['time_to_end'] = floatval($data['api_challenge']['time_to_end']);
             $tParams['start_date'] = $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
@@ -452,6 +472,22 @@ class ApiChallengeController extends Controller
         }
         $editForm->get('result')->setData($apiChallenge->getDelayedResult());
         
+        //set hashtag defaul value
+        $isTrending = false;
+        if($apiChallenge->getHashtag()){
+            $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->findOneBy(array('tag' => $apiChallenge->getHashtag()->getTag()));
+            if($oApiTrendingTopics){
+                $editForm->get('choice_hashtag')->setData('trends');
+                $editForm->get('trendingTopics')->setData($oApiTrendingTopics);
+                $isTrending = true;
+            } else {
+                $editForm->get('choice_hashtag')->setData('manuel');
+                $editForm->get('hashtag_user')->setData($apiChallenge->getHashtag()->getTag());
+            }
+        }
+        
+        
+        
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -462,11 +498,27 @@ class ApiChallengeController extends Controller
             $tParams['title'] = $data['api_challenge']['title'];
             $tParams['color'] = $data['api_challenge']['color'];
             $tParams['delayed_result'] = $data['api_challenge']['result'];
+            $tParams['prize'] = $data['api_challenge']['prize'];
             
-            if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
-                $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
-            } elseif ($apiChallenge->getHashtag()) {
-                $tParams['hashtag'] =  $apiChallenge->getHashtag()->getTag();
+            //hashtag
+//            if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
+//                $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
+//            } elseif ($apiChallenge->getHashtag()) {
+//                $tParams['hashtag'] =  $apiChallenge->getHashtag()->getTag();
+//            }
+            if(isset($data['api_challenge']['choice_hashtag']) && $data['api_challenge']['choice_hashtag'] != '' ){
+                if($data['api_challenge']['choice_hashtag'] == 'manuel'){
+                    if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
+                       $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
+                    }
+                } elseif ($data['api_challenge']['choice_hashtag'] == 'trends') {
+                    if(isset($data['api_challenge']['trendingTopics']) && $data['api_challenge']['trendingTopics'] != '' ){
+                        $oTrendingTopic = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->find($data['api_challenge']['trendingTopics']);
+                        if($oTrendingTopic){
+                            $tParams['hashtag'] = $oTrendingTopic->getTag();
+                        }
+                    }
+                }
             }
             
 //            $tParams['time_to_end'] = floatval($data['api_challenge']['time_to_end']);
@@ -519,6 +571,7 @@ class ApiChallengeController extends Controller
             'apiChallenge' => $apiChallenge,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'isTrending' => $isTrending,
         ));
     }
 
@@ -624,6 +677,20 @@ class ApiChallengeController extends Controller
         return new JsonResponse(array('code' => 'success'));
     }
     
+    public function twitterHashtagAjaxAction(Request $request)
+    {
+        $twitter = $this->get('endroid.twitter');
+        // Or retrieve the timeline using the generic query method
+        $tParams = array (
+            'id' => 1
+        );
+        $response = $twitter->query('trends/place', 'GET', 'json', $tParams);
+        
+        $tweets = json_decode($response->getContent());
+//        var_dump($tweets[0]->trends);die;
+        return new JsonResponse($tweets);
+    }
+    
     public function WithoutAPIaddChallengeToContestAjaxAction(Request $request)
     {
         
@@ -689,4 +756,145 @@ class ApiChallengeController extends Controller
         return new JsonResponse(array('code' => 'success'));
     }
     
+    public function addToTrendsAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $data = $request->request->all();
+        
+        if( !(isset($data['tag'])) ) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => 'parameter missing tag')); 
+        }
+        try {
+            $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->findOneBy(array('tag' => $data['tag']));
+            if(!$oApiTrendingTopics){
+                $oApiTrendingTopics = new ApiTrendingTopics();
+                $oApiTrendingTopics->setTag($data['tag']);
+
+                $em->persist($oApiTrendingTopics);
+                $em->flush();
+            }
+            
+        } catch (Exception $ex) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => $ex->getMessage())); 
+        }
+       
+        
+        return new JsonResponse(array('code' => 'success'));
+    }
+    
+    public function delToTrendsAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $data = $request->request->all();
+        
+        if( !(isset($data['id'])) ) {
+            return new JsonResponse(array('code' => 'eroor', 'messate' => 'parameter missing id')); 
+        }
+        try{
+            $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->find($data['id']);
+            $em->remove($oApiTrendingTopics);
+            $em->flush();
+        } catch (Exception $ex) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => $ex->getMessage())); 
+        }
+        
+        return new JsonResponse(array('code' => 'success'));
+    }
+    
+    public function deleteAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        $curlService = $this->get('yon_user.data');
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $data = $request->request->all();
+        
+        if( !(isset($data['challengeId'])) ) {
+            return new JsonResponse(array('code' => 'eroor', 'messate' => 'parameter missing id')); 
+        }
+        try{
+            $delChallengeUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('challenges').'/'. $data['challengeId'];
+        
+            $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
+//            if( (int)$data['to_belong_to_user'] > 0  ){
+//                $custHeaderContent[] = 'X-YESorNO-UserID: '.$data['to_belong_to_user'];
+//            }
+
+            $result = $curlService->curlDelete($delChallengeUrl, $custHeaderContent);
+
+            $response = json_decode($result);
+        } catch (Exception $ex) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => $ex->getMessage())); 
+        }
+        
+        return new JsonResponse(array('code' => 'success'));
+    }
+    
+    /**
+     * Lists all trends entities.
+     *
+     */
+    public function trendsAction(Request $request)
+    {
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        
+        $twitter = $this->get('endroid.twitter');
+        
+        $tParams = array (
+            'id' => 1
+        );
+        $twitterTopCinquants = null;
+        try {
+            $response = $twitter->query('trends/place', 'GET', 'json', $tParams);
+            $tweets = json_decode($response->getContent());
+            $twitterTopCinquants = $tweets[0]->trends;
+            
+        } catch (Exception $ex) {
+            $tweets = array();
+        } finally {
+            if(!$twitterTopCinquants){
+                $twitterTopCinquants = array();
+            }
+            
+            // pour generer le menu contest dans le popup
+            $em = $this->getDoctrine()->getManager();
+            $apiTrendingTopics = $em->getRepository('YonParisBundle:ApiTrendingTopics')->findAll();
+            $apiHashtags = $em->getRepository('YonParisBundle:ApiHashtag')->findBy(
+                array('visible'=> 1), 
+                array('range' => 'DESC'),
+                6,0
+            );
+            
+
+            return $this->render('YonParisBundle:Paris:trends.html.twig', array(
+                'twitterTopCinquants' => $twitterTopCinquants,
+                'apiHashtags' => $apiHashtags,
+                'apiTrendingTopics' => $apiTrendingTopics,
+            ));
+        }
+    }
 }

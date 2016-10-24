@@ -28,7 +28,31 @@ apichallenge_reset_concours_ajax:
     defaults: { _controller: "YonParisBundle:ApiChallenge:resetConcoursAjax" }
     methods:  POST
     
+apichallenge_twitter_hashtag_ajax:
+    path:     /twitter-hashtag-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:twitterHashtagAjax" }
+    methods:  GET
+    
 apichallenge_add_challenge_to_contest_ajax:
     path:     /add-challenge-to-contest-ajax
     defaults: { _controller: "YonParisBundle:ApiChallenge:addChallengeToContestAjax" }
+    methods:  POST
+    
+apichallenge_trends:
+    path:     /trends
+    defaults: { _controller: "YonParisBundle:ApiChallenge:trends" }
+    methods:  GET
+apichallenge_add_to_trends_ajax:
+    path:     /add-to-trends-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:addToTrendsAjax" }
+    methods:  POST
+    
+apichallenge_del_to_trends_ajax:
+    path:     /del-to-trends-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:delToTrendsAjax" }
+    methods:  POST
+    
+apichallenge_delete_ajax:
+    path:     /delete-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:deleteAjax" }
     methods:  POST

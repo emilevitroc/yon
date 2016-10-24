@@ -46,14 +46,22 @@ class ApiChallengeType extends AbstractType
                 )
             )
 //            ->add('endDate', 'datetime')
-                
-            ->add('hashtag','entity',array(
+            ->add('choice_hashtag', 'choice', array(
+                'label' => 'Choix hashtags',
+                'choices' => array('trends' => 'Trending topics', 'manuel' => 'Manuel'),
+                'expanded' => true,
+                'multiple' => false,
+                'mapped'   => false,
+                'label_attr' => $options ['label_attr'],
+            ))
+            ->add('trendingTopics','entity',array(
+                'mapped' => false,
                 'empty_value' => 'Choisir un trending topic',
                 'label_attr' => $options ['label_attr'],
-                'class' => 'YonParisBundle:ApiHashtag',
+                'class' => 'YonParisBundle:ApiTrendingTopics',
                 'property' => 'tag',
                 'required' => false,
-                'label' => 'Trending topic',
+                'label' => 'Trending topics',
                 'query_builder' => function ($repository) use($options) {
                         return $repository->createQueryBuilder ( 'sh' )
                                 ->andWhere('sh.visible = 1')
@@ -96,6 +104,10 @@ class ApiChallengeType extends AbstractType
             )
             ->add('betPrice', null, array(
                     'label' => 'Prix du paris',
+                )
+            )
+            ->add('prize', null, array(
+                    'label' => 'Prize',
                 )
             )
             ->add('status', 'choice', array (
