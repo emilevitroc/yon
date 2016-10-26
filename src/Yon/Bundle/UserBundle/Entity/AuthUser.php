@@ -90,6 +90,13 @@ class AuthUser
      * @ORM\Column(name="date_joined", type="datetime", nullable=false)
      */
     private $dateJoined;
+    
+    /**
+     * @var \AuthUser
+     *
+     * @ORM\OneToOne(targetEntity="ApiUserprofile", cascade ={"persist"}, mappedBy="user")
+     */
+    private $user;
 
 
 
@@ -332,4 +339,28 @@ class AuthUser
     {
         return $this->dateJoined;
     }
+    
+    /**
+     * Set user
+     *
+     * @param \Yon\Bundle\UserBundle\Entity\ApiUserprofile $user
+     * @return ApiUserprofile
+     */
+    public function setUser(\Yon\Bundle\UserBundle\Entity\ApiUserprofile $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Yon\Bundle\UserBundle\Entity\ApiUserprofile 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
 }

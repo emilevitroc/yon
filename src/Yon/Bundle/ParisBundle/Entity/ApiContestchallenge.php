@@ -41,7 +41,7 @@ class ApiContestchallenge
     /**
      * @var \ApiContest
      *
-     * @ORM\ManyToOne(targetEntity="\Yon\Bundle\ParisBundle\Entity\ApiContest")
+     * @ORM\ManyToOne(targetEntity="\Yon\Bundle\ParisBundle\Entity\ApiContest", inversedBy="contestChallenge")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contest_id", referencedColumnName="id")
      * })

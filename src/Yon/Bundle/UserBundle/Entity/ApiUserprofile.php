@@ -158,7 +158,7 @@ class ApiUserprofile
     /**
      * @var \AuthUser
      *
-     * @ORM\ManyToOne(targetEntity="AuthUser", cascade ={"persist"})
+     * @ORM\OneToOne(targetEntity="AuthUser", cascade ={"persist"}, inversedBy="user")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })

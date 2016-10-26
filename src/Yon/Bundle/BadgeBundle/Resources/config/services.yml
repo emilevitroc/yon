@@ -1,0 +1,4 @@
+services:
+#    yon_badge.example:
+#        class: Yon\Bundle\BadgeBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

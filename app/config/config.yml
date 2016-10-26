@@ -4,6 +4,8 @@ imports:
     - { resource: services.yml }
     - { resource: "@YonUserBundle/Resources/config/services.yml" }
     - { resource: "@YonParisBundle/Resources/config/services.yml" }
+    - { resource: "@YonBadgeBundle/Resources/config/services.yml" }
+    - { resource: "@YonRankBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -15,6 +17,7 @@ parameters:
     users: "/users"
     challenges: "/challenges"
     contests: "/contests"
+    app_settings: "/admin/app_settings"
 endroid_twitter:
     consumer_key: frBrEbA9VRNOFiiGVnIXfqwrq
     consumer_secret: mTjDFO29o1CbJTua6mVNHzfvfUE0wfCBUFU7a6aLxinAUzApBn

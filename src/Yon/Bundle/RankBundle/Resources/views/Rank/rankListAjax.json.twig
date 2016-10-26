@@ -1,0 +1,22 @@
+{% spaceless %}
+    {% set aaData = {} %}
+    {% for userrank in values %}
+        
+        {% 
+        set value = [ 
+            userrank.rank,
+            '<a href="#"><button class="btn btn-mini btn-mini-rectif">'~userrank.user.user.id~'</button></a>',
+            userrank.user.user.displayUsername,
+            userrank.user.user.phoneNumber,
+            userrank.user.user.challengesCount,
+            userrank.user.user.followersCount,
+            userrank.user.user.followingsCount,
+            userrank.points
+        ]
+        %}
+        
+        {% set aaData = aaData|merge({ (loop.index0): value }) %}
+    {% endfor %}
+{% endspaceless %}
+{% set data = data|merge({ 'aaData': aaData} ) %}
+{{ data|json_encode|raw }}

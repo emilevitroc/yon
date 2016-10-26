@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ApiContestuserranking
  *
  * @ORM\Table(name="api_contestuserranking", uniqueConstraints={@ORM\UniqueConstraint(name="api_contestuserranking_contest_id_5fdcedf0a43b10a0_uniq", columns={"contest_id", "user_id"})}, indexes={@ORM\Index(name="api_contestuserranking_user_id_769d288d85062325_fk_auth_user_id", columns={"user_id"}), @ORM\Index(name="IDX_6DEBC8E91CD0F0DE", columns={"contest_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Yon\Bundle\ParisBundle\Repository\ApiContestuserrankingRepository")
  */
 class ApiContestuserranking
 {

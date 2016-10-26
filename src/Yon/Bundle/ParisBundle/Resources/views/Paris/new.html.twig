@@ -130,6 +130,16 @@
                     $( "#api_challenge_color" ).val(oParis.item.color) ;
                     $( "#api_challenge_result" ).val(oParis.item.result) ;
                     
+                    if(oParis.item.isTrending){
+                        $('#trends-container').show();
+                        $('#api_challenge_trendingTopics').val(oParis.item.trendingTopics);
+                        $('#api_challenge_choice_hashtag_0').attr('checked', true);
+                    }else{
+                        $('#manual-container').show();
+                        $('#api_challenge_hashtag_user').val(oParis.item.hashtagUser);
+                        $('#api_challenge_choice_hashtag_1').attr('checked', true);
+                    }
+                    
                     var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
                     var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
                     zdiff = moment.utc(end.diff(start)).format('HH:mm');
@@ -180,7 +190,8 @@
                 });
                     
                     {% if baseParis is defined %}
-                        presetParisList( { item: JSON.parse('{{ baseParis|raw }}') });
+                        var jsparsed = JSON.stringify({{ baseParis|raw }});
+                        presetParisList( { item: JSON.parse(jsparsed) });
                     {% endif %}
                         
                  

@@ -1,0 +1,3 @@
+yon_badge_homepage:
+    path:     /badge
+    defaults: { _controller: YonBadgeBundle:Badge:index }

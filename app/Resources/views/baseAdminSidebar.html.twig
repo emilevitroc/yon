@@ -82,6 +82,35 @@
                     </li>
                 </ul>
             </li>
+            <li class="treeview {% if menuBadge is defined %}{{ active }}{% endif %}">
+                <a href="#">
+                    <i class="fa fa-certificate"></i>
+                    <span>Badges</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if menuBadgeConfig is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('yon_badge_homepage') }}"><i class="fa fa-circle-o"></i>Configuration</a>
+                    </li>
+                    
+                </ul>
+            </li>
+            
+            <li class="treeview {% if menuRank is defined %}{{ active }}{% endif %}">
+                <a href="#">
+                    <i class="fa fa-puzzle-piece"></i>
+                    <span>Classement</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if menuRankGeneral is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('yon_rank_general') }}"><i class="fa fa-circle-o"></i>Général</a>
+                    </li>
+                    <li class="{% if menuRankContest is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('yon_rank_homepage') }}"><i class="fa fa-circle-o"></i>Par concours</a>
+                    </li>
+                </ul>
+            </li>
             
         </ul>
     </section>

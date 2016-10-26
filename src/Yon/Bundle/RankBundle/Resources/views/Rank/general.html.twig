@@ -1,7 +1,7 @@
 {% extends 'baseAdmin.html.twig' %}
-{% block title %}{{ parent() }} Utillisateurs {% endblock %}
-{% set menuUsers = true %}
-{% set menuUsersAll = true %}
+{% block title %}{{ parent() }} Classement général {% endblock %}
+{% set menuRank = true %}
+{% set menuRankGeneral = true %}
 {% block stylesheets %}
     {{ parent() }}
 <style type="text/css">
@@ -10,6 +10,13 @@
     }
     .btn-mini-rectif{
         margin-right: 5px;
+    }
+    .contest-filter {
+        bottom: -37px;
+        left: 330px;
+        position: relative;
+        width: 400px;
+        z-index: 2;
     }
     .list-count {
         font-size: 2.1em;
@@ -34,50 +41,33 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Utillisateurs</h3>
+                    <h3 class="box-title">Classement général</h3>
                     <div class="list-count">
                         <span class="title-count-text"> TOTAL: </span><span class="title-count"></span>
                     </div>
                 </div>
                 <!-- /.box-header -->
-   
                 <div class="box-body">
                     <table id="list-users" class="table  table-bordered table-striped">
                         <thead >
                              <tr>
-                                <th>Id</th>
-                                <th>Username</th>
-                                <th>Tél n°</th>
                                 <th>Rang</th>
+                                <th>Id Utilisateur</th>
+                                <th>Name</th>
+                                <th>Tél n°</th>
                                 <th>Nb Paris Crées</th>
                                 <th>Nb Followers</th>
                                 <th>Nb Followed</th>
                                 <th>Nb Points</th>
-                                <th>Type</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                           {# {% if utilisateurs.items|length > 0 %}
-                                {% for utilisateur in utilisateurs.items %}
-                                    <tr>
-                                        <td><a href="#">{{ utilisateur.id }}</a></td>
-                                        <td>{% if utilisateur.username is defined %}{{ utilisateur.username }}{% endif %}</td>
-                                        <td>{% if utilisateur.phone_number is defined %}{{ utilisateur.phone_number }}{% endif %}</td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}#}
                         </tbody>
                     </table>
                 </div>
-              {#  <div class="box-footer">
-                    <a class="btn btn-primary" href="#">Create a new entry</a>
-                    <a class="btn btn-success" href="#">Export to csv/excel</a>
-                </div>     #}   
-               
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
@@ -85,12 +75,14 @@
             $(function () {
                 $('#list-users').DataTable(
                 {
-                    "aoColumns": [{"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": false}],
-                     "order": [[ 0, "desc" ]],
+                    "aoColumns": [{"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}],
+                     "order": [[ 0, "asc" ]],
                     "bProcessing": true,
                     "bServerSide": true,
                     "bFilter": true,
-                    "sAjaxSource": "{{ path('yon_user_list_ajax') }}",
+                    "sAjaxSource": Routing.generate('yon_rank_list_ajax',{
+                                    'contestId' : 1
+                            }),
                     "oLanguage": {
                         "sProcessing": "traitement...",
                         "oPaginate": {
@@ -99,6 +91,7 @@
                         },
                         "sSearch": "Filtrer: ",
                         "sLengthMenu": "Afficher _MENU_ enregistrement par page",
+                        "sEmptyTable": "Aucun classement trouvé"
                         
                     },
                     "drawCallback": function(settings) {

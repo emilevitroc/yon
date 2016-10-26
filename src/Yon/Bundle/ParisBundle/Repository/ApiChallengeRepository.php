@@ -24,7 +24,7 @@ class ApiChallengeRepository extends EntityRepository
                 ->setParameter('status', $options['status']);
             
         } else {
-            echo $options['status'];
+            //echo $options['status'];
             
             if( $options['status'] === 0){
                  $qb

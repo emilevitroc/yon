@@ -1,0 +1,124 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block title %}{{ parent() }} Configuration des badges {% endblock %}
+{% set menuBadge = true %}
+{% set menuBadgeConfig = true %}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-xs-12">
+            <form id="form-grille" action="" method="POST">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Configuration des badges</h3>
+
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>conditions d’attribution</th>
+                                    <th>nb de niveaux</th>
+                                    <th>valeurs à atteindre</th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Badge1</td>
+                                    <td>nombre paris créés avec des yoners</td>
+                                    <td>1</td>
+                                    <td><input type="number" name="badge_won_level_1" value="{{ apiAppsettings.badgeWonLevel1}}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Badge1</td>
+                                    <td>nombre paris créés avec des yoners</td>
+                                    <td>2</td>
+                                    <td><input type="number" name="badge_won_level_2" value="{{ apiAppsettings.badgeWonLevel2}}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Badge1</td>
+                                    <td>nombre paris créés avec des yoners</td>
+                                    <td>3</td>
+                                    <td><input type="number" name="badge_won_level_3" value="{{ apiAppsettings.badgeWonLevel3}}"/></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Badge2</td>
+                                    <td>nb paris joués</td>
+                                    <td>1</td>
+                                    <td><input type="number" name="badge_played_level_1" value="{{ apiAppsettings.badgePlayedLevel1}}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Badge2</td>
+                                    <td>nombre paris joués</td>
+                                    <td>2</td>
+                                    <td><input type="number" name="badge_played_level_2" value="{{ apiAppsettings.badgePlayedLevel2}}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Badge2</td>
+                                    <td>nombre paris joués</td>
+                                    <td>3</td>
+                                    <td><input type="number" name="badge_played_level_3" value="{{ apiAppsettings.badgePlayedLevel3}}"/></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Badge3</td>
+                                    <td>nombre paris gagnés</td>
+                                    <td>1</td>
+                                    <td><input type="number" name="badge_success_level_1" value="{{ apiAppsettings.badgeSuccessLevel1}}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Badge3</td>
+                                    <td>nombre paris gagnés</td>
+                                    <td>2</td>
+                                    <td><input type="number" name="badge_success_level_2" value="{{ apiAppsettings.badgeSuccessLevel2}}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Badge3</td>
+                                    <td>nombre paris gagnés</td>
+                                    <td>3</td>
+                                    <td><input type="number" name="badge_success_level_3" value="{{ apiAppsettings.badgeSuccessLevel3}}"/></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Badge4</td>
+                                    <td>nombre followers</td>
+                                    <td>1</td>
+                                    <td><input type="number" name="badge_followers_level_1" value="{{ apiAppsettings.badgeFollowersLevel1}}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Badge4</td>
+                                    <td>nombre followers</td>
+                                    <td>2</td>
+                                    <td><input type="number" name="badge_followers_level_2" value="{{ apiAppsettings.badgeFollowersLevel2}}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Badge4</td>
+                                    <td>nombre followers</td>
+                                    <td>3</td>
+                                    <td><input type="number" name="badge_followers_level_3" value="{{ apiAppsettings.badgeFollowersLevel3}}"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="submit" class="btn btn-primary" value="Enregistrer" />
+                    </div>
+                </div>
+            </form>
+            <!-- /.box -->
+        </div>
+    </div>
+                    
+{% endblock %}

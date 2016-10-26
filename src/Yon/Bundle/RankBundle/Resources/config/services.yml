@@ -1,0 +1,10 @@
+parameters:
+    yon_rank.rank_manager.class: Yon\Bundle\RankBundle\Manager\RankManager
+    
+services:
+#    yon_rank.example:
+#        class: Yon\Bundle\RankBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+    yon_rank.rank_manager:
+        class: %yon_rank.rank_manager.class%
+        arguments: [@doctrine.orm.entity_manager]

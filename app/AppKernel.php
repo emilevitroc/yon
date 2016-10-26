@@ -19,6 +19,8 @@ class AppKernel extends Kernel
             new Yon\Bundle\PrivilegeBundle\YonPrivilegeBundle(),
             new Yon\Bundle\ParisBundle\YonParisBundle(),
             new Endroid\Bundle\TwitterBundle\EndroidTwitterBundle(),
+            new Yon\Bundle\BadgeBundle\YonBadgeBundle(),
+            new Yon\Bundle\RankBundle\YonRankBundle(),
         );
         $bundles[] = new Circle\RestClientBundle\CircleRestClientBundle();
         $bundles[] = new FOS\JsRoutingBundle\FOSJsRoutingBundle();

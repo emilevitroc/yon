@@ -17,7 +17,7 @@ class ApiContestType extends AbstractType
         $builder
 //            ->add('creation', 'datetime')
             ->add('name', null, array(
-                    'label' => 'Titre',
+                    'label' => 'Nom du concours',
                 ))
 //            ->add('trophyPictureUrl')
 //            ->add('participantsCount')
@@ -37,7 +37,7 @@ class ApiContestType extends AbstractType
                 )
             )
             ->add('description', null, array(
-                    'label' => 'Description',
+                    'label' => 'Cadeaux à gagner',
                 ))
             ->add('plannedChallengesCount', null, array(
                     'label' => 'Nombre de paris',

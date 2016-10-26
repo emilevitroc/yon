@@ -23,6 +23,9 @@
         font-weight: bold;
         text-align: center;
     }
+    .td-red{
+        color: #ff0000;
+    }
 </style>
 {% endblock %}
 {% block body %}
@@ -58,7 +61,7 @@
                 </div>
                 <!-- /.box-header -->
                 
-                <div class="box-body table-responsive no-padding">
+                <div class="box-body">
                     <table id="list-users" class="table  table-bordered table-striped">
                         <thead >
                              <tr>
@@ -67,6 +70,7 @@
                                 <th>Heure de début</th>
                                 <th>Heure de fin</th>
                                 <th>Nb de paris</th>
+                                <th class="td-red">Nb de paris restant</th>
                                 <th>Nb de participants</th>
                                 <th>Partenaire</th>
                                 <th>Actions</th>
@@ -80,6 +84,7 @@
                                     <td>{% if apiContest.startDate %}{{ apiContest.startDate|date('d/m/Y H:i') }}{% endif %}</td>
                                     <td>{% if apiContest.endDate %}{{ apiContest.endDate|date('d/m/Y H:i') }}{% endif %}</td>
                                     <td>{{ apiContest.plannedChallengesCount }}</td>
+                                    <td class="td-red">{% if apiContest.plannedChallengesCount > 0 %}{{ apiContest.plannedChallengesCount - apiContest.contestChallenge|length }}{% endif %}</td>
                                     <td>{{ apiContest.participantsCount }}</td>
                                     <td>{% if apiContest.user %}{{ apiContest.user.firstName ?: apiContest.user.username  }}{% endif %}</td>
                                     <td>
@@ -112,7 +117,6 @@
                     "order": [[ 0, "desc" ]],
                     "bProcessing": true,
                     "bFilter": true,
-                    "sDom": '<""lf><"H"p>rt<"F"p>',
                     "oLanguage": {
                         "sProcessing": "traitement...",
                         "oPaginate": {
@@ -124,7 +128,7 @@
                         "sEmptyTable": "Aucun concours trouvé",
                     },
                     "footerCallback": function ( row, data, start, end, display ) {
-                        $('.title-count').html(end);
+                        $('.title-count').html(display.length);
                     }
                 });
             });

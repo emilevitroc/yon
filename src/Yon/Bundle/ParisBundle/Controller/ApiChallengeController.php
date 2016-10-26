@@ -323,9 +323,24 @@ class ApiChallengeController extends Controller
                 $name->color = $entity->getColor();
                 $name->concours = $concours;
                 $name->startDate = date_format($entity->getStartDate(), 'd/m/Y H:i');
-                $name->hashtag = $entity->getHashtag() ? $entity->getHashtag()->getId() : 0;
+//                $name->hashtag = $entity->getHashtag() ? $entity->getHashtag()->getId() : 0;
                 $name->user = $entity->getUser()->getId();
+                
+                //set hashtag defaul value
+                $isTrending = false;
+                if($entity->getHashtag()){
+                    $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->findOneBy(array('tag' => $entity->getHashtag()->getTag()));
+                    if($oApiTrendingTopics){
+                        $name->trendingTopics = $oApiTrendingTopics->getId();
+                        $isTrending = true;
+                    } else {
+                        $name->hashtagUser = $entity->getHashtag()->getTag();
+                    }
+                }
+                $name->isTrending = $isTrending;
+        
                 $baseParis = $name;
+                
             }
         }
         

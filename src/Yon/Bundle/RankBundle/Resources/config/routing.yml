@@ -1,0 +1,11 @@
+yon_rank_homepage:
+    path:     /rank
+    defaults: { _controller: YonRankBundle:Rank:index }
+yon_rank_general:
+    path:     /rank/general
+    defaults: { _controller: YonRankBundle:Rank:general }
+yon_rank_list_ajax:
+    path:   /rank/list-ajax
+    defaults: { _controller: "YonRankBundle:Rank:rankListAjax" }
+    options:
+        expose: true

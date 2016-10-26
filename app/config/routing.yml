@@ -1,3 +1,11 @@
+yon_rank:
+    resource: "@YonRankBundle/Resources/config/routing.yml"
+    prefix:   /
+
+yon_badge:
+    resource: "@YonBadgeBundle/Resources/config/routing.yml"
+    prefix:   /
+
 yon_paris:
     resource: "@YonParisBundle/Resources/config/routing.yml"
     prefix:   /
