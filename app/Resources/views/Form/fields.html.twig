@@ -25,13 +25,13 @@
 {% block form_row %}
 {% spaceless %}
     {% if compound %}
-        <div class="form-groups">
+        <div class="form-group">
             {{ form_label(form, "", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 {#            {{ form_errors(form) }}#}
             {{ form_widget(form, {'attr': {'class': 'form-control'}}) }}
         </div> 
     {% else %}
-        <div class="form-groups">
+        <div class="form-group">
             {{ form_label(form, "", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 {#            {{ form_errors(form) }}#}
             {{ form_widget(form, {'attr': {'class': 'form-control'}}) }}

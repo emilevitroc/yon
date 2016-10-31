@@ -1,0 +1,7 @@
+yon_message_homepage:
+    path:     /message
+    defaults: { _controller: YonMessageBundle:Message:index }
+yon_message_homepage_send_message_ajax:
+    path:     /send-message-ajax
+    defaults: { _controller: YonMessageBundle:Message:sendMessageAjax }
+    methods:  POST

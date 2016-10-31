@@ -55,7 +55,7 @@
                     </div>
                     {{ form_start(edit_form) }}
                     <div class="box-body">
-                        <div class="form-groups">
+                        <div class="form-group">
                             <label for="name" class="col-sm-2 control-label required">Auteur</label>
                             <div class="col-sm-5">
                                 <input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiChallenge.user is defined %}{{ apiChallenge.user.id }} {% endif %}">

@@ -97,10 +97,68 @@ class AuthUser
      * @ORM\OneToOne(targetEntity="ApiUserprofile", cascade ={"persist"}, mappedBy="user")
      */
     private $user;
+    
+    /**
+     * @var \ApiChallenge
+     *
+     * @ORM\OneToMany(targetEntity="\Yon\Bundle\ParisBundle\Entity\ApiChallenge", mappedBy="user")
+     */
+    private $challenge;
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->challenge = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add challenge
+     *
+     * @param \Yon\Bundle\ParisBundle\Entity\ApiChallenge $challenge
+     * @return ApiChallenge
+     */
+    public function addChallenge(\Yon\Bundle\ParisBundle\Entity\ApiChallenge $challenge)
+    {
+        $this->challenge[] = $challenge;
 
-
+        return $this;
+    }
 
     /**
+     * Remove challenge
+     *
+     * @param \Yon\Bundle\ParisBundle\Entity\ApiChallenge $challenge
+     */
+    public function removeChallenge(\Yon\Bundle\ParisBundle\Entity\ApiChallenge $challenge)
+    {
+        $this->challenge->removeElement($challenge);
+    }
+
+    /**
+     * Get challenge
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChallenge()
+    {
+        return $this->challenge;
+    }
+    
+    public function isHavedBanedChallenge(){
+        $isBaned = false;
+        foreach ($this->challenge as $challenge){
+            if($challenge->getState() == 3) { //bannir
+                $isBaned = true;
+                break;
+            }
+        }
+        return $isBaned;
+    }
+
+        /**
      * Get id
      *
      * @return integer 

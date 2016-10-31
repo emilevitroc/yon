@@ -195,6 +195,16 @@ class ApiChallenge
     private $user;
     
     /**
+     * @var \AuthUser
+     *
+     * @ORM\ManyToOne(targetEntity="\Yon\Bundle\UserBundle\Entity\AuthUser", inversedBy="challenge")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="moderate_by", referencedColumnName="id")
+     * })
+     */
+    private $moderateBy;
+    
+    /**
      * @var \ApiContestChallenge
      *
      * @ORM\OneToMany(targetEntity="ApiContestchallenge", mappedBy="challenge")
@@ -207,6 +217,21 @@ class ApiChallenge
      * @ORM\OneToMany(targetEntity="ApiBet", mappedBy="challenge")
      */
     private $bets;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="state", type="integer", nullable=false)
+     * si state 0: pas encore modere, 1:modere success, 2:encours de moderation, 3:banir
+     */
+    private $state = 0;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="moderate_at", type="datetime", nullable=true)
+     */
+    private $moderateAt;
 
 
     /**
@@ -286,6 +311,29 @@ class ApiChallenge
     public function getEndDate()
     {
         return $this->endDate;
+    }
+    
+    /**
+     * Set moderateAt
+     *
+     * @param \DateTime $moderateAt
+     * @return ApiChallenge
+     */
+    public function setModerateAt($moderateAt)
+    {
+        $this->moderateAt = $moderateAt;
+
+        return $this;
+    }
+
+    /**
+     * Get moderateAt
+     *
+     * @return \DateTime 
+     */
+    public function getModerateAt()
+    {
+        return $this->moderateAt;
     }
 
     /**
@@ -540,6 +588,29 @@ class ApiChallenge
     {
         return $this->status;
     }
+    
+    /**
+     * Set state
+     *
+     * @param integer $state
+     * @return ApiChallenge
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
 
     /**
      * Set popularityScore
@@ -654,6 +725,29 @@ class ApiChallenge
     public function getUser()
     {
         return $this->user;
+    }
+    
+    /**
+     * Set moderateBy
+     *
+     * @param \Yon\Bundle\ModerateByBundle\Entity\AuthUser $moderateBy
+     * @return ApiChallenge
+     */
+    public function setModerateBy(\Yon\Bundle\UserBundle\Entity\AuthUser $moderateBy = null)
+    {
+        $this->moderateBy = $moderateBy;
+
+        return $this;
+    }
+
+    /**
+     * Get moderateBy
+     *
+     * @return \Yon\Bundle\UserBundle\Entity\AuthUser 
+     */
+    public function getModerateBy()
+    {
+        return $this->moderateBy;
     }
     
     /**

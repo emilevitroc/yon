@@ -95,7 +95,6 @@
                     
                 </ul>
             </li>
-            
             <li class="treeview {% if menuRank is defined %}{{ active }}{% endif %}">
                 <a href="#">
                     <i class="fa fa-puzzle-piece"></i>
@@ -108,6 +107,18 @@
                     </li>
                     <li class="{% if menuRankContest is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('yon_rank_homepage') }}"><i class="fa fa-circle-o"></i>Par concours</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview {% if menuMessage is defined %}{{ active }}{% endif %}">
+                <a href="#">
+                    <i class="fa fa-puzzle-piece"></i>
+                    <span>Message</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if menuMessageSend is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('yon_message_homepage') }}"><i class="fa fa-circle-o"></i>Formulaire</a>
                     </li>
                 </ul>
             </li>

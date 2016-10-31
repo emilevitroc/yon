@@ -56,3 +56,27 @@ apichallenge_delete_ajax:
     path:     /delete-ajax
     defaults: { _controller: "YonParisBundle:ApiChallenge:deleteAjax" }
     methods:  POST
+apichallenge_moderate:
+    path:     /moderate
+    defaults: { _controller: "YonParisBundle:ApiChallenge:moderate" }
+    methods:  GET
+apichallenge_reset_moderate:
+    path:     /reset-moderate
+    defaults: { _controller: "YonParisBundle:ApiChallenge:resetModerate" }
+    methods:  GET
+apichallenge_reset_moderate_immediatly:
+    path:     /reset-moderate-immediatly
+    defaults: { _controller: "YonParisBundle:ApiChallenge:resetModerateImmediatly" }
+    methods:  GET
+apichallenge_validate_one_challenge_ajax:
+    path:     /validate-one-challenge-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:validateOneChallengeAjax" }
+    methods:  POST
+apichallenge_lock_one_challenge_ajax:
+    path:     /lock-one-challenge-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:lockOneChallengeAjax" }
+    methods:  POST
+apichallenge_validate_all_challenge_ajax:
+    path:     /validate-all-challenge-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:validateAllChallengeAjax" }
+    methods:  POST

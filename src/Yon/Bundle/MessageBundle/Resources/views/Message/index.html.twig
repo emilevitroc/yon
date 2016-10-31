@@ -1,0 +1,176 @@
+{% extends '::baseAdmin.html.twig' %}
+{% block title %}{{ parent() }} Messages {% endblock %}
+{% set menuMessage = true %}
+{% set menuMessageSend = true %}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+                <form action="" method="POST" class="form-edit-parameters form-horizontal" role="form">
+
+                    <div class="box-header">
+                        <h3 class="box-title">Message</h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Titre</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name" id="name" required="required" >
+                            </div>
+                        </div>
+                        
+                        <!-- textarea -->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Corps du message</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="3" name="message_data" id="message_data" required="required" ></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="push_notification">Notification</label>
+                            <div class="col-sm-10">
+                                <select id="push_notification" name="push_notification" class="form-control">
+                                    <option value="0" selected="selected">Non</option>
+                                    <option value="1">Oui</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="send_date">date d'envoye</label>
+                            <div class="col-sm-10">
+                                <input id="send_date" name="send_date" class="form-control message-datepicker" type="text">
+                            </div>
+                        </div>
+                        <h4>choix de la cible se fait en sélectionnant un ou plusieurs des critères suivants:</h4>
+                        <div class="form-group">
+                            <div class="col-sm-2  control-label">
+                                <input class="cible-choice" type="checkbox" value="nbYon">
+                            </div>
+                            <div class="col-sm-2">nb Yons (entre X et Y Yons)</div>
+                            <div class="col-sm-2">De: <input type="number" name="nbYonFrom" value="0"></div>
+                            <div class="col-sm-2">À: <input type="number" name="nbYonTo" value="0"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2  control-label">
+                                <input class="cible-choice" type="checkbox" value="nbChallenge">
+                            </div>
+                            <div class="col-sm-2">nb paris créés:&nbsp;<input type="number" name="nbChallenge" value="0"></div>
+                            <div class="col-sm-2">De: <input type="text" name="nbChallengeFrom" class="message-datepicker"></div>
+                            <div class="col-sm-2">À: <input type="text" name="nbChallengeonTo" class="message-datepicker"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2  control-label">
+                               <input class="cible-choice" type="checkbox" value="nbPlayed">
+                            </div>
+                            <div class="col-sm-2">nb paris joués:&nbsp;<input type="number" name="nbPlayed" value="0"></div>
+                            <div class="col-sm-2">De: <input type="text" name="nbPlayedFrom" class="message-datepicker"></div>
+                            <div class="col-sm-2">À: <input type="text" name="nbPlayedTo" class="message-datepicker"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2  control-label">
+                               <input class="cible-choice" type="checkbox" value="nbHashtag">
+                            </div>
+                            <div class="col-sm-2">nb de # créés:&nbsp;<input type="number" name="nbHashtag" value="0"></div>
+                            <div class="col-sm-2">De: <input type="text" name="nbHashtagFrom" class="message-datepicker"></div>
+                            <div class="col-sm-2">À: <input type="text" name="nbHashtagTo" class="message-datepicker"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2  control-label">
+                               <input class="cible-choice" type="checkbox" value="nbContest">
+                            </div>
+                            <div class="col-sm-4">nb concours pour lesquels il a joué au moins:&nbsp;<input type="number" name="nbHashtagPercent" value="0" >% de paris</div>
+                            <div class="col-sm-2"><input type="number" name="nbContest" value="0"></div>
+                        </div>
+                    </div>
+
+                    <div class="box-footer">
+                        <input type="button" class="btn btn-primary sendnotif" value="Envoyer" />
+                        <img width="30px" src="/images/animatedEllipse.gif" class="loading-ajax" style="display: none;"/>
+                    </div>
+                    <input type="hidden" name="type" value="messages">
+                    <input type="hidden" name="user_ids" value="46506">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock%}
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">          
+    $(function () {
+        $(".sendnotif").click(function(){
+            var $this = $(this);
+            var $form = $this.parents('form');
+            var donnees = $form.serialize();
+            $this.hide();
+            $this.next().show();
+            
+            $('input.error').removeClass('error');
+            if ($("#name").val() == "") {
+                $("#name").addClass('error').focus();
+                $this.show();
+                $this.next().hide();
+                return false;
+            }
+            if ($("#message_data").val() == "") {
+                $("#message_data").addClass('error').focus();
+                $this.show();
+                $this.next().hide();
+                return false;
+            }
+            if( $('input.cible-choice:checked').length == 0){
+                bootbox.alert("Vous devez choisir un critère pour cible");
+                $this.show();
+                $this.next().hide();
+                 return false;
+            }
+            $this.show();
+            $this.next().hide();
+            bootbox.alert("Message have been sent");
+            return false;
+            
+            $.ajax({
+                type: "POST",
+                url: "{{ path('yon_message_homepage_send_message_ajax') }}",
+                cache: false,
+                data : donnees,
+                success: function(response){
+                    $this.show();
+                    $this.next().hide();
+                    if(response.success) {
+                        bootbox.alert("Message have been sent");
+                        //window.location.href = '{{ path('yon_message_homepage') }}';
+                    } else {
+                        if(response.message){
+                            bootbox.alert(response.message);
+                        }
+                    }
+                }
+            }).fail(function(response) {
+                $this.show();
+                $this.next().hide();
+            });
+        });
+        {#$('#send_date').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm'
+        });#}
+        $('.message-datepicker').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm'
+        });
+    });     
+                
+	</script>
+{% endblock %}

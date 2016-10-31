@@ -752,7 +752,7 @@ class ApiChallengeController extends Controller
         $data = $request->request->all();
         
         if( !(isset($data['challenge']) && isset($data['contest'])) ) {
-            return new JsonResponse(array('code' => 'eroor', 'messate' => 'parameter missing challenge, contest')); 
+            return new JsonResponse(array('code' => 'eroor', 'message' => 'parameter missing challenge, contest')); 
         }
         
         $ContestChallengeUrl = $this->container->getParameter('api_url').'/contests/'.$data['contest'].'/challenges';
@@ -911,5 +911,221 @@ class ApiChallengeController extends Controller
                 'apiTrendingTopics' => $apiTrendingTopics,
             ));
         }
+    }
+    
+    /**
+     * Lists all moderate challenges.
+     *
+     */
+    public function moderateAction(Request $request)
+    {
+        $session = $request->getSession ();
+        
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $filters = array();
+        $filters['start'] = 0;
+        $filters['length'] = 50;
+        $sortings = array();
+        $sortings['p.endDate'] = 'ASC';
+        $options = array(
+//            'search' => $request->query->get('sSearch')
+        );
+        $options['status'] = "";
+        $options['state'] = "0";
+        $options['isModerate'] = true;
+        $em = $this->getDoctrine()->getManager();
+        
+        $apiChallenges   = $this->get('yon_paris.paris_manager')->getParisBy($options, $filters, $sortings)->getResult();
+        
+        //set state encours:2 et date moderation to now
+        foreach ($apiChallenges as $apiChallenge){
+            $apiChallenge->setState(2);
+            $apiChallenge->setModerateAt(new \DateTime ());
+            $em->persist($apiChallenge);
+            $em->flush();
+        }
+
+        return $this->render('YonParisBundle:Paris:moderate.html.twig', array(
+            'apiChallenges' => $apiChallenges,
+        ));
+    }
+    
+    public function resetModerateAction(Request $request)
+    {
+        $session = $request->getSession ();
+        
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $filters = array();
+//        $filters['start'] = 0;
+//        $filters['length'] = 50;
+        $sortings = array();
+//        $sortings['p.endDate'] = 'ASC';
+        $options = array(
+//            'search' => $request->query->get('sSearch')
+        );
+        $options['status'] = "";
+        $options['state'] = "2";
+        $options['resetModerate'] = true;
+        $em = $this->getDoctrine()->getManager();
+        
+        $apiChallenges   = $this->get('yon_paris.paris_manager')->getParisBy($options, $filters, $sortings)->getResult();
+        
+        //set state encours:2 et date moderation to now
+        foreach ($apiChallenges as $apiChallenge){
+            $apiChallenge->setState(0);
+            $apiChallenge->setModerateAt(NULL);
+            $em->persist($apiChallenge);
+            $em->flush();
+        }
+        
+        echo 'reset: '. count($apiChallenges). ' paris';die;
+    }
+    
+    public function resetModerateImmediatlyAction(Request $request)
+    {
+        $session = $request->getSession ();
+        
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $filters = array();
+//        $filters['start'] = 0;
+//        $filters['length'] = 50;
+        $sortings = array();
+//        $sortings['p.endDate'] = 'ASC';
+        $options = array(
+//            'search' => $request->query->get('sSearch')
+        );
+        $options['status'] = "";
+        $options['state'] = "2";
+//        $options['resetModerate'] = true;
+        $em = $this->getDoctrine()->getManager();
+        
+        $apiChallenges   = $this->get('yon_paris.paris_manager')->getParisBy($options, $filters, $sortings)->getResult();
+        
+        //set state encours:2 et date moderation to now
+        foreach ($apiChallenges as $apiChallenge){
+            $apiChallenge->setState(0);
+            $apiChallenge->setModerateAt(NULL);
+            $em->persist($apiChallenge);
+            $em->flush();
+        }
+        
+        echo 'reset: '. count($apiChallenges). ' paris';die;
+    }
+    
+    public function validateAllChallengeAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $currentAuthUser = $session->get ( 'user_infos');
+        $authUserId = $currentAuthUser->id;
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $data = $request->request->all();
+        
+        if( !(isset($data['challengeId'])) ) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => 'parameter missing challengeId')); 
+        }
+        try {
+            foreach ($data['challengeId'] as $id) {
+                $oApiChallenge = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiChallenge')->find($id);
+                if($oApiChallenge){
+                    $authUser = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:AuthUser')->find($authUserId);
+                    $oApiChallenge->setState(1);
+                    $oApiChallenge->setModerateBy($authUser);
+                    $em->persist($oApiChallenge);
+                    $em->flush();
+                }
+            }
+            
+        } catch (Exception $ex) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => $ex->getMessage())); 
+        }
+       
+        
+        return new JsonResponse(array('code' => 'success'));
+    }
+    public function validateOneChallengeAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $currentAuthUser = $session->get ( 'user_infos');
+        $authUserId = $currentAuthUser->id;
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $data = $request->request->all();
+        
+        if( !(isset($data['id'])) ) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => 'parameter missing id')); 
+        }
+        try {
+            $oApiChallenge = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiChallenge')->find($data['id']);
+            if($oApiChallenge){
+                $authUser = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:AuthUser')->find($authUserId);
+                $oApiChallenge->setState(1);
+                $oApiChallenge->setModerateBy($authUser);
+                $em->persist($oApiChallenge);
+                $em->flush();
+            }
+            
+        } catch (Exception $ex) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => $ex->getMessage())); 
+        }
+       
+        
+        return new JsonResponse(array('code' => 'success'));
+    }
+    
+    public function lockOneChallengeAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $currentAuthUser = $session->get ( 'user_infos');
+        $authUserId = $currentAuthUser->id;
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $data = $request->request->all();
+        
+        if( !(isset($data['id'])) ) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => 'parameter missing id')); 
+        }
+        try {
+            $oApiChallenge = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiChallenge')->find($data['id']);
+            if($oApiChallenge){
+                $authUser = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:AuthUser')->find($authUserId);
+                $oApiChallenge->setState(3);
+                $oApiChallenge->setModerateBy($authUser);
+                $em->persist($oApiChallenge);
+                $em->flush();
+            }
+            
+        } catch (Exception $ex) {
+            return new JsonResponse(array('code' => 'eroor', 'message' => $ex->getMessage())); 
+        }
+        
+        return new JsonResponse(array('code' => 'success'));
     }
 }

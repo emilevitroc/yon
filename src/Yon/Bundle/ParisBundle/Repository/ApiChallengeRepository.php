@@ -45,6 +45,24 @@ class ApiChallengeRepository extends EntityRepository
                 ->setParameter('searchId', $options['search'])
                 ->setParameter('searchName', '%'.$options['search'].'%');
         }
+        
+        //moderation
+        if (isset($options['isModerate']) && $options['isModerate'] == 1) {
+            $qb->andWhere('p.moderateAt IS NULL');
+            $qb->andWhere('p.endDate > current_timestamp()');
+        }
+        if (isset($options['resetModerate']) && $options['resetModerate'] == 1) {
+            $date = new \DateTime();
+            $date->modify('-15 minute');
+            $qb->andWhere('p.moderateAt IS NOT NULL');
+            $qb->andWhere('p.moderateAt  <= :date');
+            $qb->setParameter(':date', $date);
+        }
+        if (isset($options['state']) && $options['state'] != "") {
+            $qb
+                ->andWhere('p.state = :state')
+                ->setParameter('state', $options['state']);
+        }
 
         return $qb;
     }

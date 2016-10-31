@@ -1,0 +1,218 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block title %}{{ parent() }}Modération des paris{% endblock %}
+{% set menuParis = true %}
+{% set menuParisAll = true %}
+{% block stylesheets %}
+    {{ parent() }}
+<style type="text/css">
+    #list-users_length, #list-users_filter {
+        margin: 10px;
+    }
+    .btn-mini-rectif{
+        margin-right: 5px;
+    }
+    .status-filter {
+            bottom: -37px;
+            left: 330px;
+            position: relative;
+            width: 400px;
+            z-index: 2;
+        }
+    .list-count {
+        font-size: 2.1em;
+        font-weight: bold;
+        text-align: center;
+    }
+    .td-red{
+        color: #ff0000;
+    }
+    .tr-red {
+        color: #ff0000;
+    }
+</style>
+{% endblock %}
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+        
+    <div class="row">
+        <div class="col-xs-12">
+            <form id="form-moderate" action="" method="POST">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Modération des paris</h3>
+                    </div>
+                    <!-- /.box-header -->
+
+                    <div class="box-body">
+                        <table id="list-users" class="table  table-bordered table-striped">
+                            <thead >
+                                 <tr>
+                                    <tr>
+                                    <th>Id</th>
+                                    <th>Intitulé</th>
+                                    <th>Auteur</th>
+                                    <th>Heure de début</th>
+                                    <th>Heure de fin</th>
+                                    <th>hashtag</th>
+                                    <th>Concours</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if apiChallenges|length == 0 %}
+                                    <tr class="odd"><td colspan="8" class="dataTables_empty" valign="top">aucun paris à moderé</td></tr>
+                                {% endif %}
+                                {% for apiChallenge in apiChallenges %}
+                                    {% set zhash = ( ( apiChallenge.hashtag is defined and apiChallenge.hashtag is not empty)? '#'~apiChallenge.hashtag.tag : '') %}
+                                    {% set concours = '' %}
+                                    {% for absensi in apiChallenge.contestChallenge %}
+                                            {% set concours = absensi.contest.name %}
+                                    {% endfor %}
+                                    <tr class="{% if apiChallenge.user.isHavedBanedChallenge %}tr-red {% endif %}">
+                                        <td>{{ apiChallenge.id }} <input type="hidden" name="challengeId[]" value="{{ apiChallenge.id }}"/></td>
+                                        <td>{{ apiChallenge.title }}</td>
+                                        <td>{{ apiChallenge.user.firstName ?: apiChallenge.user.username }}</td>
+                                        <td>{{ apiChallenge.startDate|date('d/m/Y H:i:s') }}</td>
+                                        <td>{{ apiChallenge.endDate|date('d/m/Y H:i:s') }}</td>
+                                        <td>{{ zhash }}</td>
+                                        <td>{{ concours }}</td>
+                                        <td>
+                                            <a href="javascript:void(0);" onclick="confirmValidateChallenge('{{ apiChallenge.id }}', $(this));" class="btn btn-mini btn-mini-rectif">Autoriser</a>
+                                            <a href="javascript:void(0);" onclick="confirmLockChallenge('{{ apiChallenge.id }}', $(this));" class="btn btn-mini btn-mini-rectif">Bannir</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+                        {% if apiChallenges|length > 0 %}
+                            <input onclick="confirmValidateAllChallenge();" type="button" value="Autoriser tous" class="btn btn-primary">
+                        {% endif %}
+                        <a class="btn btn-default pull-left" href="{{ path('apichallenge_index') }}">Retour à la liste</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">
+            $(function () {
+                
+            });
+            function confirmValidateChallenge(challengeId, $this){
+                bootbox.confirm({
+                    title: "Voulez vous vraiment autoriser le paris?",
+                    message: "Le paris sera marqué autorisé",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Non'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Oui'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result){
+                            $this.parents('tr').remove();
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('apichallenge_validate_one_challenge_ajax')}}',
+                                cache: false,
+                                data: {id: challengeId},
+                                success: function(response){
+                                    if(response.code == 'success') {
+                                        console.log('success');
+                                    } else {
+                                      console.log(response.message);  
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            function confirmLockChallenge(challengeId, $this){
+                bootbox.confirm({
+                    title: "Voulez vous vraiment bannir le paris?",
+                    message: "Le paris sera marqué banni",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Non'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Oui'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result){
+                            $this.parents('tr').remove();
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('apichallenge_lock_one_challenge_ajax')}}',
+                                cache: false,
+                                data: {id: challengeId},
+                                success: function(response){
+                                    if(response.code == 'success') {
+                                        console.log('success');
+                                    } else {
+                                      console.log(response.message);  
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            function confirmValidateAllChallenge(){
+                var donnees = $('#form-moderate').serialize();
+            
+                bootbox.confirm({
+                    title: "Voulez vous vraiment autoriser les paris séléctionés?",
+                    message: "Les paris seront marqués autorisés",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Non'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Oui'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result){
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('apichallenge_validate_all_challenge_ajax')}}',
+                                cache: false,
+                                data : donnees,
+                                success: function(response){
+                                    if(response.code == 'success') {
+                                        window.location.href = '{{ path('apichallenge_index') }}';
+                                        console.log('success');
+                                    } else {
+                                      console.log(response.message);  
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            
+	</script>
+{% endblock %}
+
+

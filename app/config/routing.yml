@@ -1,3 +1,7 @@
+yon_message:
+    resource: "@YonMessageBundle/Resources/config/routing.yml"
+    prefix:   /
+
 yon_rank:
     resource: "@YonRankBundle/Resources/config/routing.yml"
     prefix:   /
