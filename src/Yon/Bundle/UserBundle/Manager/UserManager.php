@@ -43,4 +43,11 @@ class UserManager extends BaseManager
         return $query->getQuery()->getSingleResult();
     }
     
+    public function getUserIds($options=array())
+    {    	
+        
+        $query = $this->getRepository()->findUserIdsByQueryBuilder($options);
+        return $query->getQuery()->getResult();
+    }
+    
 }

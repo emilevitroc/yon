@@ -57,11 +57,11 @@
                         <h4>choix de la cible se fait en sélectionnant un ou plusieurs des critères suivants:</h4>
                         <div class="form-group">
                             <div class="col-sm-2  control-label">
-                                <input class="cible-choice" type="checkbox" value="nbYon">
+                                <input class="cible-choice" type="checkbox" id="nbYon" value="nbYon_ok" name="nbYon">
                             </div>
                             <div class="col-sm-2">nb Yons (entre X et Y Yons)</div>
-                            <div class="col-sm-2">De: <input type="number" name="nbYonFrom" value="0"></div>
-                            <div class="col-sm-2">À: <input type="number" name="nbYonTo" value="0"></div>
+                            <div class="col-sm-2">De: <input type="number" name="nbYonFrom" id="nbYonFrom" value="0"/></div>
+                            <div class="col-sm-2">À: <input type="number" name="nbYonTo" id="nbYonTo" value="0"></div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2  control-label">
@@ -101,7 +101,7 @@
                         <img width="30px" src="/images/animatedEllipse.gif" class="loading-ajax" style="display: none;"/>
                     </div>
                     <input type="hidden" name="type" value="messages">
-                    <input type="hidden" name="user_ids" value="46506">
+                    <input type="hidden" name="user_ids" id="user_ids" value="46506">
                 </form>
             </div>
         </div>
@@ -111,6 +111,17 @@
     {{ parent() }}
 	<script type="text/javascript">          
     $(function () {
+        
+        $("#nbYon").click(function(){
+            var _nbYonFrom = $("#nbYonFrom").val();
+            var _nbYonTo   = $("#nbYonTo").val();
+            
+            if ($("#nbYon").is(':checked'))
+            {
+
+            }
+        })
+        
         $(".sendnotif").click(function(){
             var $this = $(this);
             var $form = $this.parents('form');
@@ -139,8 +150,8 @@
             }
             $this.show();
             $this.next().hide();
-            bootbox.alert("Message have been sent");
-            return false;
+            /*bootbox.alert("Message have been sent");
+            return false;*/
             
             $.ajax({
                 type: "POST",

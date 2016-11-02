@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Yon\Bundle\UserBundle\Entity\ApiUserprofile;
 
 class MessageController extends Controller
 {
@@ -20,6 +21,7 @@ class MessageController extends Controller
             $response = new RedirectResponse($url);
             return $response;
         }
+        
         return $this->render('YonMessageBundle:Message:index.html.twig');
     }
     public function sendMessageAjaxAction()
@@ -33,14 +35,48 @@ class MessageController extends Controller
             return $response;
         }
         
+        
+        
+        
+        
+       
         $data = $request->request->all();
+        $options = array();
+        $arrId   = array();
+        
+        if((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok')){
+            $options['nbYonfrom'] = $data['nbYonFrom'];
+            $options['nbYonto']   = $data['nbYonTo'];
+        }else{
+            $data['user_ids'] = null;
+        }
+        
+        $userIds              = $this->get('yon_user.user_manager')->getUserIds($options);
+        
+        foreach($userIds as $res)
+        {
+            array_push($arrId,$res->getId());
+        }
+        array_push($arrId,'46506');
+
+        if((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok'))
+        {
+            $data['user_ids'] = join(',',$arrId);
+        }else{
+            $data['user_ids'] = null;
+        }        
+//        var_dump($data);
+//        die();
         
         $activitiesUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('activities');
 
         $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
-
-        $result = $curlService->curlPost($activitiesUrl, $data, $custHeaderContent);
-
+        
+        if($data['user_ids']){
+            $result = $curlService->curlPost($activitiesUrl, $data, $custHeaderContent);
+        }else{
+            return new JsonResponse(array('code' => 'eroor', 'message' => "Aucun utilisateur trouvé")); 
+        }
         $response = json_decode($result);
 
         if($response && isset($response->message)) {
@@ -49,4 +85,5 @@ class MessageController extends Controller
         
         return new JsonResponse(array('success' => true));
     }
+    
 }

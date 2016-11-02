@@ -69,4 +69,30 @@ class ApiUserprofileRepository extends EntityRepository
         return $qb;
     }
     
+    public function findUserIdsByQueryBuilder($options=null){
+        $qb = $this->createQueryBuilder('u')->select('u');
+        
+        
+        if(isset($options['nbYonfrom']) || isset($options['nbYonto']))
+        {
+            
+            if((isset($options['nbYonfrom']) || $options['nbYonfrom'] != "" || $options['nbYonfrom'] != 0) && ($options['nbYonto'] == "" || $options['nbYonto'] == 0)){
+                $qb ->andwhere('u.balance = :balance1')
+                    ->setParameter('balance1', $options['nbYonfrom']);
+            }else if((isset($options['nbYonto']) || $options['nbYonto'] != "" || $options['nbYonto'] != 0) && ($options['nbYonfrom'] == "" || $options['nbYonfrom'] == 0))
+            {
+                $qb ->andwhere('u.balance <= :balance2')
+                    ->setParameter('balance2', $options['nbYonto']);
+            }
+            else{
+                $qb ->andwhere('u.balance between :balance1 and :balance2')
+                    ->setParameter('balance1', $options['nbYonfrom'])
+                    ->setParameter('balance2', $options['nbYonto']);
+            }
+        }else{
+            $qb->setMaxResults(0)->setFirstResult(0);
+        }
+        return $qb;
+    }
+    
 }
