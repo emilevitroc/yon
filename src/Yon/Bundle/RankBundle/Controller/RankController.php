@@ -46,7 +46,7 @@ class RankController extends Controller
             'u.id',
             'u.displayUsername',
             'u.phoneNumber',
-            'u.challengesCount',
+//            'u.challengesCount',
             'u.followersCount',
             'u.followingsCount',
             'ur.rank',

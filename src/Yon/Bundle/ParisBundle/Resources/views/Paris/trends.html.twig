@@ -38,7 +38,7 @@
     {% endfor %}
         
     <div class="row">
-        <div class="col-md-6 col-lg-6 col-xs-12">
+        <div class="col-md-6 col-lg-6 col-xs-6">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Liste depuis twitter</h3>
@@ -73,8 +73,6 @@
                     </table>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-lg-6 col-xs-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Liste des populaires</h3>
@@ -106,9 +104,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
+        <div class="col-md-6 col-lg-6 col-xs-6">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Liste des trending topics</h3>
@@ -286,19 +282,21 @@
                 bootbox.prompt(
                     "Entrer le nom du trending topics", 
                     function(tag){ 
-                        $.ajax({
-                            type: "POST",
-                            url: '{{ path('apichallenge_add_to_trends_ajax')}}',
-                            cache: false,
-                            data: {tag: tag},
-                            success: function(response){
-                                if(response.code == 'success') {
-                                    location.reload();
-                                } else {
-                                  console.log(response.message);  
+                        if(tag){
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('apichallenge_add_to_trends_ajax')}}',
+                                cache: false,
+                                data: {tag: tag},
+                                success: function(response){
+                                    if(response.code == 'success') {
+                                        location.reload();
+                                    } else {
+                                      console.log(response.message);  
+                                    }
                                 }
-                            }
-                        }); 
+                            }); 
+                        }
                     }
                 );
             }

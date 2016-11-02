@@ -1,14 +1,19 @@
 {% spaceless %}
     {% set aaData = {} %}
     {% for userrank in values %}
-        
+        {% if userrank.user.firstName|trim != '' %}
+            {% set name = userrank.user.firstName|trim %}
+        {% elseif userrank.user.user.displayUsername|trim != '' %}
+            {% set name = userrank.user.user.displayUsername|trim %}
+        {% else %}
+            {% set name = userrank.user.user.phoneNumber|trim %}
+        {% endif %}
         {% 
         set value = [ 
             userrank.rank,
             '<a href="#"><button class="btn btn-mini btn-mini-rectif">'~userrank.user.user.id~'</button></a>',
-            userrank.user.user.displayUsername,
+            name,
             userrank.user.user.phoneNumber,
-            userrank.user.user.challengesCount,
             userrank.user.user.followersCount,
             userrank.user.user.followingsCount,
             userrank.points

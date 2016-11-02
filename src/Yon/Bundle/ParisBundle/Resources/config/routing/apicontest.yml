@@ -22,3 +22,9 @@ apicontest_delete:
     path:     /{id}/delete
     defaults: { _controller: "YonParisBundle:ApiContest:delete" }
     methods:  DELETE
+    
+apicontest_contest_info_ajax:
+    path:   /contest-info-ajax
+    defaults: { _controller: "YonParisBundle:ApiContest:contestInfoAjax" }
+    options:
+        expose: true

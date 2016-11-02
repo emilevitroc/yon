@@ -79,6 +79,8 @@ class ApiChallengeController extends Controller
             return $response;
         }
         
+         $authUserId = $request->get('userId');
+        
         // pour generer le menu contest dans le popup
         $em = $this->getDoctrine()->getManager();
         $apiContests = $em->getRepository('YonParisBundle:ApiContest')->findAll();
@@ -97,6 +99,7 @@ class ApiChallengeController extends Controller
         //$apiChallenges = $em->getRepository('YonParisBundle:ApiChallenge')->findAll();
         return $this->render('YonParisBundle:Paris:index.html.twig', array(
             'apiContests' => json_encode($tApiContests),
+            'authUserId' => $authUserId,
         ));
     }
     
@@ -107,7 +110,7 @@ class ApiChallengeController extends Controller
         $sortings = $this->getSortings($request, array(
             'p.id',
             'p.title',
-            'pu.username',
+            'pu.firstName',
             'p.startDate',
             'p.endDate',
             'ph.tag',
@@ -119,6 +122,8 @@ class ApiChallengeController extends Controller
         $status = $request->get('status', null);
         $coucoursId = $request->get('coucoursId', null);
         $from = $request->get('amp;from', null);
+        $userId = $request->get('authUserId', null);
+//        $userId = $request->get('userId', 46385);
         
         $options = array(
             'search' => $request->query->get('sSearch')
@@ -132,6 +137,10 @@ class ApiChallengeController extends Controller
         }
         if(isset($coucoursId) && !empty($coucoursId)){
             $options['coucoursId'] = $coucoursId;
+        }
+        
+        if($userId){
+            $options['userId'] = $userId;
         }
         
         $jTemplate = 'YonParisBundle:Paris:parisListAjax.json.twig';
@@ -713,7 +722,7 @@ class ApiChallengeController extends Controller
         $data = $request->request->all();
         
         if( !(isset($data['challenge']) && isset($data['contest'])) ) {
-            return new JsonResponse(array('code' => 'eroor', 'messate' => 'parameter missing challenge, contest')); 
+            return new JsonResponse(array('code' => 'error', 'message' => 'parameter missing challenge, contest')); 
         }
         
         $oApiContestchallenges = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiContestchallenge')->findBy(array(

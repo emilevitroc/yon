@@ -166,7 +166,7 @@ class UserController extends Controller
         $filters  = $this->getFilters($request);
         $sortings = $this->getSortings($request, array(
             'u.id',
-            'uh.username',
+            'uh.firstName',
             'u.phoneNumber',
             'u.rank',
             'u.challengesCount',
@@ -223,6 +223,7 @@ class UserController extends Controller
             
             $name = new \stdClass();
             $name->id = $entity->getId();
+            $name->authid = $entity->getUser()->getId();
 //            $name->value = $entity->getUser()->getUsername() . ' (' . $entity->getPhoneNumber().')';
             $name->value = $entity->getId().'-'.$entity->getUser()->getUsername().'-'.$entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';
             

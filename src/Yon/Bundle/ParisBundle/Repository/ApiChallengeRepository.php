@@ -38,6 +38,12 @@ class ApiChallengeRepository extends EntityRepository
                 ->andWhere('pc.id = :coucoursId')
                 ->setParameter('coucoursId', $options['coucoursId']);
         }
+        
+        if (isset($options['userId']) && $options['userId'] > 0) {
+            $qb
+                ->andWhere('pu.id = :userId')
+                ->setParameter('userId', $options['userId']);
+        }
 
         if (isset($options['search'])) {
             $qb

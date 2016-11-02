@@ -67,7 +67,7 @@
                                 <th>Id Utilisateur</th>
                                 <th>Name</th>
                                 <th>Tél n°</th>
-                                <th>Nb Paris Crées</th>
+                                {#<th>Nb Paris Crées</th>#}
                                 <th>Nb Followers</th>
                                 <th>Nb Followed</th>
                                 <th>Nb Points</th>
@@ -87,7 +87,7 @@
             $(function () {
                 $('#list-users').DataTable(
                 {
-                    "aoColumns": [{"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}],
+                    "aoColumns": [{"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}],
                      "order": [[ 0, "asc" ]],
                     "bProcessing": true,
                     "bServerSide": true,
