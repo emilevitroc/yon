@@ -78,6 +78,17 @@
                         </thead>
                         <tbody>
                             {% for apiContest in apiContests %}
+                                {% if apiContest.user %}
+                                    {% if apiContest.user.firstName|trim != '' %}
+                                        {% set name = apiContest.user.firstName|trim %}
+                                    {% elseif apiContest.user.user.displayUsername|trim != '' %}
+                                        {% set name = apiContest.user.user.displayUsername|trim %}
+                                    {% else %}
+                                        {% set name = apiContest.user.user.phoneNumber|trim %}
+                                    {% endif %}
+                                {% else %}
+                                    {% set name = '' %}
+                                {% endif %}
                                 <tr>
 {#                                    <td><a href="{{ path('apicontest_show', { 'id': apiContest.id }) }}">{{ apiContest.id }}</a></td>#}
                                     <td>{{ apiContest.id }}</td>
@@ -87,7 +98,7 @@
                                     <td>{{ apiContest.plannedChallengesCount }}</td>
                                     <td class="td-red">{% if apiContest.plannedChallengesCount > 0 %}{{ apiContest.plannedChallengesCount - apiContest.contestChallenge|length }}{% endif %}</td>
                                     <td>{{ apiContest.participantsCount }}</td>
-                                    <td>{% if apiContest.user %}{{ apiContest.user.firstName ?: apiContest.user.username  }}{% endif %}</td>
+                                    <td>{{ name }}</td>
                                     <td>
                                          <a href="{{ path('apicontest_edit', { 'id': apiContest.id }) }}"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>
 {#                                         <a href="#"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>#}

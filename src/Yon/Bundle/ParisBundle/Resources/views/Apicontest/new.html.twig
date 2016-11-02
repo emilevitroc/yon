@@ -85,8 +85,17 @@
                   format:'dd-mm-yyyy'
                 });#}
 
+                $('#api_contest_name').attr('placeholder', '#concours');
+                $('#api_contest_name').keydown(function(e) {
+                    if (e.keyCode == 32 || e.keyCode == 51) { //espace et #
+                        return false;
+                    }
+                    if($('#api_contest_name').val().length == 0 ){
+                        $('#api_contest_name').val("#");
+                    }
+                  });
                 function log( message ) {
-                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
+                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.authid) ;
                 }
                 
                 $( "#to_belong_to_user" ).autocomplete({

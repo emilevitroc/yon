@@ -6,11 +6,18 @@
         {% for absensi in apiChallenge.contestChallenge %}
                 {% set concours = absensi.contest.name %}
         {% endfor %}
+        {% if apiChallenge.user.firstName|trim != '' %}
+            {% set name = apiChallenge.user.firstName|trim %}
+        {% elseif apiChallenge.user.user.displayUsername|trim != '' %}
+            {% set name = apiChallenge.user.user.displayUsername|trim %}
+        {% else %}
+            {% set name = apiChallenge.user.user.phoneNumber|trim %}
+        {% endif %}
         {% 
         set value = [
             apiChallenge.id,
             apiChallenge.title,
-            apiChallenge.user.firstName ?: apiChallenge.user.username ,
+            name ,
             apiChallenge.startDate|date('d/m/Y H:i:s'),
             apiChallenge.endDate|date('d/m/Y H:i:s'),
             zhash,

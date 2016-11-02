@@ -96,9 +96,9 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <div class="box-footer">
+                {#<div class="box-footer">
                     <a class="btn btn-primary pull-left" href="{{ path('apichallenge_moderate') }}">Moderer 50 paris</a>
-                </div>
+                </div>#}
         </div>
     </div>
 </div>
@@ -117,7 +117,9 @@
                     "bProcessing": true,
                     "bServerSide": true,
                     "bFilter": true,
-                    "sAjaxSource": "{{ path('yon_paris_list_ajax') }}",
+                    "sAjaxSource": Routing.generate('yon_paris_list_ajax',{
+                                    'authUserId': '{{ authUserId }}'
+                            }),
                     "oLanguage": {
                         "sProcessing": "traitement...",
                         "oPaginate": {
@@ -138,7 +140,8 @@
                     oTable = $('#list-users').dataTable();
                     var oSettings = oTable.fnSettings();
                     oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{
-                                    'status' : $('#status').val()
+                                    'status' : $('#status').val(),
+                                    'authUserId': '{{ authUserId }}'
                             });
                     oTable.fnFilter($('.dataTables_filter input').val());
                 } );

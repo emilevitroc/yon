@@ -1,11 +1,17 @@
 {% spaceless %}
     {% set aaData = {} %}
     {% for apiuser in values %}
-        
-        {% 
+        {% if apiuser.user.firstName is not empty %}
+            {% set name = apiuser.user.firstName %}
+        {% elseif apiuser.displayUsername is not empty %}
+            {% set name = apiuser.displayUsername %}
+        {% else %}
+            {% set name = '' %}
+        {% endif %}
+        {%
         set value = [ 
             apiuser.id,
-            apiuser.user.username,
+            name,
             apiuser.phoneNumber,
             apiuser.rank,
             apiuser.challengesCount,
@@ -17,7 +23,7 @@
             '<a href="'~path('yon_user_edit', {id: apiuser.id})~'"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>' ~ 
             '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Désactiver</button></a>' ~ 
             '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Bannir</button></a>' ~ 
-            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Voir les paris</button></a>'
+            '<a href="'~path('apichallenge_index', {userId: apiuser.user.id})~'"><button class="btn btn-mini btn-mini-rectif"> Voir les paris</button></a>'
         ]
         %}
         

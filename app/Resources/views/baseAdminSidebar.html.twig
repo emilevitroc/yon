@@ -65,6 +65,9 @@
                     <li class="{% if menuParisTrends is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('apichallenge_trends') }}"><i class="fa fa-circle-o"></i>Gérer les trending topics</a>
                     </li>
+                    <li class="{% if menuParisModerate is defined %}{{ active }}{% endif %}">
+                        <a href="{{ path('apichallenge_moderate') }}"><i class="fa fa-circle-o"></i>Outil de modération</a>
+                    </li>
                 </ul>
             </li>
             <li class="treeview {% if menuConcours is defined %}{{ active }}{% endif %}">
