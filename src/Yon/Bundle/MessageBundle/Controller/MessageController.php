@@ -88,8 +88,6 @@ class MessageController extends Controller
             }
         }
         
-        
-        
         $userIds              = $this->get('yon_user.user_manager')->getUserIds($options);
         
         foreach($userIds as $res)

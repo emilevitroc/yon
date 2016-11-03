@@ -80,7 +80,7 @@
                             <div class="col-sm-2">De: <input type="text" name="nbPlayedFrom" id="nbPlayedFrom" class="message-datepicker"></div>
                             <div class="col-sm-2">À: <input type="text" name="nbPlayedTo" id="nbPlayedTo" class="message-datepicker"></div>
                         </div>
-                        <div class="form-group">
+                        {#<div class="form-group">
                             <div class="col-sm-2  control-label">
                                <input class="cible-choice" type="checkbox" value="nbHashtag">
                             </div>
@@ -94,7 +94,7 @@
                             </div>
                             <div class="col-sm-4">nb concours pour lesquels il a joué au moins:&nbsp;<input type="number" name="nbHashtagPercent" value="0" >% de paris</div>
                             <div class="col-sm-2"><input type="number" name="nbContest" value="0"></div>
-                        </div>
+                        </div>#}
                     </div>
 
                     <div class="box-footer">
@@ -182,7 +182,7 @@
                     $this.next().hide();
                     if(response.success) {
                         bootbox.alert("Message have been sent");
-                        //window.location.href = '{{ path('yon_message_homepage') }}';
+                        window.location.href = '{{ path('yon_message_homepage') }}';
                     } else {
                         if(response.message){
                             bootbox.alert(response.message);
