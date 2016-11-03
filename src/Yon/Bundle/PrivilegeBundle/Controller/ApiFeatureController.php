@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Yon\Bundle\PrivilegeBundle\Entity\ApiFeature;
 use Yon\Bundle\PrivilegeBundle\Form\ApiFeatureType;
 
@@ -29,6 +29,10 @@ class ApiFeatureController extends Controller
             return $response;
         }
         
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
+        }
+        
         $em = $this->getDoctrine()->getManager();
 
         $apiFeatures = $em->getRepository('YonPrivilegeBundle:ApiFeature')->findAll();
@@ -49,6 +53,10 @@ class ApiFeatureController extends Controller
             $url = $this->container->get('router')->generate('yon_user_login');
             $response = new RedirectResponse($url);
             return $response;
+        }
+        
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
         }
         
         $apiFeature = new ApiFeature();

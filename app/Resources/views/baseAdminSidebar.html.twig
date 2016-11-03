@@ -4,6 +4,7 @@
     <section class="sidebar">
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
+            {% set tabPrivilege = app.session.get('privileges')|split(',') %}
 {#            <li class="header">MAIN NAVIGATION</li>#}
             <li class="{% if app.request.get('_route') == 'yon_user_homepage' %}active{% endif %} treeview">
                 <a href="{{ path('yon_user_homepage') }}">
@@ -25,6 +26,9 @@
                     </li>
                 </ul>
             </li>
+            
+{#            {% if 'apimodule_index' in tabPrivilege %}#}
+            {% if 'all' in tabPrivilege %}
             <li class="treeview {% if menuPrivileges is defined %}{{ active }}{% endif %}">
                 <a href="#">
                     <i class="fa fa-cogs"></i>
@@ -32,7 +36,7 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{% if menuModuleList is defined %}{{ active }}{% endif %}">
+                    {#<li class="{% if menuModuleList is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('apimodule_index') }}"><i class="fa fa-circle-o"></i> Liste module</a>
                     </li>
                     <li class="{% if menuModuleCreate is defined %}{{ active }}{% endif %}">
@@ -43,12 +47,13 @@
                     </li>
                     <li class="{% if menuFeatureCreate is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('apifeature_new') }}"><i class="fa fa-circle-o"></i> Créer une fonctionnalité</a>
-                    </li>
+                    </li>#}
                     <li class="{% if menuPrivilegeManage is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('apimodule_grille') }}"><i class="fa fa-circle-o"></i> Gérer les privilèges</a>
                     </li>
                 </ul>
             </li>
+            {% endif %}
             <li class="treeview {% if menuParis is defined %}{{ active }}{% endif %}">
                 <a href="#">
                     <i class="fa fa-puzzle-piece"></i>
@@ -62,12 +67,16 @@
                     <li class="{% if menuParisCreate is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('apichallenge_new') }}"><i class="fa fa-circle-o"></i> Créer</a>
                     </li>
+                    {% if 'apichallenge_trends' in tabPrivilege  or 'all' in tabPrivilege  %}
                     <li class="{% if menuParisTrends is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('apichallenge_trends') }}"><i class="fa fa-circle-o"></i>Gérer les trending topics</a>
                     </li>
+                    {% endif %}
+                    {% if 'apichallenge_moderate' in tabPrivilege or 'all' in tabPrivilege %}
                     <li class="{% if menuParisModerate is defined %}{{ active }}{% endif %}">
                         <a href="{{ path('apichallenge_moderate') }}"><i class="fa fa-circle-o"></i>Outil de modération</a>
                     </li>
+                    {% endif %}
                 </ul>
             </li>
             <li class="treeview {% if menuConcours is defined %}{{ active }}{% endif %}">
@@ -85,6 +94,7 @@
                     </li>
                 </ul>
             </li>
+            {% if 'all' in tabPrivilege %}
             <li class="treeview {% if menuBadge is defined %}{{ active }}{% endif %}">
                 <a href="#">
                     <i class="fa fa-certificate"></i>
@@ -125,6 +135,7 @@
                     </li>
                 </ul>
             </li>
+            {% endif %}
             
         </ul>
     </section>

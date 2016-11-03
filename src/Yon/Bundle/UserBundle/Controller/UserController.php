@@ -3,11 +3,13 @@
 namespace Yon\Bundle\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Yon\Bundle\UserBundle\Entity\ApiUserprofile;
+use Yon\Bundle\PrivilegeBundle\Entity\ApiFeature;
 
 class UserController extends Controller
 {
@@ -16,6 +18,7 @@ class UserController extends Controller
     {
         
         $session = $request->getSession ();
+        //var_dump($session->get ( 'privileges'));die;
         if(!$session->get ( 'yon_token')){
             $url = $this->container->get('router')->generate('yon_user_login');
             $response = new RedirectResponse($url);
@@ -25,6 +28,10 @@ class UserController extends Controller
         $post_data = array(
             'token' => $session->get ( 'yon_token')
         );
+        
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
+        }
         
         $tBreadcrumbs = array();
         $oBreadcrumb = new \stdClass();
@@ -42,6 +49,9 @@ class UserController extends Controller
         
         if ($request->isMethod("POST")) {
             $data = $request->request->all();
+            if($data['type'] == 1){
+                $data['is_staff'] = true;
+            }
             $connectUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('users') ;
         
             $curlService = $this->get('yon_user.data');
@@ -91,6 +101,11 @@ class UserController extends Controller
         $post_data = array(
             'token' => $session->get ( 'yon_token')
         );
+        
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
+        }
+        
         $tBreadcrumbs = array();
         $oBreadcrumb = new \stdClass();
         $oBreadcrumb->label= 'Utilisateur';
@@ -98,32 +113,40 @@ class UserController extends Controller
         $tBreadcrumbs[] = $oBreadcrumb;
         
 //        //get User by WS
-//        $userUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('users').'/'.$id ;
+        $userUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('users').'/'.$utilisateur->getId() ;
 //        
-//        $curlService = $this->get('yon_user.data');
+        $curlService = $this->get('yon_user.data');
 //        
 //        $result = $curlService->curlGet($userUrl, $post_data);
 //        $utilisateur = json_decode($result);
         
         if ($request->isMethod("POST")) {
             $data = $request->request->all();
-            $utilisateur->getUser()->setUsername($data['username']);
-            $utilisateur->setLocale($data['locale']);
-            $utilisateur->setPhoneNumber(str_replace(' ','',$data['phone_number']));
-            $utilisateur->setBalance($data['balance']);
-            if( (int)$data['to_belong_to_user'] > 0 ){
-                $utilisateur->setToBelongToUser($data['to_belong_to_user']);
+            if($data['type'] == 1){
+                $data['is_staff'] = true;
             }
-            $utilisateur->setStar($data['star']);
-            $utilisateur->setType($data['type']);
-            $utilisateur->setDisplayUsername($data['name']);
-            $utilisateur->getUser()->setFirstName($data['name']);
             
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($utilisateur);
-            $em->flush();
+            //MAJ user
+            $customerHeader = array('Authorization: '. $session->get ( 'yon_token'));
+            $result = $curlService->curlPatch($userUrl, $data, $customerHeader);
+            $response = json_decode($result);
             
-            $this->get('session')->getFlashBag()->add('success', sprintf('Utilisateur a été bien modifié!.'));
+            if(isset($response->message)){
+                $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
+            } else {
+                $upUserProfile = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:ApiUserprofile')->find($utilisateur->getId());
+                $upUserProfile->setBalance($data['balance']);
+                if( (int)$data['to_belong_to_user'] > 0 ){
+                    $upUserProfile->setToBelongToUser($data['to_belong_to_user']);
+                }
+                $upUserProfile->setStar($data['star']);
+                $upUserProfile->setType($data['type']);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($upUserProfile);
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', sprintf('Utilisateur a été bien modifié!.'));
+            }
+            
             return $this->redirectToRoute('yon_user_edit', array('id' => $utilisateur->getId()));
         }
 
@@ -141,6 +164,10 @@ class UserController extends Controller
             $url = $this->container->get('router')->generate('yon_user_login');
             $response = new RedirectResponse($url);
             return $response;
+        }
+        
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
         }
 //        var_dump($session->get ( 'yon_token'));
 //        $post_data = array(
@@ -300,7 +327,6 @@ class UserController extends Controller
         $session = $request->getSession ();
         $post_data = $request->request->all();
         
-        
         //url-ify the data for the POST
         $fields_string = '';
         foreach($post_data as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
@@ -321,7 +347,37 @@ class UserController extends Controller
                 $session = $request->getSession ();
 		$session->set ( 'yon_token', $response->token );
 		$session->set ( 'user_infos', $response->user );
+                $utilisateur = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:ApiUserprofile')->find($response->user->id);
 		//$session->set ( 'user_profil_id', $response->id );
+		$session->set ( 'user_type', $utilisateur->getType() );
+                
+                // get list privilege
+                $apiFeatures = array();
+                switch ($utilisateur->getType()) {
+                    case 2://Admin Interne
+                        $apiFeatures = $this->getDoctrine()->getManager()->getRepository('YonPrivilegeBundle:ApiFeature')->findBy(array('isAdminIntern' => 1));
+                    break;
+                    case 3://Admin Externe
+                        $apiFeatures = $this->getDoctrine()->getManager()->getRepository('YonPrivilegeBundle:ApiFeature')->findBy(array('isAdminExtern' => 1));
+                    break;
+                    case 4://Partenaire Commercial
+                        $apiFeatures = $this->getDoctrine()->getManager()->getRepository('YonPrivilegeBundle:ApiFeature')->findBy(array('isPartenaireCommercial' => 1));
+                    break;
+
+                }
+                
+                $privileges = '';
+                if($utilisateur->getType() == 1 ){ //superadmi
+                    $privileges = 'all';
+                } else {
+                    $tPrivileges = array();
+                    foreach ($apiFeatures as $apiFeature) {
+                        $tPrivileges = array_merge($tPrivileges, ApiFeature::$FEATURES[$apiFeature->getId()]);
+                    }
+                    $privileges .= implode(',', $tPrivileges);
+                }
+                $session->set ( 'privileges',  $privileges );
+                
             }
             $response->redirect_url =  $this->generateUrl('yon_user_homepage');
         }

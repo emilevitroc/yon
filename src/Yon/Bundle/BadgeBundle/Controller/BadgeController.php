@@ -3,6 +3,7 @@
 namespace Yon\Bundle\BadgeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,10 @@ class BadgeController extends Controller
             $url = $this->container->get('router')->generate('yon_user_login');
             $response = new RedirectResponse($url);
             return $response;
+        }
+        
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
         }
         
         $tBreadcrumbs = array();
