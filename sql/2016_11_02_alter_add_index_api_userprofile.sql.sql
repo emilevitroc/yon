@@ -1,0 +1,1 @@
+ALTER TABLE `api_userprofile` ADD INDEX(`balance`);

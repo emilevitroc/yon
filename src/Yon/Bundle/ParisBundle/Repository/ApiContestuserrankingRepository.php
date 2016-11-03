@@ -20,7 +20,7 @@ class ApiContestuserrankingRepository extends EntityRepository
             ->andWhere('ur.contest = :contestId')
             ->setParameter('contestId', $options['contestId']);
         } else {
-            die('fsdfsd');
+            //die('fsdfsd');
         }
 
         if (isset($options['search'])) {

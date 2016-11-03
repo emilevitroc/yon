@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 use Yon\Bundle\PrivilegeBundle\Entity\ApiModule;
 use Yon\Bundle\PrivilegeBundle\Form\ApiModuleType;
@@ -49,6 +50,10 @@ class ApiModuleController extends Controller
             $url = $this->container->get('router')->generate('yon_user_login');
             $response = new RedirectResponse($url);
             return $response;
+        }
+        
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
         }
         
         $apiModule = new ApiModule();
@@ -95,6 +100,10 @@ class ApiModuleController extends Controller
             $url = $this->container->get('router')->generate('yon_user_login');
             $response = new RedirectResponse($url);
             return $response;
+        }
+        
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
         }
         
         $deleteForm = $this->createDeleteForm($apiModule);
@@ -166,6 +175,10 @@ class ApiModuleController extends Controller
             return $response;
         }
         
+        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+            throw new AccessDeniedHttpException ();
+        }
+        
         $em = $this->getDoctrine()->getManager();
         
         if ($request->isMethod("POST")) {
@@ -204,10 +217,14 @@ class ApiModuleController extends Controller
             return $this->redirectToRoute('apimodule_grille');
         }
         
-        $apiFeatures = $em->getRepository('YonPrivilegeBundle:ApiFeature')->findAll();
+        $query = $em->getRepository('YonPrivilegeBundle:ApiFeature')->createQueryBuilder('pf')
+            ->leftJoin('pf.apiModule', 'pm')
+                ->orderBy('pm.id', 'asc');
+ 
+//        $apiFeatures = $em->getRepository('YonPrivilegeBundle:ApiFeature')->findAll();
 
         return $this->render('YonPrivilegeBundle:apimodule:grille.html.twig', array(
-            'apiFeatures' => $apiFeatures,
+            'apiFeatures' => $query->getQuery()->getResult(),
         ));
     }
 }

@@ -66,7 +66,22 @@ class ApiFeature
      */
     private $apiModule;
 
-
+    static $FEATURES = array (
+        2 => array('yon_user_new' ),
+        3 => array('yon_user_homepage'),
+        4 => array('apicontest_new'),
+        5 => array('apicontest_index'),
+        6 => array('apichallenge_new'),
+        7 => array('apichallenge_index'),
+        8 => array('yon_user_hors_admin'),
+        9 => array('yon_user_admin'),
+        10 => array('apichallenge_new_differe'),
+        11 => array('apichallenge_add_to_contest_daily_yon'),
+        12 => array('apichallenge_prime'),
+        13 => array('apichallenge_moderate'),
+        14 => array('apichallenge_trends'),
+        15 => array('apichallenge_assign_to_user'),
+    );
 
     /**
      * Get id
