@@ -3,7 +3,7 @@
 namespace Yon\Bundle\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Yon\Bundle\ParisBundle\Entity\ApiChallenge;
 /**
  * AuthUser
  *
@@ -98,12 +98,19 @@ class AuthUser
      */
     private $user;
     
+
+    
     /**
-     * @var \ApiChallenge
-     *
      * @ORM\OneToMany(targetEntity="\Yon\Bundle\ParisBundle\Entity\ApiChallenge", mappedBy="user")
      */
     private $challenge;
+    
+    /**
+     * @var \ApiContestChallenge
+     *
+     * @ORM\OneToMany(targetEntity="\Yon\Bundle\ParisBundle\Entity\ApiBet", mappedBy="user")
+     */
+    private $bets;
     
     
     /**
@@ -112,6 +119,7 @@ class AuthUser
     public function __construct()
     {
         $this->challenge = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bets = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -145,6 +153,39 @@ class AuthUser
     public function getChallenge()
     {
         return $this->challenge;
+    }
+    
+    /**
+     * Add bets
+     *
+     * @param \Yon\Bundle\ParisBundle\Entity\ApiBet $bets
+     * @return ApiBet
+     */
+    public function addBet(\Yon\Bundle\ParisBundle\Entity\ApiBet $bets)
+    {
+        $this->bets[] = $bets;
+
+        return $this;
+    }
+
+    /**
+     * Remove bets
+     *
+     * @param \Yon\Bundle\ParisBundle\Entity\ApiBet $bets
+     */
+    public function removeBet(\Yon\Bundle\ParisBundle\Entity\ApiBet $bets)
+    {
+        $this->bets->removeElement($bets);
+    }
+
+    /**
+     * Get bets
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBet()
+    {
+        return $this->bets;
     }
     
     public function isHavedBanedChallenge(){

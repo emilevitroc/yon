@@ -34,39 +34,77 @@ class MessageController extends Controller
             $response = new RedirectResponse($url);
             return $response;
         }
-        
-        
-        
-        
-        
        
         $data = $request->request->all();
         $options = array();
         $arrId   = array();
-        
+//        var_dump($data);
+       
         if((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok')){
+            $options['nbYon']     = $data['nbYon'];
             $options['nbYonfrom'] = $data['nbYonFrom'];
             $options['nbYonto']   = $data['nbYonTo'];
-        }else{
-            $data['user_ids'] = null;
         }
+            
+            
+        if((isset($data['nbChallenge'])) && ($data['nbChallenge'] == 'nbChallenge_ok'))
+        {
+            $options['nbChallenge']      = $data['nbChallenge'];
+            $options['nbch']             = $data['nbChallengeP'];
+            if($data['nbChallengeFrom'] != ""){
+                $datetime = new \DateTime();
+                $newDate = $datetime->createFromFormat('d/m/Y H:i:s', $data['nbChallengeFrom'].":00");
+                $options['d_nbch1']   = $newDate->format('Y-m-d H:i:s');
+            }
+            if($data['nbChallengeonTo'] != ""){
+                $datetime = new \DateTime();
+                $newDate = $datetime->createFromFormat('d/m/Y H:i:s', $data['nbChallengeonTo'].":00");
+                $options['d_nbch2']   = $newDate->format('Y-m-d H:i:s');
+            }
+        }
+        
+        
+        if((isset($data['nbPlayed'])) && ($data['nbPlayed'] == 'nbPlayed_ok')){
+            
+            /*$options['nbP']      = $data['nbPlayedP'];
+            $options['d_nbP1']   = $data['nbPlayedFrom'];
+            $options['d_nbP2']   = $data['nbPlayedTo'];*/
+            $options['nbPlayed'] = $data['nbPlayed'];
+            $options['nbP']      = $data['nbPlayedP'];
+            if($data['nbChallengeFrom'] != ""){
+                $datetime = new \DateTime();
+                $newDatepl = $datetime->createFromFormat('d/m/Y H:i:s', $data['nbPlayedFrom'].":00");
+                $options['d_nbpl1']   = $newDatepl->format('Y-m-d H:i:s');
+            }
+            if($data['nbChallengeonTo'] != ""){
+                $datetime = new \DateTime();
+                $newDatepl = $datetime->createFromFormat('d/m/Y H:i:s', $data['nbPlayedTo'].":00");
+                $options['d_nbpl2']   = $newDatepl->format('Y-m-d H:i:s');
+            }
+        }
+        
+        
         
         $userIds              = $this->get('yon_user.user_manager')->getUserIds($options);
         
         foreach($userIds as $res)
         {
-            array_push($arrId,$res->getId());
+            array_push($arrId,$res->getUser()->getId());
         }
-        array_push($arrId,'46506');
+        array_push($arrId,46506);
 
-        if((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok'))
+        if(((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok')) || ((isset($data['nbChallenge'])) && ($data['nbChallenge'] == 'nbChallenge_ok')) || ((isset($data['nbPlayed'])) && ($data['nbPlayed'] == 'nbPlayed_ok')))
         {
-            $data['user_ids'] = join(',',$arrId);
+           $data['user_ids'] = join(',',$arrId);
         }else{
             $data['user_ids'] = null;
-        }        
-//        var_dump($data);
-//        die();
+        }
+        
+       
+        
+        //var_dump($data);
+        
+        //die();
         
         $activitiesUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('activities');
 

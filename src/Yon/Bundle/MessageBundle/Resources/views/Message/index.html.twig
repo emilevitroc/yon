@@ -65,19 +65,20 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2  control-label">
-                                <input class="cible-choice" type="checkbox" value="nbChallenge">
+                                <input class="cible-choice" type="checkbox" id="nbParis" name="nbChallenge" value="nbChallenge_ok">
                             </div>
-                            <div class="col-sm-2">nb paris créés:&nbsp;<input type="number" name="nbChallenge" value="0"></div>
-                            <div class="col-sm-2">De: <input type="text" name="nbChallengeFrom" class="message-datepicker"></div>
-                            <div class="col-sm-2">À: <input type="text" name="nbChallengeonTo" class="message-datepicker"></div>
+                            <div class="col-sm-2">nb paris créés:&nbsp;<input type="number" name="nbChallengeP" value="0" id="nbChallengeP"></div>
+                            <div class="col-sm-2">De: <input type="text" name="nbChallengeFrom" class="message-datepicker" id="nbp1"></div>
+                            <div class="col-sm-2">À: <input type="text" name="nbChallengeonTo" class="message-datepicker" id="nbp2"></div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2  control-label">
-                               <input class="cible-choice" type="checkbox" value="nbPlayed">
+                               <input class="cible-choice" type="checkbox"  id="nbPlayed" name="nbPlayed" value="nbPlayed_ok" >
                             </div>
-                            <div class="col-sm-2">nb paris joués:&nbsp;<input type="number" name="nbPlayed" value="0"></div>
-                            <div class="col-sm-2">De: <input type="text" name="nbPlayedFrom" class="message-datepicker"></div>
-                            <div class="col-sm-2">À: <input type="text" name="nbPlayedTo" class="message-datepicker"></div>
+                            <div class="col-sm-2">nb paris joués:&nbsp;<input type="number" name="nbPlayedP" value="0" id="nbPlayedP"></div>
+                            
+                            <div class="col-sm-2">De: <input type="text" name="nbPlayedFrom" id="nbPlayedFrom" class="message-datepicker"></div>
+                            <div class="col-sm-2">À: <input type="text" name="nbPlayedTo" id="nbPlayedTo" class="message-datepicker"></div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2  control-label">
@@ -119,6 +120,24 @@
             if ($("#nbYon").is(':checked'))
             {
 
+            }
+        })
+        
+        $("#nbParis").click(function(){
+            var _dateP1 = $("#nbch1").val();
+            var _dateP2 = $("#nbch2").val();
+            if ($("#nbParis").is(':checked'))
+            {
+               // alert(_dateP1+'--'+_dateP2);
+            }
+        })
+        
+        $("#nbPlayed").click(function(){
+            var _datePl1 = $("#nbPlayedFrom").val();
+            var _datePl2 = $("#nbPlayedFrom").val();
+            if ($("#nbParis").is(':checked'))
+            {
+               // alert(_dateP1+'--'+_dateP2);
             }
         })
         

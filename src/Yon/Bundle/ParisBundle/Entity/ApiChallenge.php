@@ -184,13 +184,11 @@ class ApiChallenge
      */
     private $hashtag;
 
+
+    
     /**
-     * @var \AuthUser
-     *
-     * @ORM\ManyToOne(targetEntity="\Yon\Bundle\UserBundle\Entity\AuthUser")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity="\Yon\Bundle\UserBundle\Entity\ApiUserprofile", inversedBy="challenge")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
     

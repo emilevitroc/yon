@@ -106,4 +106,13 @@ class ApiChallengeRepository extends EntityRepository
         return $qb;
     }
     
+//    public function findUserParisByQueryBuilder($options=null){
+//        $qb =  $this->createQueryBuilder('p')
+//                    ->select('p')
+//                    ->where("p.creation BETWEEN  :date1 AND :date2")
+//                    ->setParameter('date1', '2015-09-11 18:03:34')
+//                    ->setParameter('date1', '2015-09-11 23:49:38');
+//        return $qb;
+//    }
+    
 }
