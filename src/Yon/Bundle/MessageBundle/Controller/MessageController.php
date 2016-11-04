@@ -102,9 +102,7 @@ class MessageController extends Controller
         }else{
             $data['user_ids'] = null;
         }
-        
-       
-        
+
         //var_dump($data);
         
         //die();

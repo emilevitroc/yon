@@ -7,10 +7,17 @@
             {% set tabPrivilege = app.session.get('privileges')|split(',') %}
 {#            <li class="header">MAIN NAVIGATION</li>#}
             <li class="{% if app.request.get('_route') == 'yon_user_homepage' %}active{% endif %} treeview">
-                <a href="{{ path('yon_user_homepage') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
+                {% if 'yon_user_new' in tabPrivilege or 'yon_user_homepage' in tabPrivilege or 'all' in tabPrivilege %}
+                    <a href="{{ path('yon_user_homepage') }}">
+                {% else %} 
+                    <a href="{{ path('apichallenge_index') }}">
+                {% endif %}
+                        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    </a>
+                   
+            </li>           
+              
+            {% if 'yon_user_new' in tabPrivilege or 'yon_user_homepage' in tabPrivilege or 'all' in tabPrivilege %}
             <li class="treeview {% if menuUsers is defined %}{{ active }}{% endif %}">
                 <a href="#">
                     <i class="fa fa-users"></i>
@@ -26,7 +33,7 @@
                     </li>
                 </ul>
             </li>
-            
+            {% endif %}
 {#            {% if 'apimodule_index' in tabPrivilege %}#}
             {% if 'all' in tabPrivilege %}
             <li class="treeview {% if menuPrivileges is defined %}{{ active }}{% endif %}">

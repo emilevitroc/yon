@@ -379,7 +379,15 @@ class UserController extends Controller
                 $session->set ( 'privileges',  $privileges );
                 
             }
-            $response->redirect_url =  $this->generateUrl('yon_user_homepage');
+            
+            if($utilisateur->getType() == 4 || $utilisateur->getType() == 3)
+            {
+                $response->redirect_url =  $this->generateUrl('apichallenge_index');
+            }else{
+                $response->redirect_url =  $this->generateUrl('yon_user_homepage');
+            }
+            
+           
         }
         
         return new JsonResponse($response);
