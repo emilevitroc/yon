@@ -187,7 +187,7 @@ class ApiChallenge
 
     
     /**
-     * @ORM\ManyToOne(targetEntity="\Yon\Bundle\UserBundle\Entity\ApiUserprofile", inversedBy="challenge")
+     * @ORM\ManyToOne(targetEntity="\Yon\Bundle\UserBundle\Entity\AuthUser", inversedBy="challenge")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;

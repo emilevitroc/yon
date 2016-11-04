@@ -166,9 +166,9 @@ class UserController extends Controller
             return $response;
         }
         
-        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
-            throw new AccessDeniedHttpException ();
-        }
+//        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
+//            throw new AccessDeniedHttpException ();
+//        }
 //        var_dump($session->get ( 'yon_token'));
 //        $post_data = array(
 //            'token' => $session->get ( 'yon_token')
