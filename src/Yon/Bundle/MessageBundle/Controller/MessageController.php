@@ -76,12 +76,12 @@ class MessageController extends Controller
             $options['d_nbP2']   = $data['nbPlayedTo'];*/
             $options['nbPlayed'] = $data['nbPlayed'];
             $options['nbP']      = $data['nbPlayedP'];
-            if($data['nbChallengeFrom'] != ""){
+            if($data['nbPlayedFrom'] != ""){
                 $datetime = new \DateTime();
                 $newDatepl = $datetime->createFromFormat('d/m/Y H:i:s', $data['nbPlayedFrom'].":00");
                 $options['d_nbpl1']   = $newDatepl->format('Y-m-d H:i:s');
             }
-            if($data['nbChallengeonTo'] != ""){
+            if($data['nbPlayedTo'] != ""){
                 $datetime = new \DateTime();
                 $newDatepl = $datetime->createFromFormat('d/m/Y H:i:s', $data['nbPlayedTo'].":00");
                 $options['d_nbpl2']   = $newDatepl->format('Y-m-d H:i:s');
