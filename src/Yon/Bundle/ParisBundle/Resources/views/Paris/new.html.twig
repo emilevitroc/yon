@@ -153,7 +153,7 @@
                                 
                             }
                         });
-                        $('#api_challenge_hashtag_user').val(contestVal.replace(/\s/g,"")).attr('readonly','readonly');
+                        $('#api_challenge_hashtag_user').val(contestVal.replace(/\s/g,"").replace("-","_")).attr('readonly','readonly');
                     } else {
                         $('#api_challenge_hashtag_user').val("").removeAttr('readonly');
                         $( "#to_belong_to_user" ).val("").removeAttr('readonly');

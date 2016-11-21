@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ApiChallenge
  *
- * @ORM\Table(name="api_challenge", indexes={@ORM\Index(name="api_challenge_e4858d5c", columns={"hashtag_id"}), @ORM\Index(name="api_challenge_e8701ad4", columns={"user_id"}), @ORM\Index(name="result_published", columns={"result_published"}), @ORM\Index(name="cancelled", columns={"cancelled"}), @ORM\Index(name="end_date", columns={"end_date"}), @ORM\Index(name="result", columns={"result"}), @ORM\Index(name="bets_count", columns={"bets_count"}), @ORM\Index(name="status", columns={"status"}), @ORM\Index(name="popularity_score", columns={"popularity_score"})})
+ * @ORM\Table(name="api_challenge", indexes={@ORM\Index(name="api_challenge_e4858d5c", columns={"hashtag_id"}), @ORM\Index(name="api_challenge_e8701ad4", columns={"user_id"}), @ORM\Index(name="end_date", columns={"end_date"}), @ORM\Index(name="result", columns={"result"}), @ORM\Index(name="bets_count", columns={"bets_count"}), @ORM\Index(name="status", columns={"status"}), @ORM\Index(name="popularity_score", columns={"popularity_score"})})
  * @ORM\Entity(repositoryClass="Yon\Bundle\ParisBundle\Repository\ApiChallengeRepository")
  */
 class ApiChallenge
@@ -89,20 +89,6 @@ class ApiChallenge
      * @ORM\Column(name="color", type="string", length=7, nullable=false)
      */
     private $color;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="cancelled", type="boolean", nullable=false)
-     */
-    private $cancelled;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="result_published", type="boolean", nullable=false)
-     */
-    private $resultPublished;
 
     /**
      * @var integer
@@ -380,51 +366,9 @@ class ApiChallenge
         return $this->color;
     }
 
-    /**
-     * Set cancelled
-     *
-     * @param boolean $cancelled
-     * @return ApiChallenge
-     */
-    public function setCancelled($cancelled)
-    {
-        $this->cancelled = $cancelled;
+    
 
-        return $this;
-    }
-
-    /**
-     * Get cancelled
-     *
-     * @return boolean 
-     */
-    public function getCancelled()
-    {
-        return $this->cancelled;
-    }
-
-    /**
-     * Set resultPublished
-     *
-     * @param boolean $resultPublished
-     * @return ApiChallenge
-     */
-    public function setResultPublished($resultPublished)
-    {
-        $this->resultPublished = $resultPublished;
-
-        return $this;
-    }
-
-    /**
-     * Get resultPublished
-     *
-     * @return boolean 
-     */
-    public function getResultPublished()
-    {
-        return $this->resultPublished;
-    }
+    
 
     /**
      * Set prize
@@ -756,8 +700,7 @@ class ApiChallenge
         $this->contestChallenge = new \Doctrine\Common\Collections\ArrayCollection();
         $this->bets = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setCreation ( new \DateTime () );
-        $this->setCancelled(0);
-        $this->setResultPublished(0);
+
         $this->setBetsCount(0);
         $this->setCommentsCount(0);
         $this->setWinnersCount(0);
