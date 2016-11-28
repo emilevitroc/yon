@@ -132,15 +132,15 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Hastag</th>
-                                <th>Actions</th>
+                                <!--th>Actions</th-->
                             </tr>
                         </thead>
                         <tbody>
                             {% for apiTrendingTopic in apiTrendingTopics %}
                                 <tr>
                                     <td>{{ apiTrendingTopic.id }}</td>
-                                    <td>{{ apiTrendingTopic.tag }}</td>
-                                    <td><a href="#" onclick="confirmDelTrendingsTopics('{{ apiTrendingTopic.id }}');"><button class="btn btn-mini btn-mini-rectif">Supprimer du trending topics </button></a></td>
+                                    <td>#{{ apiTrendingTopic.hashtag.tag }}</td>
+                                    <!--td><a href="#" onclick="confirmDelTrendingsTopics('{{ apiTrendingTopic.id }}');"><button class="btn btn-mini btn-mini-rectif">Supprimer du trending topics </button></a></td-->
                                 </tr>
                             {% endfor %}
                         </tbody>

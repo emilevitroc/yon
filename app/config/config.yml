@@ -20,6 +20,7 @@ parameters:
     contests: "/contests"
     app_settings: "/admin/app_settings"
     activities: "/activities"
+    hashtags: "/hashtags"
 endroid_twitter:
     consumer_key: frBrEbA9VRNOFiiGVnIXfqwrq
     consumer_secret: mTjDFO29o1CbJTua6mVNHzfvfUE0wfCBUFU7a6aLxinAUzApBn

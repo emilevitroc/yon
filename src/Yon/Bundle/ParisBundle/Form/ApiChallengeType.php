@@ -61,14 +61,14 @@ class ApiChallengeType extends AbstractType
                 'mapped' => false,
                 'empty_value' => 'Choisir un trending topic',
                 'label_attr' => $options ['label_attr'],
-                'class' => 'YonParisBundle:ApiTrendingTopics',
-                'property' => 'tag',
+                'class' => 'YonParisBundle:ApiFeaturedhashtag',
+                'property' => 'hashtag.tag',
                 'required' => false,
                 'label' => 'Trending topics',
                 'query_builder' => function ($repository) use($options) {
                         return $repository->createQueryBuilder ( 'sh' )
-                                ->andWhere('sh.visible = 1')
-                                ->addOrderBy('sh.range', 'DESC');
+                                //->andWhere('sh.visible = 1')
+                                ->addOrderBy('sh.id', 'DESC');
                 },
                 )
             )

@@ -759,7 +759,7 @@ class ApiChallengeController extends Controller
         $session = $request->getSession ();
         $curlService = $this->get('yon_user.data');
         $data = $request->request->all();
-        
+               
         if( !(isset($data['challenge']) && isset($data['contest'])) ) {
             return new JsonResponse(array('code' => 'eroor', 'message' => 'parameter missing challenge, contest')); 
         }
@@ -791,13 +791,48 @@ class ApiChallengeController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         $data = $request->request->all();
+               
+        $curlService = $this->get('yon_user.data');
+        $htagChallengeUrl = $this->container->getParameter('api_url').$this->container->getParameter('hashtags');
+        //$tParamsHtag['featured_hashtag_ids'] = '67,45,';
+        $tParamsHtag['tag'] = $data['tag'];
+        $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
+        $result = $curlService->curlPost($htagChallengeUrl, $tParamsHtag, $custHeaderContent);
+        $response = json_decode($result);
         
+        if($response && isset($response->id) && $response->id > 0){
+                
+                $arr_id = [];
+                $oApiFeaturedhashtag = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiFeaturedhashtag')->findAll();
+
+                foreach($oApiFeaturedhashtag as $res){
+                    array_push($arr_id,$res->getHashtag()->getId());
+                }
+                
+                if(!in_array($response->id,$arr_id)){
+                    array_push($arr_id, $response->id);
+                }
+                
+                $tParamsFeatures['featured_hashtag_ids'] = implode(',', $arr_id);
+                $results = $curlService->curlPost($htagChallengeUrl, $tParamsFeatures, $custHeaderContent);
+                $responses = json_decode($results);
+                
+                if($response && isset($response->message) && $response->message != ''){
+                    return new JsonResponse(array('code' => 'eroor', 'message' => sprintf($response->message)));
+                }
+                
+            } else {
+               return new JsonResponse(array('code' => 'eroor', 'message' => sprintf($response->message)));
+            }
+        
+            return new JsonResponse(array('code' => 'success'));
+        /*die();        
         if( !(isset($data['tag'])) ) {
             return new JsonResponse(array('code' => 'eroor', 'message' => 'parameter missing tag')); 
         }
         try {
             $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->findOneBy(array('tag' => $data['tag']));
-            if(!$oApiTrendingTopics){
+            if(!$oApiTrendingTopics){               
                 $oApiTrendingTopics = new ApiTrendingTopics();
                 $oApiTrendingTopics->setTag($data['tag']);
 
@@ -810,7 +845,7 @@ class ApiChallengeController extends Controller
         }
        
         
-        return new JsonResponse(array('code' => 'success'));
+        return new JsonResponse(array('code' => 'success'));*/
     }
     
     public function delToTrendsAjaxAction(Request $request)
@@ -906,7 +941,7 @@ class ApiChallengeController extends Controller
             
             // pour generer le menu contest dans le popup
             $em = $this->getDoctrine()->getManager();
-            $apiTrendingTopics = $em->getRepository('YonParisBundle:ApiTrendingTopics')->findAll();
+            $apiTrendingTopics = $em->getRepository('YonParisBundle:ApiFeaturedhashtag')->findAll();
             $apiHashtags = $em->getRepository('YonParisBundle:ApiHashtag')->findBy(
                 array('visible'=> 1), 
                 array('range' => 'DESC'),
