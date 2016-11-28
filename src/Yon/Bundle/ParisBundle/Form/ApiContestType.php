@@ -26,14 +26,16 @@ class ApiContestType extends AbstractType
                 array(
                     'widget' => 'single_text',
                     'label' => 'Horaire de début',
-                    'format' => 'dd/MM/yyyy HH:mm'
+                    'format' => 'dd/MM/yyyy HH:mm',
+                    'view_timezone' => 'Europe/Paris'
                 )
             )
             ->add('endDate', 'datetime', 
                 array(
                     'widget' => 'single_text',
                     'label' => 'Horaire de fin',
-                    'format' => 'dd/MM/yyyy HH:mm'
+                    'format' => 'dd/MM/yyyy HH:mm',
+                    'view_timezone' => 'Europe/Paris'
                 )
             )
             ->add('description', null, array(

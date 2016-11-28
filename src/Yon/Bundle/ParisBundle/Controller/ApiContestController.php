@@ -55,8 +55,8 @@ class ApiContestController extends Controller
             $name->name = $apiContest->getName();
             $name->userId = $apiContest->getUser() ? $apiContest->getUser()->getId(): 0;
             $name->userProfileId = $apiContest->getUser() ? $apiContest->getUser()->getUser()->getId(): 0;
-            $name->endDate = date_format($apiContest->getEndDate(), 'd/m/Y H:i');
-            $name->startDate = date_format($apiContest->getStartDate(), 'd/m/Y H:i'); 
+            $name->endDate = date_format($apiContest->getEndDate()->setTimezone(new \DateTimeZone('Europe/Paris')), 'd/m/Y H:i');
+            $name->startDate = date_format($apiContest->getStartDate()->setTimezone(new \DateTimeZone('Europe/Paris')), 'd/m/Y H:i'); 
             $endDateP = clone $apiContest->getStartDate();
             $endDateP6 = clone $apiContest->getStartDate();
             $endDateProv = $endDateP->add(new \DateInterval('PT1H'));

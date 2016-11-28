@@ -36,7 +36,7 @@ class ApiChallengeType extends AbstractType
                     'label' => 'Horaire de début',
                     'format' => 'dd/MM/yyyy HH:mm',
 //                    'model_timezone' => 'UTC',
-//                    'view_timezone' => 'Europe/Paris'
+                    'view_timezone' => 'Europe/Paris'
                 )
             )
             ->add(
@@ -44,7 +44,8 @@ class ApiChallengeType extends AbstractType
                 array(
                     'widget' => 'single_text',
                     'label' => 'Horaire de fin',
-                    'format' => 'dd/MM/yyyy HH:mm'
+                    'format' => 'dd/MM/yyyy HH:mm',
+                    'view_timezone' => 'Europe/Paris'
                 )
             )
 //            ->add('endDate', 'datetime')

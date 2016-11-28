@@ -93,8 +93,8 @@
 {#                                    <td><a href="{{ path('apicontest_show', { 'id': apiContest.id }) }}">{{ apiContest.id }}</a></td>#}
                                     <td>{{ apiContest.id }}</td>
                                     <td>{{ apiContest.name }}</td>
-                                    <td>{% if apiContest.startDate %}{{ apiContest.startDate|date('d/m/Y H:i') }}{% endif %}</td>
-                                    <td>{% if apiContest.endDate %}{{ apiContest.endDate|date('d/m/Y H:i') }}{% endif %}</td>
+                                    <td>{% if apiContest.startDate %}{{ apiContest.startDate|date('d/m/Y H:i', "+1") }}{% endif %}</td>
+                                    <td>{% if apiContest.endDate %}{{ apiContest.endDate|date('d/m/Y H:i', "+1") }}{% endif %}</td>
                                     <td>{{ apiContest.plannedChallengesCount }}</td>
                                     <td class="td-red">{% if apiContest.plannedChallengesCount > 0 %}{{ apiContest.plannedChallengesCount - apiContest.contestChallenge|length }}{% endif %}</td>
                                     <td>{{ apiContest.participantsCount }}</td>
