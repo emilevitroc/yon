@@ -327,11 +327,18 @@ class ApiChallengeController extends Controller
     //            $name->label = $entity->getUser()->getUsername();
                 $name->label = $entity->getTitle();
                 $name->title = $entity->getTitle();
-                $name->endDate = date_format($entity->getEndDate(), 'd/m/Y H:i');
+                $finDate = date_format($entity->getEndDate(), 'Y-m-d H:i'); 
+                $dateFin = new \DateTime($finDate);
+                $dateFin->setTimezone(new \DateTimeZone('Europe/Paris'));
+                $name->endDate = $dateFin->format('d/m/Y H:i');
+                
                 $name->result = $entity->getResult();
                 $name->color = $entity->getColor();
                 $name->concours = $concours;
-                $name->startDate = date_format($entity->getStartDate(), 'd/m/Y H:i');
+                $debDate = date_format($entity->getStartDate(), 'Y-m-d H:i');               
+                $dateDeb = new \DateTime($debDate);
+                $dateDeb->setTimezone(new \DateTimeZone('Europe/Paris'));
+                $name->startDate = $dateDeb->format('d/m/Y H:i');
 //                $name->hashtag = $entity->getHashtag() ? $entity->getHashtag()->getId() : 0;
                 $name->user = $entity->getUser()->getId();
                 
