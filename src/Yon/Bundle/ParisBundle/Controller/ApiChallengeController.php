@@ -378,7 +378,7 @@ class ApiChallengeController extends Controller
             if(isset($data['api_challenge']['choice_hashtag']) && $data['api_challenge']['choice_hashtag'] != '' ){
                 if($data['api_challenge']['choice_hashtag'] == 'manuel'){
                     if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
-                       $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
+                       $tParams['hashtag'] = str_replace('#', '', $data['api_challenge']['hashtag_user']);
                     }
                 } elseif ($data['api_challenge']['choice_hashtag'] == 'trends') {
                     if(isset($data['api_challenge']['trendingTopics']) && $data['api_challenge']['trendingTopics'] != '' ){
