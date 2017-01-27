@@ -86,6 +86,97 @@
                             {{ form_row(form.prize) }}                            
                             {{ form_row(form.status) }}
                             {{ form_row(form.alertMessage) }}
+                            
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label required">Coupons</label>
+                                
+                                <div class="col-sm-10" style="border: 2px solid #d2d6de;left: 18px;width: 81.2%;">
+                                    
+                                    <div class="col-sm-8">
+                                        <ul id="list-coupon">
+                                            {#<li>aa</li>#}
+                                        </ul>
+                                    </div>
+                                    <br/>
+                                    <span class="btn btn-default" id="add_coupon">+</span>
+                                    
+                                    <div id="container-coupon-form" style="display:none;">
+                                        <hr/>
+                                        <div class="form-edit-new form-horizontal" id = "form_coupon">
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label for="type" class="col-sm-2 control-label required">Type</label>
+                                                    <div class="col-sm-8">
+                                                        <select name="f_coupon[XXXX][type]" placeholder="type" class="form-control" id="type_coupon">
+                                                            <option>----- Choisir type coupon -----</option>
+                                                            {% for keyCoupon,valCoupon in typeCoupon %}
+                                                                <option value="{{ keyCoupon }}">{{ valCoupon }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label for="title" class="col-sm-2 control-label required">Titre</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control"  name="f_coupon[XXXX][title]" id="titre_coupon" placeholder="Titre coupon">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label for="name" class="col-sm-2 control-label required">Name</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control"  name="f_coupon[XXXX][name]" id="name_coupon" placeholder="nom">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label for="short_title" class="col-sm-2 control-label required">Short title</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control"  name="f_coupon[XXXX][short_title]" id="short_title_coupon" placeholder="Description courte ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label for="message" class="col-sm-2 control-label required">Message</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control"  name="f_coupon[XXXX][message]" id="message_coupon" placeholder="message ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label for="amount" class="col-sm-2 control-label required">Amount</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control"  name="f_coupon[XXXX][amount]" id="amount_coupon" placeholder="amount ">
+                                                    </div>
+                                                   
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 ">
+                                                        <span class="btn btn-primary" id="add_cloned_value" onclick="getItemValue('XXXX')">Ajouter</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div id="list-coupon-form-cloned">
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                            
                         </div>
                         
                         <div class="box-footer">
@@ -102,7 +193,38 @@
 {% block javascripts %}
     {{ parent() }}
 	<script type="text/javascript">
+            function getItemValue(countName){
+                var inputValues = [];
+                $('#item-coupon-form-'+countName+' select').each(function() {
+                    inputValues.push($(this).val());
+                })
+                $('#item-coupon-form-'+countName+' input').each(function() {
+                    inputValues.push($(this).val());
+                })
+                $("#list-coupon").html('<li>'+inputValues+'</li>');
+            }
             $(function () {
+                
+
+                $("#add_coupon").click(function(e){
+                    var $couponForm     =  $('#container-coupon-form');
+                    var $couponFormLast =  $('#list-coupon-form-cloned > div:last');
+                    
+                    if($couponFormLast.length > 0){
+                        var iSourceLength = parseInt( $couponFormLast.prop("id").match(/\d+/g), 10 ) +1;
+                    } else {
+                        var iSourceLength = 1;
+                    }
+                    
+                    var $clonForm       = $couponForm.clone().prop('id','item-coupon-form-'+iSourceLength);
+                    $klonreplaced = $clonForm.html().replace(/XXXX/g, iSourceLength);
+                    $clonForm.html($klonreplaced);
+                    $("#list-coupon-form-cloned").append($clonForm.show());
+                    $(this).attr('disabled');
+                    //$("#list-coupon-form-cloned").append("<div class='col-sm-8'><div class='form-group'><div class='col-sm-2'><span class='btn btn-primary' id='add_cloned_value'>Ajouter</span></div></div></div>");
+                
+                })
+                
                 //Date picker
                {# $('#api_challenge_startDate').datepicker({
                   autoclose: true,

@@ -454,9 +454,10 @@ class ApiChallengeController extends Controller
 //                $this->get('session')->getFlashBag()->add('error',$error);
 //            }
         }
-
+        $typeCoupon = ApiChallenge::$TYPE_COUPON; 
         return $this->render('YonParisBundle:Paris:new.html.twig', array(
             'apiChallenge' => $apiChallenge,
+            'typeCoupon' => $typeCoupon,
             'form' => $form->createView(),
             'baseParis' => json_encode((array)$baseParis)
         ));
