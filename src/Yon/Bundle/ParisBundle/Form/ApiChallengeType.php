@@ -120,6 +120,10 @@ class ApiChallengeType extends AbstractType
                 'choices' => ApiChallenge::$DRAFT_CHOICE 
                 )
             )
+            ->add('alertMessage', 'textarea', array(
+                    'label' => 'Popup message',
+                )
+            )
 //            ->add('status', 'choice', array (
 //                'label' => 'Statut',
 //                'empty_value' => 'Définir un statut',

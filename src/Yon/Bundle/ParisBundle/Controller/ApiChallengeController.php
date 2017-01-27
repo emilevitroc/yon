@@ -374,6 +374,7 @@ class ApiChallengeController extends Controller
             $tParams['color'] = $data['api_challenge']['color'];
             $tParams['delayed_result'] = $data['api_challenge']['result'];
             $tParams['prize'] = $data['api_challenge']['prize'];
+            $tParams['alert_message'] = $data['api_challenge']['alertMessage'];
             
             //hashatag
 //            if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
