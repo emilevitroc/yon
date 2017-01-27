@@ -201,7 +201,9 @@
                 $('#item-coupon-form-'+countName+' input').each(function() {
                     inputValues.push($(this).val());
                 })
-                $("#list-coupon").html('<li>'+inputValues+'</li>');
+                
+                $("#list-coupon").append('<li>'+inputValues+'</li>');
+                
             }
             $(function () {
                 
