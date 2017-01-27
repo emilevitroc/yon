@@ -203,7 +203,8 @@
                 })
                 
                 $("#list-coupon").append('<li>'+inputValues+'</li>');
-                
+                $("#add_coupon").show();
+                $('#item-coupon-form-'+countName).hide();
             }
             $(function () {
                 
@@ -222,7 +223,7 @@
                     $klonreplaced = $clonForm.html().replace(/XXXX/g, iSourceLength);
                     $clonForm.html($klonreplaced);
                     $("#list-coupon-form-cloned").append($clonForm.show());
-                    $(this).attr('disabled');
+                    $("#add_coupon").hide();
                     //$("#list-coupon-form-cloned").append("<div class='col-sm-8'><div class='form-group'><div class='col-sm-2'><span class='btn btn-primary' id='add_cloned_value'>Ajouter</span></div></div></div>");
                 
                 })
