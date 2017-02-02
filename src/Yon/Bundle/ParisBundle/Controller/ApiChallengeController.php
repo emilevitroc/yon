@@ -78,8 +78,9 @@ class ApiChallengeController extends Controller
             $response = new RedirectResponse($url);
             return $response;
         }
-        
-         $authUserId = $request->get('userId');
+        $routeName = $this->getRequest()->get('_route');              
+        $session->set('lastVisitePage', $routeName);
+        $authUserId = $request->get('userId');
         
         // pour generer le menu contest dans le popup
         $em = $this->getDoctrine()->getManager();

@@ -3,6 +3,7 @@
 {% block title %}{{ parent() }} Edition Paris {% endblock %}
 {% set menuParis = true %}
 {% set menuParisList = true %}
+{% set SessionLastVisitPage = app.session.get('lastVisitePage') %}
 
 {#{% block body %}
     <h1>ApiChallenge edit</h1>
@@ -82,11 +83,13 @@
                         {{ form_row(edit_form.betPrice) }}
                         {{ form_row(edit_form.prize) }}
                         {{ form_row(edit_form.status) }}
+                        {{ form_row(edit_form.alertMessage) }}
                     </div>
 
                     <div class="box-footer">
                         <input type="submit" value="Enregistrer" class="btn btn-primary">
-                        <a class="btn btn-default pull-left" href="{{ path('apichallenge_index') }}">Retour à la liste</a>
+                        {#<a class="btn btn-default pull-left" href="{{ path('apichallenge_index') }}">Retour à la liste</a>#}
+                        <a class="btn btn-default pull-left" href="{% if SessionLastVisitPage[1] is defined %}{{ path(SessionLastVisitPage[0], { id: SessionLastVisitPage[1]} ) }}{% else %}{{ path('apichallenge_index') }}{% endif %}">Retour à la liste</a>
                         <input type="button" value="Supprimer" class="btn btn-danger pull-right" onclick="confirmDelChallenge('{{ apiChallenge.id }}');">
                     </div>
                     {{ form_end(edit_form) }}

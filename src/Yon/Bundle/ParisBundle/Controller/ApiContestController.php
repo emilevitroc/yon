@@ -217,12 +217,11 @@ class ApiContestController extends Controller
             return $response;
         }
         
-        $session = $this->getRequest()->getSession();
-        $routeName = $this->getRequest()->get('_route');
-        //var_dump($routeName);die();
-        // set last visite page
-        $session->set('lastVisitePage', $routeName);
         
+        $routeName = $this->getRequest()->get('_route');
+        $apiContestId = $apiContest->getId();
+        
+        $session->set('lastVisitePage', array($routeName,$apiContestId));
         $deleteForm = $this->createDeleteForm($apiContest);
         $editForm = $this->createForm('Yon\Bundle\ParisBundle\Form\ApiContestType', $apiContest);
         $editForm->handleRequest($request);
