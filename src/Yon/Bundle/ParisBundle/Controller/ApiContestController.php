@@ -340,7 +340,7 @@ class ApiContestController extends Controller
         } catch (Exception $ex) {
             
             return new JsonResponse(array('code' => 'eroor', 'message' => $ex->getMessage())); 
-            $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
+            
         }
         
         return new JsonResponse(array('code' => 'success'));
