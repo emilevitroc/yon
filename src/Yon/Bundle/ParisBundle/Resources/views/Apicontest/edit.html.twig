@@ -63,6 +63,7 @@
                     <div class="box-footer">
                         <input type="submit" value="Enregistrer" class="btn btn-primary">
                         <a class="btn btn-default pull-left" href="{{ path('apicontest_index') }}">Retour à la liste</a>
+                        <input type="button" value="Supprimer" class="btn btn-danger pull-right" onclick="confirmDelContest('{{ apiContest.id }}');">                    
                     </div>
                     {{ form_end(edit_form) }}
                 </form>
@@ -180,6 +181,39 @@
                 });
                 datat = $("#list-paris").DataTable();
             });
+            
+            function confirmDelContest(contestId){
+                bootbox.confirm({
+                    title: "Voulez vous vraiment supprimer le concours?",
+                    message: "Le concours sera supprimer definitivement dans la base",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Non'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Oui'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result){
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('apicontest_delete_ajax')}}',
+                                cache: false,
+                                data: {contestId: contestId},
+                                success: function(response){
+                                    if(response.code == 'success') {
+                                        window.location.href = '{{ path('apicontest_index') }}';
+                                    } else {
+                                      console.log(response.message);  
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            
             function confirmDelInConcours(parisId, contest){
                     bootbox.alert("Fonction à venir");
                     /*

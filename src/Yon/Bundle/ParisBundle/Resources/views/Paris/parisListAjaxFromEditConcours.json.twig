@@ -24,7 +24,7 @@
             apiChallenge.betsCount,
             apiChallenge.getBetsStatistics(),
             concours.name,
-            '<a href="#" onclick="confirmDelInConcours('~apiChallenge.id~','~concours.id~');"><button class="btn btn-mini btn-mini-rectif">Supprimer du concours</button></a>'
+            '<a href="'~path('apichallenge_edit', { id: apiChallenge.id} )~'"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>'
         ]
         %}
         

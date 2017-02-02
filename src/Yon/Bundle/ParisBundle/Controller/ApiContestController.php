@@ -217,6 +217,12 @@ class ApiContestController extends Controller
             return $response;
         }
         
+        $session = $this->getRequest()->getSession();
+        $routeName = $this->getRequest()->get('_route');
+        //var_dump($routeName);die();
+        // set last visite page
+        $session->set('lastVisitePage', $routeName);
+        
         $deleteForm = $this->createDeleteForm($apiContest);
         $editForm = $this->createForm('Yon\Bundle\ParisBundle\Form\ApiContestType', $apiContest);
         $editForm->handleRequest($request);
@@ -297,6 +303,47 @@ class ApiContestController extends Controller
         }
 
         return $this->redirectToRoute('apicontest_index');
+    }
+    
+    /**
+     * Delete ajax contest 
+     * @param Request $request
+     * @return RedirectResponse|JsonResponse
+     */
+    public function deleteAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        $curlService = $this->get('yon_user.data');
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        
+        
+        $data = $request->request->all();
+       
+        if( !(isset($data['contestId'])) ) {
+            return new JsonResponse(array('code' => 'eroor', 'messate' => 'parameter missing id')); 
+        }
+        
+        try{
+            $delContestUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('contests').'/'. $data['contestId'];
+        
+            $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
+
+
+            $result = $curlService->curlDelete($delContestUrl, $custHeaderContent);
+
+            $response = json_decode($result);
+            $this->get('session')->getFlashBag()->add('success', sprintf('le concours a été bien supprimé!.'));
+        } catch (Exception $ex) {
+            
+            return new JsonResponse(array('code' => 'eroor', 'message' => $ex->getMessage())); 
+            $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
+        }
+        
+        return new JsonResponse(array('code' => 'success'));
     }
 
     /**
