@@ -17,6 +17,7 @@ parameters:
     authentification: "/sessions"
     users: "/users"
     challenges: "/challenges"
+    coupons: "/coupons"
     contests: "/contests"
     app_settings: "/admin/app_settings"
     activities: "/activities"

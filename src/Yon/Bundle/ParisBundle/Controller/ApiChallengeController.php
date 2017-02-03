@@ -13,7 +13,7 @@ use Yon\Bundle\ParisBundle\Entity\ApiHashtag;
 use Yon\Bundle\ParisBundle\Entity\ApiContestchallenge;
 use Yon\Bundle\ParisBundle\Form\ApiChallengeType;
 use Yon\Bundle\ParisBundle\Entity\ApiTrendingTopics;
-
+use Yon\Bundle\ParisBundle\Util\UniqueId;
 /**
  * ApiChallenge controller.
  *
@@ -369,14 +369,15 @@ class ApiChallengeController extends Controller
             
             $data = $request->request->all();
             
-            //prepare parametre pour envoyer vers api
+            //prepare parametre pour envoyer vers api           
             $tParams = array();
+            $tParamsCoupons     = array();
             $tParams['title'] = $data['api_challenge']['title'];
             $tParams['color'] = $data['api_challenge']['color'];
             $tParams['delayed_result'] = $data['api_challenge']['result'];
             $tParams['prize'] = $data['api_challenge']['prize'];
             $tParams['alert_message'] = $data['api_challenge']['alertMessage'];
-            
+
             //hashatag
 //            if(isset($data['api_challenge']['hashtag_user']) && $data['api_challenge']['hashtag_user'] != '' ){
 //                $tParams['hashtag'] =  $data['api_challenge']['hashtag_user'];
@@ -408,7 +409,7 @@ class ApiChallengeController extends Controller
             $tParams['bet_price'] = $data['api_challenge']['betPrice'];
             if((int)$data['api_challenge']['status'] == 1){
                 $tParams['draft'] = 1;
-            }
+            }         
 //            $tParams['draft'] = 1;
 //            echo $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
            // var_dump( $tParams);
@@ -438,6 +439,23 @@ class ApiChallengeController extends Controller
                     
                     $result = $curlService->curlPost($ContestChallengeUrl, $tParamsContestChallenge, $custHeaderContent);
                 }
+                
+                //add to coupons
+                $custHeaderContents = array('Authorization: '. $session->get ( 'yon_token')); 
+                $couponsUrl         = $this->container->getParameter('api_url').''.$this->container->getParameter('coupons') ;
+                
+                $tParamsCoupons['challenge_id'] =  $response->id;
+                $tParamsCoupons['type']         =  $data['f_coupon']['type'];
+
+                $tParamsCoupons['title']        =  $data['f_coupon']['title'];
+                $tParamsCoupons['short_title']  =  $data['f_coupon']['short_title'];
+                $tParamsCoupons['message']      =  $data['f_coupon']['message'];
+                $tParamsCoupons['amount']       =  (int)$data['f_coupon']['amount'];
+                
+                $nameUniqId = UniqueId::generateRandomString(6);
+                $tParamsCoupons['name'] =  "admin-".$nameUniqId;
+                
+                $resultCouponUrl   = $curlService->curlPost($couponsUrl, $tParamsCoupons, $custHeaderContents);
                 
                $this->get('session')->getFlashBag()->add('success', sprintf('un paris a été bien ajouté!.')); 
             } else {
@@ -600,12 +618,13 @@ class ApiChallengeController extends Controller
             
             return $this->redirectToRoute('apichallenge_index');
         }
-
+        $typeCoupon = ApiChallenge::$TYPE_COUPON; 
         return $this->render('YonParisBundle:Paris:edit.html.twig', array(
             'apiChallenge' => $apiChallenge,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'isTrending' => $isTrending,
+            'typeCoupon'=>$typeCoupon,
         ));
     }
 
