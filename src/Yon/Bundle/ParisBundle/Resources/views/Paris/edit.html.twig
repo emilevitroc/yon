@@ -84,7 +84,8 @@
                         {{ form_row(edit_form.prize) }}
                         {{ form_row(edit_form.status) }}
                         {{ form_row(edit_form.alertMessage) }}
-                        
+                        <input type = "hidden" value="{% if resultCouponChallenge.id is defined %}{{ resultCouponChallenge.id }}{% endif%}" name="couponId" id="couponId">
+                        {% if(resultCouponChallenge is not empty ) %}
                         <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label required">Coupons</label>
                                 
@@ -97,21 +98,28 @@
                                 </div>
                                 <br/>
                                 {#<span class="btn btn-default" id="add_coupon">+</span>#}
-
-                                <!--input id="add_coupon" type="checkbox" style="width:20px;" value="1" name="checkbox"/-->
-
+                                
+                                <div class="form-group">                                                
+                                        <div class="col-sm-1">
+                                            <input id="add_coupon" type="checkbox" name="f_coupon[check]" style="width:20px;" value="1"  >
+                                        </div>
+                                </div>
+                                
+                                    
                                 <div id="container-coupon-form" style="display:none;">
                                     <hr/>
                                     <div class="form-edit-new form-horizontal" id = "form_coupon">
+       
                                         <div class="col-sm-8">
                                             <div class="form-group">
                                                 <label for="type" class="col-sm-2 control-label ">Type</label>
                                                 <div class="col-sm-8">
+                                                    
                                                     <select name="f_coupon[type]" placeholder="type" class="form-control" id="type_coupon">
                                                         <option value= "0">----- Choisir type coupon -----</option>
-                                                        {#{% for keyCoupon,valCoupon in typeCoupon %}
-                                                            <option value="{{ valCoupon }}">{{ valCoupon }}</option>
-                                                        {% endfor %}#}
+                                                        {% for keyCoupon,valCoupon in typeCoupon %}
+                                                            <option {% if (valCoupon == resultCouponChallenge.type )%} selected="selected" {% endif %} value="{{ keyCoupon }}">{{ valCoupon }}</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
                                             </div>
@@ -120,7 +128,7 @@
                                             <div class="form-group">
                                                 <label for="amount" class="col-sm-2 control-label ">Amount</label>
                                                 <div class="col-sm-8">
-                                                    <input type="number" class="form-control"  name="f_coupon[amount]" id="amount_coupon" placeholder="amount" >
+                                                    <input type="number" class="form-control"  name="f_coupon[amount]" id="amount_coupon" placeholder="amount" {% if resultCouponChallenge.amount is defined %}value="{{resultCouponChallenge.amount}}"{% endif %} >
                                                 </div>
 
                                             </div>
@@ -129,7 +137,7 @@
                                             <div class="form-group">
                                                 <label for="message" class="col-sm-2 control-label ">Message</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control"  name="f_coupon[message]" id="message_coupon" placeholder="message" >
+                                                    <input type="text" class="form-control"  name="f_coupon[message]" id="message_coupon" placeholder="message"  {% if resultCouponChallenge.popup.message is defined %}value="{{resultCouponChallenge.popup.message}}"{% endif %}>
                                                 </div>
                                             </div>
                                         </div>
@@ -137,7 +145,7 @@
                                             <div class="form-group">
                                                 <label for="short_title" class="col-sm-2 control-label ">Short title</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control"  name="f_coupon[short_title]" id="short_title_coupon" placeholder="Description courte" >
+                                                    <input type="text" class="form-control"  name="f_coupon[short_title]" id="short_title_coupon" placeholder="Description courte" {% if resultCouponChallenge.popup.short_title is defined %}value="{{resultCouponChallenge.popup.short_title}}"{% endif %}>
                                                 </div>
                                             </div>
                                         </div>
@@ -145,7 +153,7 @@
                                             <div class="form-group">
                                                 <label for="title" class="col-sm-2 control-label">Titre</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control"  name="f_coupon[title]" id="titre_coupon" placeholder="Titre coupon" >
+                                                    <input type="text" class="form-control"  name="f_coupon[title]" id="titre_coupon" placeholder="Titre coupon" {% if resultCouponChallenge.popup.title is defined %}value="{{resultCouponChallenge.popup.title}}"{% endif %} >
                                                 </div>
                                             </div>
                                         </div>
@@ -159,6 +167,7 @@
 
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                     
                     
@@ -182,8 +191,52 @@
 	<script type="text/javascript">
             $(function () {
                 
-                //$('#add_coupon').attr('checked',true);
-                
+                $('#add_coupon').attr('checked',true);
+                if($('#add_coupon').prop('checked')) {
+                    $("#container-coupon-form").show();
+                    $("#form_coupon select").prop('required',true);
+                    $("#form_coupon input").prop('required',true);
+                } else {
+                    $("#container-coupon-form").hide();
+                     $("#form_coupon select").prop('required',false);
+                    $("#form_coupon input").prop('required',false);
+                }
+                {% if(resultCouponChallenge is not empty ) %}
+                $('#add_coupon').click(function(){
+                    if($('#add_coupon').prop('checked')) {
+                        $("#container-coupon-form").show();
+                        $("#form_coupon select").prop('required',true);
+                        $("#form_coupon input").prop('required',true);
+                        $('#add_coupon').val('1');
+                        $("#couponId").val("{{ resultCouponChallenge.id }}"+"_modification");
+                    } else {
+                            $('#add_coupon').val('0');
+                            bootbox.confirm({
+                                title: "Cette action suppime ce coupon",
+                                message: "Le coupon sera supprimer definitivement dans la base",
+                                buttons: {
+                                    cancel: {
+                                        label: '<i class="fa fa-times"></i> Non'
+                                    },
+                                    confirm: {
+                                        label: '<i class="fa fa-check"></i> Oui'
+                                    }
+                                },
+                                callback: function (result) {
+                                    if(result){
+                                        $("#container-coupon-form").hide();
+                                        $("#form_coupon select").prop('required',false);
+                                        $("#form_coupon input").prop('required',false);
+                                        $("#couponId").val("{{ resultCouponChallenge.id }}");
+                                    }else{
+                                        $('#add_coupon').trigger('click');
+                                        
+                                    }
+                                }
+                            }); 
+                    }
+                })
+                {% endif %}
                 
                 {% if isTrending %}
                     $('#trends-container').show();

@@ -47,8 +47,8 @@ class ApiChallenge
     
     
     static $TYPE_COUPON = array(
-        1 => 'share_facebook',
-        2 => 'share_twitter',
+        'share_facebook' => 'Facebook',
+        'share_twitter' => 'Twitter',
         /*1 => 'fivestars_review',
         2 => 'create_challenge',
         3 => 'invite_user',

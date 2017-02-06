@@ -538,6 +538,11 @@ class ApiChallengeController extends Controller
             }
         }
         
+        // Récuperation coupons à partir de l'id du paris (challenges/<id>/coupons)
+        $curlServices = $this->get('yon_user.data');
+        $couponChallengeUrl = $this->container->getParameter('api_url').$this->container->getParameter('challenges').'/'.$apiChallenge->getId().$this->container->getParameter('coupons');
+        $post_data =  array('token' => $session->get ( 'yon_token'));
+        $resultCouponChallenge = $curlServices->curlGet($couponChallengeUrl,$post_data);    
         
         
         $editForm->handleRequest($request);
@@ -547,6 +552,7 @@ class ApiChallengeController extends Controller
             
             //prepare parametre pour envoyer vers api
             $tParams = array();
+            $tParamsCoupons = array();
             $tParams['title'] = $data['api_challenge']['title'];
             $tParams['color'] = $data['api_challenge']['color'];
             $tParams['delayed_result'] = $data['api_challenge']['result'];
@@ -599,6 +605,30 @@ class ApiChallengeController extends Controller
             $response = json_decode($result);
 //            var_dump($result);die;
             
+            // edit or delete coupon
+            if(!empty($data['f_coupon'])){
+                if(isset($data['f_coupon']['check'])){
+                    $editCouponUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('coupons').'/'. $idCoupons;
+                    
+                    $tParamsCoupons['challenge_id'] =  $apiChallenge->getId();
+                    $tParamsCoupons['type']         =  $data['f_coupon']['type'];
+
+                    $tParamsCoupons['title']        =  $data['f_coupon']['title'];
+                    $tParamsCoupons['short_title']  =  $data['f_coupon']['short_title'];
+                    $tParamsCoupons['message']      =  $data['f_coupon']['message'];
+                    $tParamsCoupons['amount']       =  (int)$data['f_coupon']['amount'];
+                    $nameUniqId = UniqueId::generateRandomString(6);
+                    $tParamsCoupons['name'] =  "admin-".$nameUniqId;
+                    $result = $curlService->curlPatch($editCouponUrl, $tParamsCoupons, $customerHeader);
+                    
+                }else{
+                    $delCouponUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('coupons').'/'. $idCoupons;
+                    $custHeaderContents = array('Authorization: '. $session->get ( 'yon_token'));
+                    $result = $curlService->curlDelete($delCouponUrl, $custHeaderContents);
+                    $response = json_decode($result);
+                }
+            }          
+            
             if($response && isset($response->id) && $response->id > 0){
                 
                 //add to contest if need
@@ -610,7 +640,7 @@ class ApiChallengeController extends Controller
                     
                     $result = $curlService->curlPost($ContestChallengeUrl, $tParamsContestChallenge, $custHeaderContent);
                 }
-                
+                                              
                $this->get('session')->getFlashBag()->add('success', sprintf('un paris a été bien modifié!.')); 
             } else {
                $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
@@ -619,12 +649,21 @@ class ApiChallengeController extends Controller
             return $this->redirectToRoute('apichallenge_index');
         }
         $typeCoupon = ApiChallenge::$TYPE_COUPON; 
+        $rsCoupons = json_decode($resultCouponChallenge);
+        $items = $rsCoupons->items;
+        if(!empty($items)){
+            $rsItems = $items[0];
+        }else{
+            $rsItems = "";
+        }
+        
         return $this->render('YonParisBundle:Paris:edit.html.twig', array(
             'apiChallenge' => $apiChallenge,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'isTrending' => $isTrending,
             'typeCoupon'=>$typeCoupon,
+            'resultCouponChallenge'=>$rsItems,
         ));
     }
 
