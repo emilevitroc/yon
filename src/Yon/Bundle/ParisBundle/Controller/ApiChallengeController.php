@@ -606,6 +606,8 @@ class ApiChallengeController extends Controller
 //            var_dump($result);die;
             
             // edit or delete coupon
+            $idCoupons = $data['couponId'];
+            //var_dump($data);
             if(!empty($data['f_coupon'])){
                 if(isset($data['f_coupon']['check'])){
                     $editCouponUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('coupons').'/'. $idCoupons;
