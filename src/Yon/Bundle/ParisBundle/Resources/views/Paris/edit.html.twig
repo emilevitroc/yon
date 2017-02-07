@@ -101,7 +101,7 @@
                                 
                                 <div class="form-group">                                                
                                         <div class="col-sm-1">
-                                            <input id="add_coupon" type="checkbox" name="f_coupon[check]" style="width:20px;" value="1"  >
+                                            <input id="add_coupon" type="checkbox" name="f_coupon[check]" style="width:20px;" value="1"  > &nbsp; Activer coupon
                                         </div>
                                 </div>
                                 
@@ -118,7 +118,7 @@
                                                     <select name="f_coupon[type]" placeholder="type" class="form-control" id="type_coupon">
                                                         <option value= "0">----- Choisir type coupon -----</option>
                                                         {% for keyCoupon,valCoupon in typeCoupon %}
-                                                            <option {% if (valCoupon == resultCouponChallenge.type )%} selected="selected" {% endif %} value="{{ keyCoupon }}">{{ valCoupon }}</option>
+                                                            <option {% if (resultCouponChallenge.type is defined and keyCoupon == resultCouponChallenge.type )%} selected="selected" {% endif %} value="{{ keyCoupon }}">{{ valCoupon }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
