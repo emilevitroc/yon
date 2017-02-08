@@ -55,6 +55,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        defaultMaxHour: '%defaultMaxHour%'
 
 # Doctrine Configuration
 doctrine:

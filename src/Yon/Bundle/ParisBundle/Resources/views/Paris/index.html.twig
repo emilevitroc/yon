@@ -177,6 +177,27 @@
                         }
                     });
             }
+            
+            function supprimerParis(challengeId){
+                bootbox.confirm("Etes vous sur de vouloir supprimer ce paris?", function(result){ 
+                    if(result){
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ path('apichallenge_delete_ajax')}}',
+                            cache: false,
+                            data: {challengeId: challengeId},
+                            success: function(response){
+                                if(response.code == 'success') {
+                                    window.location.href = '{{ path('apichallenge_index') }}';
+                                } else {
+                                  console.log(response.message);  
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+            
 	</script>
 {% endblock %}
 
