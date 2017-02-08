@@ -111,7 +111,7 @@
                                                         <select name="f_coupon[type]" placeholder="type" class="form-control" id="type_coupon">
                                                             <option value= "0">----- Choisir type coupon -----</option>
                                                             {% for keyCoupon,valCoupon in typeCoupon %}
-                                                                <option value="{{ valCoupon }}">{{ valCoupon }}</option>
+                                                                <option value="{{ keyCoupon }}">{{ valCoupon }}</option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>

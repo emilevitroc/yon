@@ -346,7 +346,7 @@ class ApiChallengeController extends Controller
                 //set hashtag defaul value
                 $isTrending = false;
                 if($entity->getHashtag()){
-                    $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->findOneBy(array('tag' => $entity->getHashtag()->getTag()));
+                    $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiFeaturedhashtag')->findOneBy(array('hashtag' => $entity->getHashtag()));
                     if($oApiTrendingTopics){
                         $name->trendingTopics = $oApiTrendingTopics->getId();
                         $isTrending = true;
@@ -392,9 +392,9 @@ class ApiChallengeController extends Controller
                     }
                 } elseif ($data['api_challenge']['choice_hashtag'] == 'trends') {
                     if(isset($data['api_challenge']['trendingTopics']) && $data['api_challenge']['trendingTopics'] != '' ){
-                        $oTrendingTopic = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->find($data['api_challenge']['trendingTopics']);
+                        $oTrendingTopic = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiFeaturedhashtag')->find($data['api_challenge']['trendingTopics']);
                         if($oTrendingTopic){
-                            $tParams['hashtag'] = $oTrendingTopic->getTag();
+                            $tParams['hashtag'] = $oTrendingTopic->getHashtag()->getTag();
                         }
                     }
                 }
@@ -527,7 +527,7 @@ class ApiChallengeController extends Controller
         //set hashtag defaul value
         $isTrending = false;
         if($apiChallenge->getHashtag()){
-            $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->findOneBy(array('tag' => $apiChallenge->getHashtag()->getTag()));
+            $oApiTrendingTopics = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiFeaturedhashtag')->findOneBy(array('hashtag' => $apiChallenge->getHashtag()));
             if($oApiTrendingTopics){
                 $editForm->get('choice_hashtag')->setData('trends');
                 $editForm->get('trendingTopics')->setData($oApiTrendingTopics);
@@ -571,9 +571,9 @@ class ApiChallengeController extends Controller
                     }
                 } elseif ($data['api_challenge']['choice_hashtag'] == 'trends') {
                     if(isset($data['api_challenge']['trendingTopics']) && $data['api_challenge']['trendingTopics'] != '' ){
-                        $oTrendingTopic = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiTrendingTopics')->find($data['api_challenge']['trendingTopics']);
+                        $oTrendingTopic = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiFeaturedhashtag')->find($data['api_challenge']['trendingTopics']);
                         if($oTrendingTopic){
-                            $tParams['hashtag'] = $oTrendingTopic->getTag();
+                            $tParams['hashtag'] = $oTrendingTopic->getHashtag()->getTag();
                         }
                     }
                 }
@@ -610,37 +610,23 @@ class ApiChallengeController extends Controller
             //var_dump($data);
             if(!empty($data['f_coupon'])){
                 if(isset($data['f_coupon']['check'])){
+                    $tParamsCoupons['type']         =  $data['f_coupon']['type'];
+                    $tParamsCoupons['challenge_id'] =  $apiChallenge->getId();
+                    $tParamsCoupons['title']        =  $data['f_coupon']['title'];
+                    $tParamsCoupons['short_title']  =  $data['f_coupon']['short_title'];
+                    $tParamsCoupons['message']      =  $data['f_coupon']['message'];
+                    $tParamsCoupons['amount']       =  (int)$data['f_coupon']['amount'];
+                    $nameUniqId = UniqueId::generateRandomString(6);
+                    $tParamsCoupons['name'] =  "admin-".$nameUniqId;
                     if((int)$idCoupons > 0){
                         $editCouponUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('coupons').'/'. $idCoupons;
-                    
-                        $tParamsCoupons['challenge_id'] =  $apiChallenge->getId();
-                        $tParamsCoupons['type']         =  $data['f_coupon']['type'];
-
-                        $tParamsCoupons['title']        =  $data['f_coupon']['title'];
-                        $tParamsCoupons['short_title']  =  $data['f_coupon']['short_title'];
-                        $tParamsCoupons['message']      =  $data['f_coupon']['message'];
-                        $tParamsCoupons['amount']       =  (int)$data['f_coupon']['amount'];
-                        $nameUniqId = UniqueId::generateRandomString(6);
-                        $tParamsCoupons['name'] =  "admin-".$nameUniqId;
                         $result = $curlService->curlPatch($editCouponUrl, $tParamsCoupons, $customerHeader);
                     } else {
                         $custHeaderContents = array('Authorization: '. $session->get ( 'yon_token')); 
                         $couponsUrl         = $this->container->getParameter('api_url').''.$this->container->getParameter('coupons') ;
-
-                        $tParamsCoupons['challenge_id'] =  $apiChallenge->getId();
-                        $tParamsCoupons['type']         =  $data['f_coupon']['type'];
-
-                        $tParamsCoupons['title']        =  $data['f_coupon']['title'];
-                        $tParamsCoupons['short_title']  =  $data['f_coupon']['short_title'];
-                        $tParamsCoupons['message']      =  $data['f_coupon']['message'];
-                        $tParamsCoupons['amount']       =  (int)$data['f_coupon']['amount'];
-
-                        $nameUniqId = UniqueId::generateRandomString(6);
-                        $tParamsCoupons['name'] =  "admin-".$nameUniqId;
-
+                        
                         $resultCouponUrl   = $curlService->curlPost($couponsUrl, $tParamsCoupons, $custHeaderContents);
                     }
-                    
                     
                 }else{
                     $delCouponUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('coupons').'/'. $idCoupons;
