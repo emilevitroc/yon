@@ -142,7 +142,8 @@
                 
                 /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
                 $('#api_contest_startDate').datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm'
+                    format: 'DD/MM/YYYY HH:mm',
+                    minDate: moment()
                     //defaultDate: "11/1/2013",
                     /*disabledDates: [
                         moment("12/25/2013"),
@@ -151,7 +152,8 @@
                     ]*/
                 });
                 $('#api_contest_endDate').datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm'
+                    format: 'DD/MM/YYYY HH:mm',
+                    minDate: moment()
                 });
                 $("#api_contest_startDate").on("dp.change", function(e) {
                     $('#api_contest_endDate').val(e.date.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));                   
