@@ -197,7 +197,7 @@
 {% block javascripts %}
     {{ parent() }}
 	<script type="text/javascript">
-            var defaultMaxHour = {{ defaultMaxHour }}
+            var defaultMaxHour = {{ defaultMaxHour }};
             /*function getItemValue(countName){
                 var inputValues = [];
                 $('#item-coupon-form-'+countName+' select').each(function() {
@@ -382,7 +382,7 @@
                     } else {
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
                     }
-                    $('#api_challenge_endDate').data("DateTimePicker").maxDate(e.date.add(defaultMaxHour, 'hours'));                   
+                    $('#api_challenge_endDate').val(e.date.add(defaultMaxHour, 'hours'));                   
                 });
                 $("#api_challenge_endDate").on("dp.change", function(e) {
                     
