@@ -276,8 +276,7 @@
                 
                 /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
                 $('#api_challenge_startDate').datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm',
-                    minDate: moment()
+                    format: 'DD/MM/YYYY HH:mm'
                     //defaultDate: "11/1/2013",
                     /*disabledDates: [
                         moment("12/25/2013"),
@@ -286,8 +285,7 @@
                     ]*/
                 });
                 $('#api_challenge_endDate').datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm',
-                    minDate: moment()
+                    format: 'DD/MM/YYYY HH:mm'
                 });
                 $("#api_challenge_startDate").on("dp.change", function(e) {
                     $('#api_challenge_endDate').val(e.date.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));                   
