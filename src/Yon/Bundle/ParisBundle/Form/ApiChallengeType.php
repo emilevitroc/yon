@@ -122,6 +122,7 @@ class ApiChallengeType extends AbstractType
             )
             ->add('alertMessage', 'textarea', array(
                     'label' => 'Popup message',
+                    'required' => false,
                 )
             )
 //            ->add('status', 'choice', array (

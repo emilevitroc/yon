@@ -8,6 +8,11 @@
         {% else %}
             {% set name = '' %}
         {% endif %}
+        {% if(apiuser.challengesCount != 0 )%}
+            {% set voir_paris = '<a href="'~path('apichallenge_index', {userId: apiuser.user.id})~'" ><button class="btn btn-mini btn-mini-rectif"> Voir les paris</button></a>' %}
+        {% else %}
+            {% set voir_paris = '<span></span>' %}
+        {% endif %}
         {%
         set value = [ 
             apiuser.id,
@@ -19,11 +24,10 @@
             apiuser.followingsCount,
             apiuser.balance,
             apiuser.getTypeString(),
-            '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Voir</button></a>' ~ 
             '<a href="'~path('yon_user_edit', {id: apiuser.id})~'"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>' ~ 
             '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Désactiver</button></a>' ~ 
             '<a href="#"><button class="btn btn-mini btn-mini-rectif"> Bannir</button></a>' ~ 
-            '<a href="'~path('apichallenge_index', {userId: apiuser.user.id})~'"><button class="btn btn-mini btn-mini-rectif"> Voir les paris</button></a>'
+            voir_paris
         ]
         %}
         
