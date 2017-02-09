@@ -652,7 +652,15 @@ class ApiChallengeController extends Controller
                $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
             }
             
-            return $this->redirectToRoute('apichallenge_index');
+            $sessionLastVisitPage = $session->get ( 'lastVisitePage');
+            if($sessionLastVisitPage && isset($sessionLastVisitPage[1])){
+                return $this->redirectToRoute($sessionLastVisitPage[0], array('id' => $sessionLastVisitPage[1]));
+            } elseif($sessionLastVisitPage){
+                return $this->redirectToRoute($sessionLastVisitPage);
+            } else {
+                return $this->redirectToRoute('apichallenge_index');
+            }
+            
         }
         $typeCoupon = ApiChallenge::$TYPE_COUPON; 
         $rsCoupons = json_decode($resultCouponChallenge);
