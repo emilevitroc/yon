@@ -606,9 +606,8 @@ class ApiChallengeController extends Controller
 //            var_dump($result);die;
             
             // edit or delete coupon
-            $idCoupons = $data['couponId'];
-            //var_dump($data);
-            if(!empty($data['f_coupon'])){
+            if(($data['f_coupon']['type'] !== "")){
+                $idCoupons = $data['couponId'];
                 if(isset($data['f_coupon']['check'])){
                     $tParamsCoupons['type']         =  $data['f_coupon']['type'];
                     $tParamsCoupons['challenge_id'] =  $apiChallenge->getId();
@@ -672,6 +671,19 @@ class ApiChallengeController extends Controller
             'typeCoupon'=>$typeCoupon,
             'resultCouponChallenge'=>$rsItems,
         ));
+    }
+    
+    public function testWebserviceAction(Request $request)
+    {
+        $session = $request->getSession ();
+        $curlService = $this->get('yon_user.data');
+        $delCouponUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('coupons').'/'. 314468;
+        
+        $custHeaderContents = array('Authorization: '. $session->get ( 'yon_token'));
+        $result = $curlService->curlDelete($delCouponUrl, $custHeaderContents);
+        $response = json_decode($result);
+        var_dump($response);
+        die();
     }
 
     /**

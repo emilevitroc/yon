@@ -83,7 +83,7 @@
                         {{ form_row(edit_form.betPrice) }}
                         {{ form_row(edit_form.prize) }}
                         {{ form_row(edit_form.status) }}
-                        {{ form_row(edit_form.alertMessage) }}
+                        {{ form_row(edit_form.alertMessage) }}                       
                         <input type = "hidden" value="{% if resultCouponChallenge.id is defined %}{{ resultCouponChallenge.id }}{% endif%}" name="couponId" id="couponId">
                         
                         <div class="form-group">
@@ -116,7 +116,7 @@
                                                 <div class="col-sm-8">
                                                     
                                                     <select name="f_coupon[type]" placeholder="type" class="form-control" id="type_coupon">
-                                                        <option value= "0">----- Choisir type coupon -----</option>
+                                                        <option value= "">----- Choisir type coupon -----</option>
                                                         {% for keyCoupon,valCoupon in typeCoupon %}
                                                             <option {% if (resultCouponChallenge.type is defined and keyCoupon == resultCouponChallenge.type )%} selected="selected" {% endif %} value="{{ keyCoupon }}">{{ valCoupon }}</option>
                                                         {% endfor %}
@@ -191,7 +191,12 @@
 	<script type="text/javascript">
             $(function () {
                 
-                $('#add_coupon').attr('checked',true);
+                {% if(resultCouponChallenge != "") %}
+                    $('#add_coupon').attr('checked',true);
+                {% else %}
+                    $('#add_coupon').attr('checked',false);
+                {% endif %}
+                
                 if($('#add_coupon').prop('checked')) {
                     $("#container-coupon-form").show();
                     $("#form_coupon select").prop('required',true);
@@ -212,8 +217,8 @@
                     } else {
                             $('#add_coupon').val('0');
                             bootbox.confirm({
-                                title: "Cette action suppime ce coupon",
-                                
+                                title: "Cette action suppime ce coupon une fois que vous cliquez sur enregistrer",
+                                message: "Voulez vous le desactiver",
                                 buttons: {
                                     cancel: {
                                         label: '<i class="fa fa-times"></i> Non'
