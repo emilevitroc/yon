@@ -154,7 +154,7 @@
                     format: 'DD/MM/YYYY HH:mm'
                 });
                 $("#api_contest_startDate").on("dp.change", function(e) {
-                    $('#api_contest_endDate').val(e.date.add(defaultMaxHour, 'hours'));                   
+                    $('#api_contest_endDate').val(e.date.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));                   
                 });
                 $("#list-paris").DataTable({
                     "aoColumns": [

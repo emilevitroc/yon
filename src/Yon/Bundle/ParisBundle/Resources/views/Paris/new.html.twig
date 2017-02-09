@@ -372,7 +372,7 @@
                     format: 'DD/MM/YYYY HH:mm'
                 });
                 $("#api_challenge_startDate").on("dp.change", function(e) {
-                    
+                    $('#api_challenge_endDate').val(e.date.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));
                     if(!contestEndDate){
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(e.date.add(6, 'hours'));
                         return;
@@ -382,7 +382,6 @@
                     } else {
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
                     }
-                    $('#api_challenge_endDate').val(e.date.add(defaultMaxHour, 'hours'));                   
                 });
                 $("#api_challenge_endDate").on("dp.change", function(e) {
                     

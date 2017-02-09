@@ -288,7 +288,7 @@
                     format: 'DD/MM/YYYY HH:mm'
                 });
                 $("#api_challenge_startDate").on("dp.change", function(e) {
-                    $('#api_challenge_endDate').val(e.date.add(defaultMaxHour, 'hours'));                   
+                    $('#api_challenge_endDate').val(e.date.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));                   
                 });
                 $("#api_challenge_endDate").on("dp.change", function(e) {
                     
