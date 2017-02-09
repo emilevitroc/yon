@@ -109,7 +109,7 @@
                                                     <label for="type" class="col-sm-2 control-label ">Type</label>
                                                     <div class="col-sm-8">
                                                         <select name="f_coupon[type]" placeholder="type" class="form-control" id="type_coupon">
-                                                            <option value= "0">----- Choisir type coupon -----</option>
+                                                            <option value= "">----- Choisir type coupon -----</option>
                                                             {% for keyCoupon,valCoupon in typeCoupon %}
                                                                 <option value="{{ keyCoupon }}">{{ valCoupon }}</option>
                                                             {% endfor %}
