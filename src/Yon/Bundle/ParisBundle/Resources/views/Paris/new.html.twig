@@ -318,7 +318,7 @@
                                     var contestStartDate = moment.utc(response.startDate, 'DD/MM/YYYY HH:mm');
                                     var contestendDateProvisoir6 = moment.utc(response.endDateProvisoir6, 'DD/MM/YYYY HH:mm');
                                    
-                                    $( "#api_challenge_startDate" ).val(contestStartDate.format('DD/MM/YYYY HH:mm')) ;
+                                    $( "#api_challenge_startDate" ).val(response.startDate) ;
                                     $( "#api_challenge_endDate" ).val(response.endDateProvisoir) ;
                                     
                                     
