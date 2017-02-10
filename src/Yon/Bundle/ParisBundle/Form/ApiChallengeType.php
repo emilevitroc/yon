@@ -17,10 +17,10 @@ class ApiChallengeType extends AbstractType
     {
         $builder
 //            ->add('creation', 'datetime')
-            ->add('title', null, array(
+            /*->add('title', null, array(
                     'label' => 'Intitulé',
                 )
-            )
+            )*/
             ->add('duration', null, array(
                 'mapped' => false,
                 'label' => 'Durée (HH:mm)',
