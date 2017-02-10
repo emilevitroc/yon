@@ -263,7 +263,15 @@
                                 }
                             }); 
                     }
-                })
+                });
+                
+                /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
+                $('#api_challenge_startDate').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                });
+                $('#api_challenge_endDate').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                });
                 
                 /* concours change*/
                 var contestEndDate = null;
@@ -397,21 +405,21 @@
                     }
                 });
                 
-                /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
-                $('#api_challenge_startDate').datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm'
-                    //defaultDate: "11/1/2013",
-                    /*disabledDates: [
-                        moment("12/25/2013"),
-                        new Date(2013, 11 - 1, 21),
-                        "11/22/2013 00:53"
-                    ]*/
-                });
-                $('#api_challenge_endDate').datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm'
-                });
                 $("#api_challenge_startDate").on("dp.change", function(e) {
-                    $('#api_challenge_endDate').val(e.date.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));                   
+                    
+                    d = e.date.clone();
+                    $('#api_challenge_endDate').val(d.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));
+                    if(!contestEndDate){
+                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(e.date.add(6, 'hours'));
+                        return;
+                    }
+                    d1 = e.date.clone();
+                    d2 = e.date.clone();
+                    if(d1.date.add(6, 'hours') < contestEndDate){
+                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(d2.add(6, 'hours'));
+                    } else {
+                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                    }
                 });
                 $("#api_challenge_endDate").on("dp.change", function(e) {
                     
