@@ -59,7 +59,7 @@ class ApiContestController extends Controller
             $name->startDate = date_format($apiContest->getStartDate()->setTimezone(new \DateTimeZone('Europe/Paris')), 'd/m/Y H:i'); 
             $endDateP = clone $apiContest->getStartDate();
             $endDateP6 = clone $apiContest->getStartDate();
-            $endDateProv = $endDateP->add(new \DateInterval('PT1H'));
+            $endDateProv = $endDateP->add(new \DateInterval('PT3H'));
             $endDateProv6 = $endDateP6->add(new \DateInterval('PT6H'));
             $name->endDateProvisoir = date_format($endDateProv, 'd/m/Y H:i'); 
             $name->endDateProvisoir6 = date_format($endDateProv6, 'd/m/Y H:i'); 
