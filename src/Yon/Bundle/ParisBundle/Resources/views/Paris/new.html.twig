@@ -406,9 +406,11 @@
                     d = e.date.clone();
                     $('#api_challenge_endDate').val(d.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));
                     if(!contestEndDate){
+                        console.log('ffffff');
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(e.date.add(6, 'hours'));
                         return;
                     }
+                    console.log('sssss');
                     d1 = e.date.add(6, 'hours').clone();
                     
                     if(d1.diff(contestEndDate) < 0 ){
