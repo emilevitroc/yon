@@ -404,7 +404,7 @@
                 
                 $("#api_challenge_startDate").on("dp.change", function(e) {
                     d = e.date.clone();
-                    $('#api_challenge_endDate').val(d.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));
+                    
                     if(!contestEndDate){
                         console.log('ffffff');
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(e.date.add(6, 'hours'));
@@ -418,6 +418,7 @@
                     } else {
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
                     }
+                    $('#api_challenge_endDate').val(d.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));
                 });
                 $("#api_challenge_endDate").on("dp.change", function(e) {
                     
