@@ -315,8 +315,9 @@
                                     $( "#to_belong_to_user" ).val("").attr('readonly','readonly');
                                     
                                     contestEndDate = moment.utc(response.endDate, 'DD/MM/YYYY HH:mm');
-                                    contestStartDate = moment.utc(response.startDate, 'DD/MM/YYYY HH:mm');
-                                    contestendDateProvisoir6 = moment.utc(response.endDateProvisoir6, 'DD/MM/YYYY HH:mm');
+                                    var contestStartDate = moment.utc(response.startDate, 'DD/MM/YYYY HH:mm');
+                                    var contestendDateProvisoir6 = moment.utc(response.endDateProvisoir6, 'DD/MM/YYYY HH:mm');
+                                    console.log(contestStartDate, contestEndDate, contestendDateProvisoir6);
                                     {#contestStartDate = moment.utc(response.startDate, 'DD/MM/YYYY HH:mm');#}
                                                                        
                                     $('#api_challenge_startDate').data("DateTimePicker").minDate(contestStartDate);
