@@ -68,7 +68,16 @@
                                 </div>
                             </div>
 {#                            {{ form_widget(form) }}#}
-                            {{ form_row(form.title) }}
+                            {#{{ form_row(form.title) }}#}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label required" for="api_challenge_title">Intitulé</label>
+                                <div class="col-sm-9">
+                                    <input id="api_challenge_title" name="api_challenge[title]" required="required" maxlength="100" class="form-control ui-autocomplete-input" value="" autocomplete="off" type="text" onKeyDown="textCounter(this,'titleCountDown',100);" onKeyUp="textCounter(this,'titleCountDown',100)">                                   
+                                </div>
+                                <div class="col-sm-1">
+                                    <input style="color:red;font-size:12pt;font-style:italic;" class="form-control" readonly="readonly" type="text" id='titleCountDown' name="titleCountDown" size="3" maxlength="3" value="100" /> 
+                                </div>                               
+                            </div>
                             {{ form_row(form.duration) }}
                             {{ form_row(form.startDate) }}
                             {{ form_row(form.endDate) }}
@@ -182,7 +191,7 @@
                             </div>
                             
                         </div>
-                        
+                                                      
                         <div class="box-footer">
                             <input type="submit" class="btn btn-primary" value="Créer" />
                             {{ form_end(form) }}
@@ -211,6 +220,13 @@
                 $("#add_coupon").show();
                 $('#item-coupon-form-'+countName).hide();
             }*/
+            function textCounter(field, cnt, maxlimit) {         
+                var cntfield = document.getElementById(cnt) 
+                if (field.value.length > maxlimit) 
+                    field.value = field.value.substring(0, maxlimit);
+                else
+                    cntfield.value = maxlimit - field.value.length;
+            }
             $(function () {
                 
                 
