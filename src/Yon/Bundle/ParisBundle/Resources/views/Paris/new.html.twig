@@ -329,7 +329,7 @@
                                     
                                     $('#api_challenge_endDate').data("DateTimePicker").minDate(response.startDate);
                                     //$('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
-                                                                        
+                                                        console.log(response.startDate);                
                                     $( "#api_challenge_startDate" ).val(response.startDate) ;
                                     $( "#api_challenge_endDate" ).val(response.endDateProvisoir) ;
                                     var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
