@@ -66,7 +66,16 @@
                             </div>
                         </div>
 {#                        {{ form_widget(edit_form) }}#}
-                        {{ form_row(edit_form.title) }}
+                        {#{{ form_row(edit_form.title) }}#}
+                        <div class="form-group">
+                                <label class="col-sm-2 control-label required" for="api_challenge_title">Intitulé</label>
+                                <div class="col-sm-9">
+                                    <input id="api_challenge_title" name="api_challenge[title]" required="required" maxlength="100" class="form-control ui-autocomplete-input" autocomplete="off" type="text" onKeyDown="textCounter(this,'titleCountDown',100);" onKeyUp="textCounter(this,'titleCountDown',100)" value="{{apiChallenge.title}}">                                   
+                                </div>
+                                <div class="col-sm-1">
+                                    <input style="color:red;font-size:12pt;font-style:italic;" class="form-control" readonly="readonly" type="text" id='titleCountDown' name="titleCountDown" size="3" maxlength="3" /> 
+                                </div>                               
+                        </div>
                         {{ form_row(edit_form.duration) }}
                         {{ form_row(edit_form.startDate) }}
                         {{ form_row(edit_form.endDate) }}
@@ -190,8 +199,21 @@
     {{ parent() }}
 	<script type="text/javascript">
             var defaultMaxHour = {{ defaultMaxHour }};
+            function textCounter(field, cnt, maxlimit) {         
+                var cntfield = document.getElementById(cnt) 
+                if (field.value.length > maxlimit) 
+                    field.value = field.value.substring(0, maxlimit);
+                else
+                    cntfield.value = maxlimit - field.value.length;
+            }
             $(function () {
                 
+                /* mettre la valeur du logueur du caractère dans le input #titleCountDown*/
+                $lengthTitle = $("#api_challenge_title").val().length;
+                $calculatedLength = (100 - $lengthTitle);
+                $("#titleCountDown").val($calculatedLength);
+                
+                /* Tester si ce paris a un coupon*/
                 {% if(resultCouponChallenge != "") %}
                     $('#add_coupon').attr('checked',true);
                 {% else %}
