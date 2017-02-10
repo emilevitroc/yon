@@ -316,10 +316,10 @@
                                     $( "#api_challenge_endDate" ).val(response.endDateProvisoir) ;
                                     
                                     
-                                    contestStartDate = moment.utc(response.startDate, 'DD/MM/YYYY HH:mm');
+                                    {#contestStartDate = moment.utc(response.startDate, 'DD/MM/YYYY HH:mm');#}
                                                                        
                                     //$('#api_challenge_startDate').data("DateTimePicker").minDate(contestStartDate);
-                                    $('#api_challenge_startDate').data("DateTimePicker").maxDate(contestEndDate);
+                                    //$('#api_challenge_startDate').data("DateTimePicker").maxDate(contestEndDate);
                                     
                                     
                                     if(contestendDateProvisoir6.diff(contestEndDate) < 0 ){
