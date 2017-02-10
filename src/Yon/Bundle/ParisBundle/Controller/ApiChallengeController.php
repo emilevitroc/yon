@@ -801,7 +801,8 @@ class ApiChallengeController extends Controller
         $twitter = $this->get('endroid.twitter');
         // Or retrieve the timeline using the generic query method
         $tParams = array (
-            'id' => 1
+            //'id' => 1      // global WOEID (Where On Earth ID)
+            'id' => 23424819 // france WOEID (Where On Earth ID)
         );
         $response = $twitter->query('trends/place', 'GET', 'json', $tParams);
         
@@ -1019,8 +1020,9 @@ class ApiChallengeController extends Controller
         $twitter = $this->get('endroid.twitter');
         
         $tParams = array (
-            'id' => 1
-        );
+            //'id' => 1      // global WOEID (Where On Earth ID)
+            'id' => 23424819 // france WOEID (Where On Earth ID)
+        );        
         $twitterTopCinquants = null;
         try {
             $response = $twitter->query('trends/place', 'GET', 'json', $tParams);
