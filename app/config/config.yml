@@ -50,6 +50,8 @@ framework:
         cookie_lifetime: 0
     fragments:       ~
     http_method_override: true
+    assets:
+        version: v0.1
 
 # Twig Configuration
 twig:
