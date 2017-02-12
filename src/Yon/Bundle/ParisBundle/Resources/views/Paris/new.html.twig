@@ -317,6 +317,7 @@
                                     var mLastMax =  $('#api_challenge_startDate').data("DateTimePicker").maxDate();
                                     
                                     if(mLastMax.diff(moment(response.startDate, 'DD/MM/YYYY HH:mm')) > 0){
+                                        console.log('lllllll');
                                         $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
                                         $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
                                     } else {
