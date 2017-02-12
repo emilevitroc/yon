@@ -379,6 +379,7 @@
                     console.log(d.format('DD/MM/YYYY HH:mm'));
                     $('#api_challenge_endDate').data("DateTimePicker").minDate(e.date);
                     $('#api_challenge_endDate').val(d.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));
+                    console.log($('#api_challenge_endDate').val());
                     setDuration();
                     
                     if(!contestEndDate){
