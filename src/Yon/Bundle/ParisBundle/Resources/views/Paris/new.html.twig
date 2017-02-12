@@ -385,6 +385,7 @@
                 });
                 
                 $('#api_challenge_startDate').data("DateTimePicker").minDate(moment());
+                $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment().add('365', 'days'));
                 $("#api_challenge_startDate").on("dp.change", function(e) {
                     
                     var d = e.date.clone();
