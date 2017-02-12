@@ -392,8 +392,10 @@
                     console.log(d1.diff(contestEndDate));
                     if(d1.diff(contestEndDate) < 0 ){
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(d1);
+                        return;
                     } else {
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                        return;
                     }
                     console.log($('#api_challenge_endDate').val());
                     
