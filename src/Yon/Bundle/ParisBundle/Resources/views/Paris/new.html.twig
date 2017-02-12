@@ -321,7 +321,7 @@
                                         $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
                                         $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
                                     } else {
-                                        console.log(mLastMin);
+                                        console.log(mLastMax);
                                         $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
                                         console.log('1');
                                         $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
