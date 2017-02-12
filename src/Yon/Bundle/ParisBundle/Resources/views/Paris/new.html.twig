@@ -401,13 +401,13 @@
                     
                     if(!contestEndDate){
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(dOrig.add(6, 'hours'));
-                    }
-                    
-                    var d1 = e.date.add(6, 'hours').clone();
-                    if(d1.diff(contestEndDate) < 0 ){
-                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(d1);
                     } else {
-                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                        var d1 = e.date.add(6, 'hours').clone();
+                        if(d1.diff(contestEndDate) < 0 ){
+                            $('#api_challenge_endDate').data("DateTimePicker").maxDate(d1);
+                        } else {
+                            $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                        }
                     }
                     
                     //set h+3
