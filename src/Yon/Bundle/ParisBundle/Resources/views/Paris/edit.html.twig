@@ -526,6 +526,7 @@
             }
             
             function setDuration(){
+            console.log('setDuration');
                 var mStart = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
                 var mEnd = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
                 var mDiff = moment.utc(mEnd.diff(mStart)).format('HH:mm');
