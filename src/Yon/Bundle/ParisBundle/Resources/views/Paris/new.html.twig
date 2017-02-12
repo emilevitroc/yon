@@ -319,7 +319,10 @@
                                     var contestStartDate = moment.utc(response.startDate, 'DD/MM/YYYY HH:mm');
                                     var contestendDateProvisoir6 = moment.utc(response.endDateProvisoir6, 'DD/MM/YYYY HH:mm');
                                    
-                                    //set minDate
+                                    //reset minmaxDate
+                                    $('#api_challenge_startDate').data("DateTimePicker").minDate(null);
+                                    $('#api_challenge_startDate').data("DateTimePicker").maxDate(null);
+                                    
                                     $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
                                     
                                     $( "#api_challenge_startDate" ).val(response.startDate) ;
