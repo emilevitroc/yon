@@ -304,14 +304,7 @@
                             data: {id: contestId},
                             success: function(response){
                                 if(response.name){
-                                    $('#api_challenge_startDate').datetimepicker({
-                                        format: 'DD/MM/YYYY HH:mm',
-                                        //minDate: moment()
-                                    });
-                                    $('#api_challenge_endDate').datetimepicker({
-                                        format: 'DD/MM/YYYY HH:mm',
-                                        //minDate: moment()
-                                    });
+                                    
                                     $( "#utilisateurs_to_belong_to_user" ).val(response.userProfileId) ;
                                     $( "#to_belong_to_user" ).val("").attr('readonly','readonly');
                                     
@@ -320,10 +313,16 @@
                                     var contestendDateProvisoir6 = moment.utc(response.endDateProvisoir6, 'DD/MM/YYYY HH:mm');
                                    
                                     //reset minmaxDate
-                                    $('#api_challenge_startDate').data("DateTimePicker").minDate(null);
-                                    $('#api_challenge_startDate').data("DateTimePicker").maxDate(null);
+                                    var mLastMin =  $('#api_challenge_startDate').data("DateTimePicker").minDate();
+                                    var mLastMax =  $('#api_challenge_startDate').data("DateTimePicker").maxDate();
                                     
-                                    $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
+                                    if(mLastMax.diff(moment(response.startDate, 'DD/MM/YYYY HH:mm')) > 0){
+                                        $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
+                                        $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
+                                    } else {
+                                        $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
+                                        $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
+                                    }
                                     
                                     $( "#api_challenge_startDate" ).val(response.startDate) ;
                                     $( "#api_challenge_endDate" ).val(response.endDateProvisoir) ;
