@@ -399,7 +399,7 @@
                         $('#api_challenge_endDate').val(d.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));
                     } else {
                         if( dh.add(defaultMaxHour,'hours').diff(contestEndDate) < 0){
-                            $('#api_challenge_endDate').val(dh);
+                            $('#api_challenge_endDate').val(dh.format('DD/MM/YYYY HH:mm'));
                         } else {
                             $('#api_challenge_endDate').val(contestEndDate.format('DD/MM/YYYY HH:mm'));
                         }
