@@ -325,8 +325,12 @@
                                     }
                                     
                                     $( "#api_challenge_startDate" ).val(response.startDate) ;
-                                    $( "#api_challenge_endDate" ).val(response.endDateProvisoir) ;
                                     
+                                    if( moment(response.endDate, 'DD/MM/YYYY HH:mm').diff(moment(response.endDateProvisoir, 'DD/MM/YYYY HH:mm')) < 0){
+                                        $('#api_challenge_endDate').val(response.endDate);
+                                    } else {
+                                        $('#api_challenge_endDate').val(response.endDateProvisoir);
+                                    }
                                     
                                     {#contestStartDate = moment.utc(response.startDate, 'DD/MM/YYYY HH:mm');#}
                                                                        
