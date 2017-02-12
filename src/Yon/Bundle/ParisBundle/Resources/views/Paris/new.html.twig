@@ -323,7 +323,7 @@
                                     } else {
                                         console.log(mLastMax);
                                         $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
-                                        console.log('1');
+                                        console.log($('#api_challenge_startDate').data("DateTimePicker").maxDate());
                                         $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
                                         console.log('2');
                                     }
