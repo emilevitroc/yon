@@ -491,10 +491,6 @@
                     $('#api_challenge_duration').val(zdiff);
                 });
                 
-                 var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
-                var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
-                zdiff = moment.utc(end.diff(start)).format('HH:mm');
-                $('#api_challenge_duration').val(zdiff);
             });
             
             function confirmDelChallenge(challengeId){
