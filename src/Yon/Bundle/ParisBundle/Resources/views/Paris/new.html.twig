@@ -391,8 +391,20 @@
                     
                     var d = e.date.clone();
                     var dh = e.date.clone();
+                    var dOrig = e.date.clone();
                     
                     $('#api_challenge_endDate').data("DateTimePicker").minDate(e.date);
+                    
+                    if(!contestEndDate){
+                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(dOrig.add(6, 'hours'));
+                    }
+                    
+                    var d1 = e.date.add(6, 'hours').clone();
+                    if(d1.diff(contestEndDate) < 0 ){
+                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(d1);
+                    } else {
+                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                    }
                     
                     //set h+3
                     if(!contestEndDate){
@@ -406,19 +418,6 @@
                     }
                     
                     setDuration();
-                    if(!contestEndDate){
-                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(e.date.add(6, 'hours'));
-                        return;
-                    }
-                    
-                    var d1 = e.date.add(6, 'hours').clone();
-                    if(d1.diff(contestEndDate) < 0 ){
-                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(d1);
-                        return;
-                    } else {
-                        $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
-                        return;
-                    }
                     
                 });
                 $("#api_challenge_endDate").on("dp.change", function(e) {
