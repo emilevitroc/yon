@@ -348,9 +348,9 @@
                                     //$('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
                                                                       
                                     
-                                    var start = moment($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
-                                    var end = moment($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
-                                    zdiff = moment(end.diff(start)).format('HH:mm');
+                                    var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
+                                    var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
+                                    zdiff = moment.utc(end.diff(start)).format('HH:mm');
                                     $('#api_challenge_duration').val(zdiff);
                                     
                                 }
@@ -426,8 +426,8 @@
                 });
                 $("#api_challenge_endDate").on("dp.change", function(e) {
                     
-                    var start = moment($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
-                    var end = e.date;
+                    var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
+                    var end = e.date.utc();
                     zdiff = moment(end.diff(moment(start))).format('HH:mm');
                     $('#api_challenge_duration').val(zdiff);
                 });
@@ -464,16 +464,16 @@
                         $('#api_challenge_choice_hashtag_1').attr('checked', true);
                     }
                     
-                    var start = moment($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
-                    var end = moment($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
-                    zdiff = moment(end.diff(start)).format('HH:mm');
+                    var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
+                    var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
+                    zdiff = moment.utc(end.diff(start)).format('HH:mm');
                     $('#api_challenge_duration').val(zdiff);
                 }
                 
                 function setDuration(){
-                    var mStart = moment($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
-                    var mEnd = moment($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
-                    var mDiff = moment(mEnd.diff(mStart)).format('HH:mm');
+                    var mStart = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
+                    var mEnd = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
+                    var mDiff = moment.utc(mEnd.diff(mStart)).format('HH:mm');
                     $('#api_challenge_duration').val(mDiff);
                 }
             
