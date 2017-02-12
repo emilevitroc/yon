@@ -427,7 +427,7 @@
                 $("#api_challenge_endDate").on("dp.change", function(e) {
                     
                     var start = moment($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
-                    var end = e.date();
+                    var end = e.date;
                     zdiff = moment(end.diff(moment(start))).format('HH:mm');
                     $('#api_challenge_duration').val(zdiff);
                 });
