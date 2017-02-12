@@ -304,7 +304,14 @@
                             data: {id: contestId},
                             success: function(response){
                                 if(response.name){
-                                    
+                                    $('#api_challenge_startDate').datetimepicker({
+                                        format: 'DD/MM/YYYY HH:mm',
+                                        //minDate: moment()
+                                    });
+                                    $('#api_challenge_endDate').datetimepicker({
+                                        format: 'DD/MM/YYYY HH:mm',
+                                        //minDate: moment()
+                                    });
                                     $( "#utilisateurs_to_belong_to_user" ).val(response.userProfileId) ;
                                     $( "#to_belong_to_user" ).val("").attr('readonly','readonly');
                                     
@@ -379,7 +386,7 @@
                 $("#api_challenge_startDate").on("dp.change", function(e) {
                     
                     var d = e.date.clone();
-                    console.log(d.format('DD/MM/YYYY HH:mm'));
+                    
                     $('#api_challenge_endDate').data("DateTimePicker").minDate(e.date);
                     $('#api_challenge_endDate').val(d.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));
                     setDuration();
