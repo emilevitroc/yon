@@ -1636,12 +1636,12 @@
 //            }
             options.maxDate = parsedDate;
             if (options.useCurrent && !options.keepInvalid && date.isAfter(maxDate)) {
-                setValue(options.maxDate);
+              //  setValue(options.maxDate);
             }
             if (viewDate.isAfter(parsedDate)) {
                 viewDate = parsedDate.clone().subtract(options.stepping, 'm');
             }
-            update();
+            //update();
             return picker;
         };
 
@@ -1672,12 +1672,12 @@
 //            }
             options.minDate = parsedDate;
             if (options.useCurrent && !options.keepInvalid && date.isBefore(minDate)) {
-                setValue(options.minDate);
+              //  setValue(options.minDate);
             }
             if (viewDate.isBefore(parsedDate)) {
                 viewDate = parsedDate.clone().add(options.stepping, 'm');
             }
-            update();
+            //update();
             return picker;
         };
 
