@@ -361,23 +361,53 @@
                         });
                         $('#api_challenge_hashtag_user').val(contestVal.replace(/\s/g,"").replace("-","_")).attr('readonly','readonly');
                     } else {
+                    
                         $('#api_challenge_hashtag_user').val("").removeAttr('readonly');
                         $( "#to_belong_to_user" ).val("").removeAttr('readonly');
                         $( "#utilisateurs_to_belong_to_user" ).val("");
                         contestEndDate = null;
+                        var cust_now  = moment().format('DD/MM/YYYY HH:mm');
                         
-                        var stDateNow = moment().clone();
-                        var stDateNow2 = moment().clone();
+                        var mLastMin =  $('#api_challenge_startDate').data("DateTimePicker").minDate();
+                        var mLastMax =  $('#api_challenge_startDate').data("DateTimePicker").maxDate();
+                                    
+                        var stDateNow = moment(cust_now, 'DD/MM/YYYY HH:mm').clone();
+                        var stDateNow2 = moment(cust_now, 'DD/MM/YYYY HH:mm').clone();
+                        var stDateNow3 = moment(cust_now, 'DD/MM/YYYY HH:mm').clone();
                         
+                        if(mLastMax.diff(moment()) > 0){
+                            $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(cust_now, 'DD/MM/YYYY HH:mm'));
+                            $('#api_challenge_startDate').data("DateTimePicker").maxDate(stDateNow2.add('365', 'days'));
+
+                            $('#api_challenge_endDate').data("DateTimePicker").minDate(moment(cust_now, 'DD/MM/YYYY HH:mm'));
+                            var dCont2 = stDateNow2.add(6, 'hours').clone();
+                            $('#api_challenge_endDate').data("DateTimePicker").maxDate(dCont2);
+
+                        } else {
+                            
+                            $('#api_challenge_startDate').data("DateTimePicker").maxDate(stDateNow2.add('365', 'days'));
+                            $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(cust_now, 'DD/MM/YYYY HH:mm'));
+
+                            $('#api_challenge_endDate').data("DateTimePicker").minDate(moment(cust_now, 'DD/MM/YYYY HH:mm'));
+                            var dCont2 = stDateNow2.add(6, 'hours').clone();
+                            
+                            $('#api_challenge_endDate').data("DateTimePicker").maxDate(dCont2);
+                        }
+                        
+                        $( "#api_challenge_startDate" ).val(moment(cust_now, 'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm')) ;
+                                    
+                        $('#api_challenge_endDate').val(stDateNow3.add(3, 'hours').format('DD/MM/YYYY HH:mm'));
+                        
+                        {#$('#api_challenge_startDate').data("DateTimePicker").maxDate(moment().add('365', 'days'));
                         $('#api_challenge_startDate').data("DateTimePicker").minDate(moment());
-                        $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment().add('365', 'days'));
 
                         $('#api_challenge_endDate').data("DateTimePicker").minDate(moment());
                         
                         var dCont = stDateNow.add(6, 'hours').clone();
                         $('#api_challenge_endDate').data("DateTimePicker").maxDate(dCont);
+                        
                         $('#api_challenge_startDate').val(moment().format('DD/MM/YYYY HH:mm'));
-                        $('#api_challenge_endDate').val( stDateNow2.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm') );
+                        $('#api_challenge_endDate').val( stDateNow2.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm') );#}
                         setDuration();
                         
                     }

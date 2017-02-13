@@ -1641,7 +1641,7 @@
             if (viewDate.isAfter(parsedDate)) {
                 viewDate = parsedDate.clone().subtract(options.stepping, 'm');
             }
-            //update();
+            update();
             return picker;
         };
 
@@ -1677,7 +1677,7 @@
             if (viewDate.isBefore(parsedDate)) {
                 viewDate = parsedDate.clone().add(options.stepping, 'm');
             }
-            //update();
+            update();
             return picker;
         };
 
