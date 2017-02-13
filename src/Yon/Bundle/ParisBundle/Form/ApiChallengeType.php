@@ -145,7 +145,8 @@ class ApiChallengeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Yon\Bundle\ParisBundle\Entity\ApiChallenge'
+            'data_class' => 'Yon\Bundle\ParisBundle\Entity\ApiChallenge',
+            'allow_extra_fields' => true,
         ));
     }
 }
