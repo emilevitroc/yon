@@ -653,6 +653,7 @@ class ApiChallengeController extends Controller
             }
             
             $sessionLastVisitPage = $session->get ( 'lastVisitePage');
+            var_dump($sessionLastVisitPage);
             if($sessionLastVisitPage && isset($sessionLastVisitPage[1])){
                 return $this->redirectToRoute($sessionLastVisitPage[0], array('id' => $sessionLastVisitPage[1]));
             } elseif($sessionLastVisitPage){
