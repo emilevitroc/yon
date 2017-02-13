@@ -1631,9 +1631,9 @@
             if (!parsedDate.isValid()) {
                 throw new TypeError('maxDate() Could not parse date parameter: ' + maxDate);
             }
-            if (options.minDate && parsedDate.isBefore(options.minDate)) {
-                throw new TypeError('maxDate() date parameter is before options.minDate: ' + parsedDate.format(actualFormat));
-            }
+//            if (options.minDate && parsedDate.isBefore(options.minDate)) {
+//                throw new TypeError('maxDate() date parameter is before options.minDate: ' + parsedDate.format(actualFormat));
+//            }
             options.maxDate = parsedDate;
             if (options.useCurrent && !options.keepInvalid && date.isAfter(maxDate)) {
                 setValue(options.maxDate);
