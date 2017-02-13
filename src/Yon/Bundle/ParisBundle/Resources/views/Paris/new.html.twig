@@ -325,15 +325,15 @@
                                         $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
                                     }
                                     
-                                   
+                                   $( "#api_challenge_startDate" ).val(response.startDate) ;
                                     
                                     if( moment(response.endDate, 'DD/MM/YYYY HH:mm').diff(moment(response.endDateProvisoir, 'DD/MM/YYYY HH:mm')) < 0){
+                                        console.log('1');
                                         $('#api_challenge_endDate').val(response.endDate);
                                     } else {
+                                        console.log('2');
                                         $('#api_challenge_endDate').val(response.endDateProvisoir);
                                     }
-                               
-                                    $( "#api_challenge_startDate" ).val(response.startDate) ;
                                     
                                     var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
                                     var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
