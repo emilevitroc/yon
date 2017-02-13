@@ -70,7 +70,7 @@
                         <div class="form-group">
                                 <label class="col-sm-2 control-label required" for="api_challenge_title">Intitulé</label>
                                 <div class="col-sm-9">
-                                    <input id="api_challenge_title" name="api_challenge[title]" required="required" maxlength="100" class="form-control ui-autocomplete-input" autocomplete="off" type="text" onKeyDown="textCounter(this,'titleCountDown',100);" onKeyUp="textCounter(this,'titleCountDown',100)" value="{{apiChallenge.title}}">                                   
+                                    <input id="api_challenge_title" name="api_challenge[title]" required="required" maxlength="49" class="form-control ui-autocomplete-input" autocomplete="off" type="text" onKeyDown="textCounter(this,'titleCountDown',49);" onKeyUp="textCounter(this,'titleCountDown',49)" value="{{apiChallenge.title}}">                                   
                                 </div>
                                 <div class="col-sm-1">
                                     <input style="color:red;font-size:12pt;font-style:italic;" class="form-control" readonly="readonly" type="text" id='titleCountDown' name="titleCountDown" size="3" maxlength="3" /> 
