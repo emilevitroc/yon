@@ -319,7 +319,7 @@
                                     
                                     if(mLastMax.diff(moment(response.startDate, 'DD/MM/YYYY HH:mm')) > 0){
                                         $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
-                                        //$('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
+                                        $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
                                     } else {
                                         $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
                                         $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
@@ -379,7 +379,7 @@
                 $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment().add('365', 'days'));
                 
                 $("#api_challenge_startDate").on("dp.change", function(e) {
-                    
+                    console.log(e);
                     var d = e.date.clone();
                     var dh = e.date.clone();
                     var dOrig = e.date.clone();
