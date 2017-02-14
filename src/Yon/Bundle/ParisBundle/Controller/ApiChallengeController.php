@@ -407,9 +407,11 @@ class ApiChallengeController extends Controller
             $tParams['end_date'] = $apiChallenge->getEndDate()->format(\DateTime::ISO8601);
 //            $tParams['delayed_result'] = $data['api_challenge']['delayed_result'];
             $tParams['bet_price'] = $data['api_challenge']['betPrice'];
-            if((int)$data['api_challenge']['status'] == 1){
+            if((int)$data['api_challenge']['status'] == 5){
                 $tParams['draft'] = 1;
-            }         
+            }else{
+                $tParams['draft'] = 0;
+            }       
 //            $tParams['draft'] = 1;
 //            echo $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
            // var_dump( $tParams);
@@ -584,8 +586,10 @@ class ApiChallengeController extends Controller
             $tParams['end_date'] = $apiChallenge->getEndDate()->format(\DateTime::ISO8601);
 //            $tParams['delayed_result'] = $data['api_challenge']['delayed_result'];
             $tParams['bet_price'] = $data['api_challenge']['betPrice'];
-             if((int)$data['api_challenge']['status'] == 1){
+                if((int)$data['api_challenge']['status'] == 5){
                 $tParams['draft'] = 1;
+            }else{
+                $tParams['draft'] = 0;
             }
 //            echo $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
            // var_dump( $tParams);

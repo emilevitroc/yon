@@ -32,7 +32,7 @@ class ApiChallenge
     );
     static $DRAFT_CHOICE = array (
         0 => 'non',
-        1 => 'oui'
+        5 => 'oui'
     );
     static $DURATION = array (
         1 => '1 heure',
