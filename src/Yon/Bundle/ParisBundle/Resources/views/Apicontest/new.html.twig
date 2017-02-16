@@ -128,7 +128,49 @@
                 $("#api_contest_startDate").on("dp.change", function(e) {
                     $('#api_contest_endDate').val(e.date.add(defaultMaxHour, 'hours').format('DD/MM/YYYY HH:mm'));                   
                 });
+                
+                {% if baseContest is defined %}
+                
+                    var jsparsed = JSON.stringify({{ baseContest|raw }});
+                    console.log(jsparsed);
+                    presetContestList( { item: JSON.parse(jsparsed) });
+                {% endif %}
+                    
             });
+            
+            function presetContestList( oParis ) {
+                $( "#api_contest_name" ).val(oParis.item.name) ;
+                $( "#api_contest_startDate" ).val(oParis.item.startDate) ;
+                $( "#api_contest_endDate" ).val(oParis.item.endDate) ;
+                $( "#api_contest_description" ).val(oParis.item.description) ;
+                $( "#api_contest_plannedChallengesCount" ).val(oParis.item.challengeCount) ;
+                
+                $( "#utilisateurs_to_belong_to_user" ).val(oParis.item.user) ;
+                
+                /*$( "#utilisateurs_to_belong_to_user" ).val(oParis.item.user) ;
+                $( "#api_challenge_startDate" ).val(oParis.item.startDate) ;
+                $( "#api_challenge_endDate" ).val(oParis.item.endDate) ;
+                $( "#api_challenge_hashtag" ).val(oParis.item.hashtag) ;
+                $( "#api_challenge_contest" ).val(oParis.item.concours) ;
+                $( "#api_challenge_color" ).val(oParis.item.color) ;
+                $( "#api_challenge_result" ).val(oParis.item.result) ;*/
+
+                /*if(oParis.item.isTrending){
+                    $('#trends-container').show();
+                    $('#api_challenge_trendingTopics').val(oParis.item.trendingTopics);
+                    $('#api_challenge_choice_hashtag_0').attr('checked', true);
+                }else{
+                    $('#manual-container').show();
+                    $('#api_challenge_hashtag_user').val(oParis.item.hashtagUser);
+                    $('#api_challenge_choice_hashtag_1').attr('checked', true);
+                }*/
+
+                /*var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
+                var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');*/
+                /*zdiff = moment.utc(end.diff(start)).format('HH:mm');
+                $('#api_challenge_duration').val(zdiff);*/
+            }
+            
             
 	</script>
 {% endblock %}

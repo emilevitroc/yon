@@ -101,6 +101,7 @@
                                     <td>{{ name }}</td>
                                     <td>
                                          <a href="{{ path('apicontest_edit', { 'id': apiContest.id }) }}"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>
+                                         <a href="{{ path('apicontest_new', { duplicateFrom: apiContest.id} ) }}"><button class="btn btn-mini btn-mini-rectif"> Dupliquer</button></a>
 {#                                         <a href="#"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>#}
                                         {#<ul>
                                             <li>

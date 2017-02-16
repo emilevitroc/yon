@@ -27,7 +27,21 @@ class ApiCoupon
      * @ORM\Column(name="type", type="string", length=100, nullable=false)
      */
     private $type;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=100, nullable=false)
+     */
+    private $title;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="short_title", type="string", length=100, nullable=false)
+     */
+    private $shortTitle;
+    
     /**
      * @var integer
      *
@@ -59,7 +73,15 @@ class ApiCoupon
      */
     private $user;
 
-
+        /**
+     * @var \Challenge
+     *
+     * @ORM\ManyToOne(targetEntity="ApiChallenge")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="challenge_id", referencedColumnName="id")
+     * })
+     */
+    private $challenge;
 
     /**
      * Get id
@@ -92,6 +114,52 @@ class ApiCoupon
     public function getType()
     {
         return $this->type;
+    }
+    
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return ApiCoupon
+     */
+    public function setTitle($title)
+    {
+        $this->type = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    
+    /**
+     * Set shorttitle
+     *
+     * @param string $shortTitle
+     * @return ApiCoupon
+     */
+    public function setShortTitle($shortTitle)
+    {
+        $this->type = $shortTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getShortTitle()
+    {
+        return $this->shortTitle;
     }
 
     /**
@@ -185,4 +253,28 @@ class ApiCoupon
     {
         return $this->user;
     }
+    
+    /**
+     * Set challenge
+     *
+     * @param \Yon\Bundle\UserBundle\Entity\AuthUser $challenge
+     * @return ApiCoupon
+     */
+    public function setChallenge(\Yon\Bundle\ParisBundle\Entity\ApiChallenge $challenge = null)
+    {
+        $this->challenge = $challenge;
+
+        return $this;
+    }
+
+    /**
+     * Get challenge
+     *
+     * @return \Yon\Bundle\ParisBundle\Entity\ApiChallenge 
+     */
+    public function getChallenge()
+    {
+        return $this->challenge;
+    }
+    
 }
