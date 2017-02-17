@@ -2,6 +2,12 @@
 {% block title %}{{ parent() }}Liste des paris{% endblock %}
 {% set menuParis = true %}
 {% set menuParisAll = true %}
+{% set statusVal = app.session.get('statusValue') %}
+{% if(statusVal == 0) %}
+    {% set statusValue = "" %}
+{% else %}
+    {% set statusValue = app.session.get('statusValue') %}
+{% endif %}
 {% block stylesheets %}
     {{ parent() }}
 <style type="text/css">
@@ -59,16 +65,21 @@
                 <!-- /.box-header -->
                 <div class="status-filter">
                     <label for="status"> Status:</label>
-                    <select id="status">
+                    <select id="status">                       
                         <option value="">Tous les paris</option>
-                        <option value="0">paris en cours</option>
+                        
+                        {% for keyStatus,valueStatus in valStatus %}
+                            <option  {% if(statusValue != "")%}{% if (statusValue == keyStatus) %} selected="selected" {% endif %}{% endif %} value="{{ keyStatus }}">{{ valueStatus }}</option>
+                        {% endfor %}
+                        
+                        {#<option value="0">paris en cours</option>
                         <option value="1">paris en attente de réponse</option>
                         <option value="2">paris passés</option>
                         <option value="3">paris expiré</option>
-                        <option value="4">paris à venir</option>
+                        <option value="4">paris à venir</option>#}                       
                     </select>
                 </div>
-                <div class="box-body">
+                <div class="box-body">                   
                     <table id="list-users" class="table  table-bordered table-striped">
                         <thead >
                              <tr>
@@ -106,7 +117,15 @@
 {% block javascripts %}
     {{ parent() }}
 	<script type="text/javascript">
-            var datat = null;
+            var datat = null; 
+            var routeParis = Routing.generate('yon_paris_list_ajax',{
+                    'authUserId': '{{ authUserId }}'
+            });
+            {% if app.session.get('parisListAjaxUrl') %}
+                routePari = "{{ app.session.get('parisListAjaxUrl')}}";
+                routeParis = routePari.replace("&amp;", "&");
+            {% endif %}
+              
             $(function () {
                 $('#list-users').DataTable(
                 {
@@ -118,9 +137,8 @@
                     "bProcessing": true,
                     "bServerSide": true,
                     "bFilter": true,
-                    "sAjaxSource": Routing.generate('yon_paris_list_ajax',{
-                                    'authUserId': '{{ authUserId }}'
-                            }),
+                    "stateSave": true,
+                    "sAjaxSource": routeParis,
                     "oLanguage": {
                         "sProcessing": "traitement...",
                         "oPaginate": {
@@ -137,7 +155,7 @@
                 });
                 datat = $("#list-users").DataTable();
                 $('#status').change(function() {
-                
+                    
                     oTable = $('#list-users').dataTable();
                     var oSettings = oTable.fnSettings();
                     oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{

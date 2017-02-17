@@ -82,6 +82,8 @@ class ApiChallengeController extends Controller
         $session->set('lastVisitePage', $routeName);
         $authUserId = $request->get('userId');
         
+        $apiChallenge = new ApiChallenge();
+        $valStatus = $apiChallenge::$STATUS;
         // pour generer le menu contest dans le popup
         $em = $this->getDoctrine()->getManager();
         $apiContests = $em->getRepository('YonParisBundle:ApiContest')->findAll();
@@ -101,6 +103,7 @@ class ApiChallengeController extends Controller
         return $this->render('YonParisBundle:Paris:index.html.twig', array(
             'apiContests' => json_encode($tApiContests),
             'authUserId' => $authUserId,
+            'valStatus'=>$valStatus,
         ));
     }
     
@@ -136,6 +139,17 @@ class ApiChallengeController extends Controller
                 $options['status'] = $status;
             }
         }
+        
+        $session    = $request->getSession ();
+        $routeName  = $this->getRequest()->get('_route');   
+        $LastparisAjaxParams = array('authUserId'=> $userId);
+        if($status){
+            $LastparisAjaxParams['status'] = $request->get('status', null);
+        }
+        $parisListAjaxUrl = $this->generateUrl('yon_paris_list_ajax', $LastparisAjaxParams , true);
+        $session->set('parisListAjaxUrl', $parisListAjaxUrl);
+        $session->set('statusValue', $status);
+        
         if(isset($coucoursId) && !empty($coucoursId)){
             $options['coucoursId'] = $coucoursId;
         }
