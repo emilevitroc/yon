@@ -132,7 +132,7 @@
                 {% if baseContest is defined %}
                 
                     var jsparsed = JSON.stringify({{ baseContest|raw }});
-                    console.log(jsparsed);
+                    //console.log(jsparsed);
                     presetContestList( { item: JSON.parse(jsparsed) });
                 {% endif %}
                     

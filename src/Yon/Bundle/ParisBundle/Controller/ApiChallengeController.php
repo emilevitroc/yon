@@ -540,6 +540,9 @@ class ApiChallengeController extends Controller
         }
         $editForm->get('result')->setData($apiChallenge->getDelayedResult());
         
+        if($apiChallenge->getStatus() != 5){
+            $editForm->get('status')->setData(0);
+        }
         //set hashtag defaul value
         $isTrending = false;
         if($apiChallenge->getHashtag()){
@@ -602,9 +605,9 @@ class ApiChallengeController extends Controller
             $tParams['bet_price'] = $data['api_challenge']['betPrice'];
                 if((int)$data['api_challenge']['status'] == 5){
                 $tParams['draft'] = 1;
-            }else{
+            }/*else{
                 $tParams['draft'] = 0;
-            }
+            }*/
 //            echo $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
            // var_dump( $tParams);
             $editChallengeUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('challenges').'/'. $apiChallenge->getId();
