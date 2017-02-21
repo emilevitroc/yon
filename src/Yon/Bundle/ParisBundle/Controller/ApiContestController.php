@@ -232,7 +232,7 @@ class ApiContestController extends Controller
                     $d1         = strtotime($startDateApiContest->format('Y-m-d h:m'));
                     $d2         = strtotime($dateDeb->format('Y-m-d h:m'));
                     $datediff   = $d2 - $d1;
-
+                    
                     $nbDayBetweenTwoDate = floor($datediff / (60 * 60 * 24));
 
                     // Enregistrement Challenge
@@ -247,8 +247,16 @@ class ApiContestController extends Controller
                         $tParamsChallengeDuplicated['prize']            = ($resChallenge->getChallenge()->getPrize() === null) ? '': $resChallenge->getChallenge()->getPrize();
                         $tParamsChallengeDuplicated['alert_message']    = ($resChallenge->getChallenge()->getAlertMessage() === null) ? '' : $resChallenge->getChallenge()->getAlertMessage();                                              
                         $tParamsChallengeDuplicated['hashtag']          = $resChallenge->getChallenge()->getHashtag()->getTag();                       
-                        $tParamsChallengeDuplicated['start_date']       = $resChallenge->getChallenge()->getStartDate()->add(new \DateInterval('P'.$nbDayBetweenTwoDate.'D'))->format(\DateTime::ISO8601);
-                        $tParamsChallengeDuplicated['end_date']         = $resChallenge->getChallenge()->getEndDate()->add(new \DateInterval('P'.$nbDayBetweenTwoDate.'D'))->format(\DateTime::ISO8601);
+                        
+                        $startDate = clone $resChallenge->getChallenge()->getStartDate();
+                        $endDate   = clone $resChallenge->getChallenge()->getEndDate();
+                        if($nbDayBetweenTwoDate > 0){
+                            $tParamsChallengeDuplicated['start_date']       = $startDate->add(new \DateInterval('P'.$nbDayBetweenTwoDate.'D'))->format(\DateTime::ISO8601);
+                            $tParamsChallengeDuplicated['end_date']         = $endDate->add(new \DateInterval('P'.$nbDayBetweenTwoDate.'D'))->format(\DateTime::ISO8601);
+                        }else{
+                            $tParamsChallengeDuplicated['start_date']       = $startDate->format(\DateTime::ISO8601);
+                            $tParamsChallengeDuplicated['end_date']         = $endDate->format(\DateTime::ISO8601);
+                        }
                         $tParamsChallengeDuplicated['bet_price']        = $resChallenge->getChallenge()->getBetPrice();
                         
                         if((int)$resChallenge->getChallenge()->getStatus() == 5){
@@ -450,11 +458,22 @@ class ApiContestController extends Controller
                 foreach($oApiContestchallenges as $resChallenge){
                     $tParamsChallengeEdit = array();
                     $start_date = $resChallenge->getChallenge()->getStartDate();
-                    $startDate = clone $apiContest->getStartDate();
-                    $endDate   = clone $apiContest->getEndDate();
-                    $tParamsChallengeEdit['start_date']       = $startDate->format(\DateTime::ISO8601);
-                    $tParamsChallengeEdit['end_date']         = $endDate->format(\DateTime::ISO8601);
-                   
+                    /*$startDate = clone $apiContest->getStartDate();
+                    $endDate   = clone $apiContest->getEndDate();*/
+                    $startDate = clone $resChallenge->getChallenge()->getStartDate();
+                    $endDate   = clone $resChallenge->getChallenge()->getEndDate();
+                    /*$tParamsChallengeEdit['start_date']       = $startDate->format(\DateTime::ISO8601);
+                    $tParamsChallengeEdit['end_date']         = $endDate->format(\DateTime::ISO8601);*/
+                    
+                    if($nbDayBetweenTwoDate > 0 ){
+                        $tParamsChallengeEdit['start_date']         = $startDate->add(new \DateInterval('P'.$nbDayBetweenTwoDate.'D'))->format(\DateTime::ISO8601);
+                        $tParamsChallengeEdit['end_date']           = $endDate->add(new \DateInterval('P'.$nbDayBetweenTwoDate.'D'))->format(\DateTime::ISO8601);
+                    }else{
+                        $tParamsChallengeEdit['start_date']         = $startDate->format(\DateTime::ISO8601);
+                        $tParamsChallengeEdit['end_date']           = $endDate->format(\DateTime::ISO8601);
+                    }
+                    $tParamsChallengeEdit['hashtag']                = $resChallenge->getChallenge()->getHashtag()->getTag();
+                    
                     $editChallengeUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('challenges').'/'. $resChallenge->getChallenge()->getId();
                     $customerHeader = array('Authorization: '. $session->get ( 'yon_token'));
                     if( (int)$data['to_belong_to_user'] > 0  ){
