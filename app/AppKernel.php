@@ -40,7 +40,7 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
 //        date_default_timezone_set( 'Europe/Paris' );
-        date_default_timezone_set('UTC');
+        //date_default_timezone_set('UTC');
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
     }
 }

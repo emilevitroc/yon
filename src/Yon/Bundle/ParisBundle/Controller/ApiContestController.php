@@ -36,7 +36,7 @@ class ApiContestController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $apiContests = $em->getRepository('YonParisBundle:ApiContest')->findAll();
-
+        
         return $this->render('YonParisBundle:Apicontest:index.html.twig', array(
             'apiContests' => $apiContests,
         ));
@@ -245,18 +245,18 @@ class ApiContestController extends Controller
                         $tParamsChallengeDuplicated['color']            = $resChallenge->getChallenge()->getColor();
                         $tParamsChallengeDuplicated['delayed_result']   = ($resChallenge->getChallenge()->getDelayedResult() === null) ? '' : $resChallenge->getChallenge()->getDelayedResult();
                         $tParamsChallengeDuplicated['prize']            = ($resChallenge->getChallenge()->getPrize() === null) ? '': $resChallenge->getChallenge()->getPrize();
-                        $tParamsChallengeDuplicated['alert_message']    = ($resChallenge->getChallenge()->getAlertMessage() === null) ? '' : $resChallenge->getChallenge()->getAlertMessage();
-                        $tParamsChallengeDuplicated['hashtag']          = $resChallenge->getChallenge()->getHashtag()->getTag();
+                        $tParamsChallengeDuplicated['alert_message']    = ($resChallenge->getChallenge()->getAlertMessage() === null) ? '' : $resChallenge->getChallenge()->getAlertMessage();                                              
+                        $tParamsChallengeDuplicated['hashtag']          = $resChallenge->getChallenge()->getHashtag()->getTag();                       
                         $tParamsChallengeDuplicated['start_date']       = $resChallenge->getChallenge()->getStartDate()->add(new \DateInterval('P'.$nbDayBetweenTwoDate.'D'))->format(\DateTime::ISO8601);
                         $tParamsChallengeDuplicated['end_date']         = $resChallenge->getChallenge()->getEndDate()->add(new \DateInterval('P'.$nbDayBetweenTwoDate.'D'))->format(\DateTime::ISO8601);
                         $tParamsChallengeDuplicated['bet_price']        = $resChallenge->getChallenge()->getBetPrice();
-
+                        
                         if((int)$resChallenge->getChallenge()->getStatus() == 5){
                             $tParamsChallengeDuplicated['draft']        = 1;
                         }else{
                             $tParamsChallengeDuplicated['draft']        = 0;
                         }
-
+                        
                         $challengeUrl                                   = $this->container->getParameter('api_url').''.$this->container->getParameter('challenges') ;
                         $curlService                                    = $this->get('yon_user.data');
 
@@ -320,7 +320,7 @@ class ApiContestController extends Controller
 
                 $tParams['start_date'] = $apiContest->getStartDate()->format(\DateTime::ISO8601);
                 $tParams['end_date'] = $apiContest->getEndDate()->format(\DateTime::ISO8601);
-
+                
                 //set api header
                 $customerHeader = array('Authorization: '. $session->get ( 'yon_token'));
                 if( (int)$data['to_belong_to_user'] > 0 ){
@@ -392,14 +392,20 @@ class ApiContestController extends Controller
         $routeName = $this->getRequest()->get('_route');
         $apiContestId = $apiContest->getId();
         
+        $startDateApiContest    = $apiContest->getStartDate();
+        $oApiContestchallenges  = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiContestchallenge')->findBy(array(
+                    'contest' => $apiContest->getId()
+                ));
+        
         $session->set('lastVisitePage', array($routeName,$apiContestId));
         $deleteForm = $this->createDeleteForm($apiContest);
         $editForm = $this->createForm('Yon\Bundle\ParisBundle\Form\ApiContestType', $apiContest);
         $editForm->handleRequest($request);
-
+        
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $data = $request->request->all();
-            
+            $curlService = $this->get('yon_user.data');
+                 
             //prepare parametre pour envoyer vers api
             $tParams = array();
             $tParams['name'] = $data['api_contest']['name'];
@@ -416,8 +422,8 @@ class ApiContestController extends Controller
                 $tParams['user_id'] = $data['to_belong_to_user'];
             }
             
-            $editContestseUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('contests').'/'. $apiContest->getId();
-            $curlService = $this->get('yon_user.data');
+            $editContestseUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('contests').'/'. $apiContest->getId();            
+
 //            var_dump($tParams);die;
             $result = $curlService->curlPatch($editContestseUrl, $tParams, $customerHeader);
             
@@ -433,6 +439,29 @@ class ApiContestController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($apiContest);
                     $em->flush();
+                }
+                
+                $dateDeb        = $apiContest->getStartDate();            
+                $d1             = strtotime($startDateApiContest->format('Y-m-d h:m'));
+                $d2             = strtotime($dateDeb->format('Y-m-d h:m'));
+                $datediff       = $d2 - $d1;
+                $nbDayBetweenTwoDate = floor($datediff / (60 * 60 * 24));
+                
+                foreach($oApiContestchallenges as $resChallenge){
+                    $tParamsChallengeEdit = array();
+                    $start_date = $resChallenge->getChallenge()->getStartDate();
+                    $startDate = clone $apiContest->getStartDate();
+                    $endDate   = clone $apiContest->getEndDate();
+                    $tParamsChallengeEdit['start_date']       = $startDate->format(\DateTime::ISO8601);
+                    $tParamsChallengeEdit['end_date']         = $endDate->format(\DateTime::ISO8601);
+                   
+                    $editChallengeUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('challenges').'/'. $resChallenge->getChallenge()->getId();
+                    $customerHeader = array('Authorization: '. $session->get ( 'yon_token'));
+                    if( (int)$data['to_belong_to_user'] > 0  ){
+                        $customerHeader[] = 'X-YESorNO-UserID: '.$data['to_belong_to_user'];
+                    }
+                    $result = $curlService->curlPatch($editChallengeUrl, $tParamsChallengeEdit, $customerHeader);
+                    //var_dump($tParamsChallengeEdit);die;
                 }
                 
                $this->get('session')->getFlashBag()->add('success', sprintf('le concours a été bien modifié!.'));
