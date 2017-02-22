@@ -417,8 +417,27 @@ class ApiChallengeController extends Controller
             
             
 //            $tParams['time_to_end'] = floatval($data['api_challenge']['time_to_end']);
-            $tParams['start_date'] = $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
-            $tParams['end_date'] = $apiChallenge->getEndDate()->format(\DateTime::ISO8601);
+            if($duplicateFrom){
+                $now                    = clone (new \DateTime());
+                $nowToSave              = clone (new \DateTime());
+                $startDate              = clone $apiChallenge->getStartDate();
+                $endDate                = clone $apiChallenge->getEndDate();
+                
+                $hourdiff               = round((strtotime($endDate->format('Y-m-d h:i:s')) - strtotime($startDate->format('Y-m-d h:i:s')))/3600, 1);
+                $endDateToSave          = $now->add(new \DateInterval('PT'.$hourdiff.'H'));
+
+                if($nowToSave > $startDate){
+                    $tParams['start_date']  = $nowToSave->format(\DateTime::ISO8601);
+                    $tParams['end_date']    = $endDateToSave->format(\DateTime::ISO8601);
+                }else{
+                    $tParams['start_date']  = $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
+                    $tParams['end_date']    = $apiChallenge->getEndDate()->format(\DateTime::ISO8601);
+                }
+            }else{
+                $tParams['start_date']  = $apiChallenge->getStartDate()->format(\DateTime::ISO8601);
+                $tParams['end_date']    = $apiChallenge->getEndDate()->format(\DateTime::ISO8601);
+            }
+            //var_dump($tParams);
 //            $tParams['delayed_result'] = $data['api_challenge']['delayed_result'];
             $tParams['bet_price'] = $data['api_challenge']['betPrice'];
             if((int)$data['api_challenge']['status'] == 5){
@@ -472,7 +491,7 @@ class ApiChallengeController extends Controller
                 $tParamsCoupons['name'] =  "admin-".$nameUniqId;
                 
                 $resultCouponUrl   = $curlService->curlPost($couponsUrl, $tParamsCoupons, $custHeaderContents);
-                
+                //var_dump($resultCouponUrl);die();
                $this->get('session')->getFlashBag()->add('success', sprintf('un paris a été bien ajouté!.')); 
             } else {
                $this->get('session')->getFlashBag()->add('error', sprintf($response->message));
