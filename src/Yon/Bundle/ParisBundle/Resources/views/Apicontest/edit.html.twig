@@ -51,7 +51,17 @@
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label required">Partenaire</label>
                             <div class="col-sm-5">
-                                <input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiContest.user %}{{ apiContest.user.id }} {% endif %}">
+                                
+                                {% if(infoUser.firstName != '') %}
+                                    {% set nameToDisplay = infoUser.firstName %}
+                                {% else %}
+                                    {% set nameToDisplay = 'Pas de nom ( '~infoUser.user.phoneNumber~' )'   %}
+                                {% endif %}
+                                
+                                <input readonly="readonly" type="text" class="form-control" id="utilisateurs_to_belong_to_user_name" value="{{ nameToDisplay }}">
+                                
+                                <input  type="hidden" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiContest.user %}{{ apiContest.user.id }} {% endif %}">
+                                {#<input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiContest.user %}{{ apiContest.user.id }} {% endif %}">#}
                             </div>
                             <div class="col-sm-5">
                                 <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
@@ -89,6 +99,7 @@
                     <th>Nb de participants</th>
                     <th>Taux de réponse des différents choix</th>
                     <th>Concours</th>
+                    <th>Résultat</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -126,6 +137,7 @@
                     }
                   });
                 function log( message ) {
+                    $( "#utilisateurs_to_belong_to_user_name" ).val(message.item.firstName) ;
                     $( "#utilisateurs_to_belong_to_user" ).val(message.item.authid) ;
                 }
                 
@@ -159,8 +171,9 @@
                 $("#list-paris").DataTable({
                     "aoColumns": [
                         {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true},
-                        {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": false}
+                        {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true},{"bSortable": true}, {"bSortable": false}
                     ],
+                    "aoColumnDefs": [{"bVisible":false,"aTargets":[9] }],
                     "order": [[ 0, "desc" ]],
                     "bProcessing": true,
                     "bServerSide": true,
@@ -181,6 +194,12 @@
                         $('.title-count').html(settings.json.iTotalRecords);
                         //do whatever  
                      },
+                    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+                        if (aData[9] == "yes" ||  aData[9] == "no")
+                        {
+                            $('td', nRow).css('background-color', 'dodgerblue');
+                        }
+                    },
                 });
                 datat = $("#list-paris").DataTable();
             });

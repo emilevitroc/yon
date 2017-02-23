@@ -83,7 +83,7 @@
                     <table id="list-users" class="table  table-bordered table-striped">
                         <thead >
                              <tr>
-                                <th>Id</th>
+                                <th>Id</th>                                
                                 <th>Intitulé</th>
                                 <th>Auteur</th>
                                 <th>Heure de début</th>
@@ -92,6 +92,7 @@
                                 <th>Nb de participants</th>
                                 <th>Taux de réponse des différents choix</th>
                                 <th>Concours</th>
+                                <th>Resultat</th>
                                 {#<th>Betscount</th>
                                 <th>Commentscount</th>
                                 <th>Winnerscount</th>
@@ -132,13 +133,14 @@
                     "pageLength": 100,
                     "aoColumns": [
                         {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true},
-                        {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": false}],
+                        {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": false}],
+                    "aoColumnDefs": [{"bVisible":false,"aTargets":[9] }],
                     "order": [[ 0, "desc" ]],
                     "bProcessing": true,
                     "bServerSide": true,
                     "bFilter": true,
                     "stateSave": true,
-                    "sAjaxSource": routeParis,
+                    "sAjaxSource": routeParis,                    
                     "oLanguage": {
                         "sProcessing": "traitement...",
                         "oPaginate": {
@@ -152,6 +154,12 @@
                         $('.title-count').html(settings.json.iTotalRecords);
                         //do whatever  
                      },
+                     "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+                        if (aData[9] == "yes" ||  aData[9] == "no")
+                        {
+                            $('td', nRow).css('background-color', 'dodgerblue');
+                        }
+                    },
                 });
                 datat = $("#list-users").DataTable();
                 $('#status').change(function() {

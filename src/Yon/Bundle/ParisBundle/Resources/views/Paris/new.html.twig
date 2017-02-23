@@ -304,59 +304,69 @@
                             cache: false,
                             data: {id: contestId},
                             success: function(response){
-                                if(response.name){
-                                    
-                                    $( "#utilisateurs_to_belong_to_user" ).val(response.userProfileId) ;
-                                    $( "#to_belong_to_user" ).val("").attr('readonly','readonly');
-                                    
-                                    contestEndDate = moment(response.endDate, 'DD/MM/YYYY HH:mm');
-                                    var contestStartDate = moment(response.startDate, 'DD/MM/YYYY HH:mm');
-                                    var contestendDateProvisoir6 = moment(response.endDateProvisoir6, 'DD/MM/YYYY HH:mm');
+                               if(response.plannedChallengesCount = response.numberOfChallengesInContest){
                                    
-                                    //reset minmaxDate
-                                    var mLastMin =  $('#api_challenge_startDate').data("DateTimePicker").minDate();
-                                    var mLastMax =  $('#api_challenge_startDate').data("DateTimePicker").maxDate();
-                                    
-                                    if(mLastMax.diff(moment(response.startDate, 'DD/MM/YYYY HH:mm')) > 0){
-                                        $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
-                                        $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
-                                        
-                                        $('#api_challenge_endDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
-                                        var dCont = moment(response.startDate, 'DD/MM/YYYY HH:mm').add(6, 'hours').clone();
-                                        if(dCont.diff(contestEndDate) < 0 ){
-                                            $('#api_challenge_endDate').data("DateTimePicker").maxDate(dCont);
+                                   $('#api_challenge_contest').val("");
+                                   $('#api_challenge_duration').val("");
+                                   $('#api_challenge_startDate').val("");
+                                   $('#api_challenge_endDate').val("");
+                                   $('#api_challenge_hashtag_user').val("");
+                                   bootbox.alert("Nombre de Paris atteint pour ce concours!");
+                               }else{ 
+                                    if(response.name){
+
+                                        $( "#utilisateurs_to_belong_to_user" ).val(response.userProfileId) ;
+                                        $( "#to_belong_to_user" ).val("").attr('readonly','readonly');
+
+                                        contestEndDate = moment(response.endDate, 'DD/MM/YYYY HH:mm');
+                                        var contestStartDate = moment(response.startDate, 'DD/MM/YYYY HH:mm');
+                                        var contestendDateProvisoir6 = moment(response.endDateProvisoir6, 'DD/MM/YYYY HH:mm');
+
+                                        //reset minmaxDate
+                                        var mLastMin =  $('#api_challenge_startDate').data("DateTimePicker").minDate();
+                                        var mLastMax =  $('#api_challenge_startDate').data("DateTimePicker").maxDate();
+
+                                        if(mLastMax.diff(moment(response.startDate, 'DD/MM/YYYY HH:mm')) > 0){
+                                            $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
+                                            $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
+
+                                            $('#api_challenge_endDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
+                                            var dCont = moment(response.startDate, 'DD/MM/YYYY HH:mm').add(6, 'hours').clone();
+                                            if(dCont.diff(contestEndDate) < 0 ){
+                                                $('#api_challenge_endDate').data("DateTimePicker").maxDate(dCont);
+                                            } else {
+                                                $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                                            }
+
                                         } else {
-                                            $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                                            $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
+                                            $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
+
+                                            $('#api_challenge_endDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
+                                            var dCont = moment(response.startDate, 'DD/MM/YYYY HH:mm').add(6, 'hours').clone();
+                                            if(dCont.diff(contestEndDate) < 0 ){
+                                                $('#api_challenge_endDate').data("DateTimePicker").maxDate(dCont);
+                                            } else {
+                                                $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                                            }
                                         }
-                        
-                                    } else {
-                                        $('#api_challenge_startDate').data("DateTimePicker").maxDate(moment(response.endDate, 'DD/MM/YYYY HH:mm'));
-                                        $('#api_challenge_startDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
-                                        
-                                        $('#api_challenge_endDate').data("DateTimePicker").minDate(moment(response.startDate, 'DD/MM/YYYY HH:mm'));
-                                        var dCont = moment(response.startDate, 'DD/MM/YYYY HH:mm').add(6, 'hours').clone();
-                                        if(dCont.diff(contestEndDate) < 0 ){
-                                            $('#api_challenge_endDate').data("DateTimePicker").maxDate(dCont);
+
+                                        $( "#api_challenge_startDate" ).val(response.startDate) ;
+
+                                        if( moment(response.endDate, 'DD/MM/YYYY HH:mm').diff(moment(response.endDateProvisoir, 'DD/MM/YYYY HH:mm')) < 0){
+                                            $('#api_challenge_endDate').val(response.endDate);
                                         } else {
-                                            $('#api_challenge_endDate').data("DateTimePicker").maxDate(contestEndDate);
+                                            $('#api_challenge_endDate').val(response.endDateProvisoir);
                                         }
+
+                                        var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
+                                        var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
+                                        zdiff = moment.utc(end.diff(start)).format('HH:mm');
+                                        $('#api_challenge_duration').val(zdiff);
+
                                     }
-                                    
-                                    $( "#api_challenge_startDate" ).val(response.startDate) ;
-                                    
-                                    if( moment(response.endDate, 'DD/MM/YYYY HH:mm').diff(moment(response.endDateProvisoir, 'DD/MM/YYYY HH:mm')) < 0){
-                                        $('#api_challenge_endDate').val(response.endDate);
-                                    } else {
-                                        $('#api_challenge_endDate').val(response.endDateProvisoir);
-                                    }
-                                    
-                                    var start = moment.utc($('#api_challenge_startDate').val(), 'DD/MM/YYYY HH:mm');
-                                    var end = moment.utc($('#api_challenge_endDate').val(), 'DD/MM/YYYY HH:mm');
-                                    zdiff = moment.utc(end.diff(start)).format('HH:mm');
-                                    $('#api_challenge_duration').val(zdiff);
-                                    
-                                }
                                 
+                                }
                             }
                         });
                         $('#api_challenge_hashtag_user').val(contestVal.replace(/\s/g,"").replace("-","_")).attr('readonly','readonly');

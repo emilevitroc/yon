@@ -251,6 +251,11 @@ class UserController extends Controller
             $name = new \stdClass();
             $name->id = $entity->getId();
             $name->authid = $entity->getUser()->getId();
+            if($entity->getUser()->getFirstName() !== ""){
+                $name->firstName = $entity->getUser()->getFirstName();
+            }else{
+                $name->firstName = 'Pas de nom ( ' . $entity->getPhoneNumber().' )';
+            }
 //            $name->value = $entity->getUser()->getUsername() . ' (' . $entity->getPhoneNumber().')';
             $name->value = $entity->getId().'-'.$entity->getUser()->getUsername().'-'.$entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';
             
@@ -265,7 +270,7 @@ class UserController extends Controller
 
         return $response;
     }
-
+    
     private function getDataJson($request, $nbTotal, $nbDisplayed, $values, $template)
     {
         $data['sEcho']                = $request->query->get('sEcho');

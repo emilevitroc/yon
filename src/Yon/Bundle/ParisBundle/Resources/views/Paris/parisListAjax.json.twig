@@ -15,7 +15,7 @@
         {% endif %}
         {% 
         set value = [
-            apiChallenge.id,
+            apiChallenge.id,           
             apiChallenge.title,
             name ,
             apiChallenge.startDate|date('d/m/Y H:i:s', "Europe/Paris"),
@@ -24,6 +24,7 @@
             apiChallenge.betsCount,
             apiChallenge.getBetsStatistics(),
             concours,
+            apiChallenge.result,
             '<a href="javascript:;" onclick="addChallengeToContest('~apiChallenge.id~');" title="Ajouter à un councours"><i class="fa fa-plus btn-mini-rectif" aria-hidden="true"></i></a>'~
             '<a href="'~path('apichallenge_edit', { id: apiChallenge.id} )~'"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>'~
             '<a><button class="btn btn-mini btn-mini-rectif" onclick="supprimerParis('~apiChallenge.id~')"> Supprimer</button></a>'~

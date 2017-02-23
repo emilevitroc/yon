@@ -55,7 +55,8 @@
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label required">Partenaire</label>
                                 <div class="col-sm-5">
-                                    <input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user">
+                                    <input readonly="readonly" type="text" class="form-control" id="utilisateurs_to_belong_to_user_name">
+                                    <input  type="hidden" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user">
                                 </div>
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
@@ -96,6 +97,7 @@
                     }
                   });
                 function log( message ) {
+                    $( "#utilisateurs_to_belong_to_user_name" ).val(message.item.firstName) ;
                     $( "#utilisateurs_to_belong_to_user" ).val(message.item.authid) ;
                 }
                 
@@ -109,7 +111,7 @@
                         $('.ui-menu').width(350);
                     }
                 });
-                
+                                
                 /* https://eonasdan.github.io/bootstrap-datetimepicker/ */
                 $('#api_contest_startDate').datetimepicker({
                     format: 'DD/MM/YYYY HH:mm',

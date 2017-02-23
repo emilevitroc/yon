@@ -64,6 +64,8 @@ class ApiContestController extends Controller
             $endDateProv6 = $endDateP6->add(new \DateInterval('PT6H'));
             $name->endDateProvisoir = date_format($endDateProv, 'd/m/Y H:i'); 
             $name->endDateProvisoir6 = date_format($endDateProv6, 'd/m/Y H:i'); 
+            $name->plannedChallengesCount = $apiContest->getPlannedChallengesCount(); 
+            $name->numberOfChallengesInContest = count($apiContest->getContestChallenge()); 
         }
 
         $response = new JsonResponse();
@@ -399,7 +401,7 @@ class ApiContestController extends Controller
         
         $routeName = $this->getRequest()->get('_route');
         $apiContestId = $apiContest->getId();
-        
+              
         $startDateApiContest    = $apiContest->getStartDate();
         $oApiContestchallenges  = $this->getDoctrine()->getManager()->getRepository('YonParisBundle:ApiContestchallenge')->findBy(array(
                     'contest' => $apiContest->getId()
@@ -490,11 +492,14 @@ class ApiContestController extends Controller
             
             return $this->redirectToRoute('apicontest_index');
         }
-
+        
+        $infoUser = $apiContest->getUser();
+        
         return $this->render('YonParisBundle:Apicontest:edit.html.twig', array(
             'apiContest' => $apiContest,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'infoUser' => $infoUser,
         ));
     }
 
