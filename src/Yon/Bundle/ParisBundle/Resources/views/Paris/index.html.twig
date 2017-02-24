@@ -29,6 +29,12 @@
         font-weight: bold;
         text-align: center;
     }
+    .date_filter{
+        width:190px !important;
+    }
+    .status_filter{
+        width:455px !important;
+    }
 </style>
 {% endblock %}
 {% block body %}
@@ -92,9 +98,8 @@
                     <div class="form-horizontal">
                         <div class="form-group">
                             <label for="status" class="col-sm-2 control-label">Status:</label>
-                            {#<input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">#}
                             <div class="col-sm-3">
-                                <select id="status" class="form-control">                       
+                                <select id="status" class="form-control status_filter">                       
                                     <option value="">Tous les paris</option>
                                     {% for keyStatus,valueStatus in valStatus %}
                                         <option  {% if(statusValue != "")%}{% if (statusValue == keyStatus) %} selected="selected" {% endif %}{% endif %} value="{{ keyStatus }}">{{ valueStatus }}</option>
@@ -105,10 +110,10 @@
                         <div class="form-group">
                             <label for="hdeb" class="col-sm-2 control-label"> Heure de début:</label>
                             <div class="col-sm-2 form-inline">
-                               De <input type="text" id="date_deb_filter" placeholder="Heure de début" class="form-control" style="width:190px;">
+                               De <input type="text" id="date_deb_filter" placeholder="Heure de début" class="form-control date_filter">
                             </div>
                             <div class="col-sm-2 form-inline">
-                                à <input type="text"  id="date_fin_filter" placeholder="Heure de Fin" class="form-control" style="width:190px;">
+                                à <input type="text"  id="date_fin_filter" placeholder="Heure de Fin" class="form-control date_filter">
                             </div>
                             <div class="col-sm-3">
                                 <div id=""></div>
