@@ -336,7 +336,7 @@
                             cache: false,
                             data: {id: contestId},
                             success: function(response){
-                                if(response.plannedChallengesCount = response.numberOfChallengesInContest){
+                                if(response.plannedChallengesCount === response.numberOfChallengesInContest){
                                    
                                    $('#api_challenge_contest').val("");
                                    $('#api_challenge_duration').val("");
