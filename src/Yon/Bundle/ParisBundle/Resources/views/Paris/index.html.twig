@@ -182,6 +182,7 @@
             {% if app.session.get('parisListAjaxUrl') %}
                 routePari = "{{ app.session.get('parisListAjaxUrl')}}";
                 routeParis = routePari.replace("&amp;", "&");
+                console.log(routeParis);
             {% endif %}
               
             $(function () {
