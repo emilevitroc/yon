@@ -180,7 +180,7 @@
                     'authUserId': '{{ authUserId }}'
             });
             {% if app.session.get('parisListAjaxUrl') %}
-                routeParis = "{{ app.session.get('parisListAjaxUrl')}}";
+                routeParis = "{{ app.session.get('parisListAjaxUrl')|raw}}";
                 routeParis = routeParis.replace("amp;", "");
                 console.log(routeParis);
             {% endif %}
