@@ -138,12 +138,12 @@ class ApiChallengeController extends Controller
             'search' => $request->query->get('sSearch')
         );
         
-
+        $dateTimeZonePAris = new DateTimeZone("Europe/Paris");
         if(isset($ddeb) && $ddeb !== ""){
             $dDebEx = explode('/',$ddeb);
             $anEx = explode(' ',$dDebEx[2]);
             $resDt1 = $anEx[0].'-'.$dDebEx[1].'-'.$dDebEx[0].' '.$anEx[1];
-            $options['startDate']   = (new \DateTime($resDt1))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+            $options['startDate']   = (new \DateTime($resDt1, $dateTimeZonePAris))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
         }else{
             $options['startDate'] = "";
         }
@@ -152,7 +152,7 @@ class ApiChallengeController extends Controller
             $dFinEx = explode('/',$dfin);
             $anEx2 = explode(' ',$dFinEx[2]);
             $resDt2 = $anEx2[0].'-'.$dFinEx[1].'-'.$dFinEx[0].' '.$anEx2[1];
-            $options['endDate']     = (new \DateTime($resDt2))->setTimezone(new \DateTimeZone('Europe/Paris'))->format('Y-m-d H:i:s');
+            $options['endDate']     = (new \DateTime($resDt2, $dateTimeZonePAris))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
         }else{
             $options['endDate'] = "";
         }
