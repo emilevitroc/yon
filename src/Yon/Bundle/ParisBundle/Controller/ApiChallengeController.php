@@ -131,10 +131,10 @@ class ApiChallengeController extends Controller
         ));
         
         $status = $request->get('status', null);
-        $ddeb = $request->get('amp;ddeb', null);
-        $dfin = $request->get('amp;dfin', null);
-        $nbpartdeb = $request->get('amp;nbpartdeb', null);
-        $nbpartfin = $request->get('amp;nbpartfin', null);
+        $ddeb = $request->get('ddeb', null);
+        $dfin = $request->get('dfin', null);
+        $nbpartdeb = $request->get('nbpartdeb', null);
+        $nbpartfin = $request->get('nbpartfin', null);
         
         $coucoursId = $request->get('coucoursId', null);
         $from = $request->get('amp;from', null);
