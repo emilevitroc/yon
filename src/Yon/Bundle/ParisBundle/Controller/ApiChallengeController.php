@@ -212,7 +212,7 @@ class ApiChallengeController extends Controller
         }
         
         $logger = new Logger('sessvalu');
-        $logger->pushHandler(new StreamHandler($this->kernel->getRootDir() . '/logs/sessvalu.log', Logger::NOTICE));
+        $logger->pushHandler(new StreamHandler($this->get('kernel')->getRootDir() . '/logs/sessvalu.log', Logger::NOTICE));
         $logger->notice('-------------------------------------------------------------------------------------------------------------------------------------');
         $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
 //        $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
