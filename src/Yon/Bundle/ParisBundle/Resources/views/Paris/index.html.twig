@@ -7,8 +7,6 @@
 {% set ddeb = app.session.get('ddeb') %}
 {% if(statusVal is null) %}
     {% set statusValue = "" %}
-{% else %}
-    {% set statusValue = app.session.get('statusValue') %}
 {% endif %}
 {% block stylesheets %}
     {{ parent() }}
@@ -112,10 +110,10 @@
                         <div class="form-group">
                             <label for="hdeb" class="col-sm-2 control-label"> Heure de début:</label>
                             <div class="col-sm-2 form-inline">
-                               De <input type="text" id="date_deb_filter" placeholder="Heure de début" class="form-control date_filter">
+                                De <input type="text" id="date_deb_filter" placeholder="Heure de début" class="form-control date_filter" value="{{ dfin }}">
                             </div>
                             <div class="col-sm-2 form-inline">
-                                à <input type="text"  id="date_fin_filter" placeholder="Heure de Fin" class="form-control date_filter">
+                                à <input type="text"  id="date_fin_filter" placeholder="Heure de Fin" class="form-control date_filter"  value="{{ dfin }}">
                             </div>
                             <div class="col-sm-3">
                                 <div id=""></div>

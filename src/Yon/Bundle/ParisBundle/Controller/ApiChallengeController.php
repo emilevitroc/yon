@@ -14,6 +14,10 @@ use Yon\Bundle\ParisBundle\Entity\ApiContestchallenge;
 use Yon\Bundle\ParisBundle\Form\ApiChallengeType;
 use Yon\Bundle\ParisBundle\Entity\ApiTrendingTopics;
 use Yon\Bundle\ParisBundle\Util\UniqueId;
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 /**
  * ApiChallenge controller.
  *
@@ -193,7 +197,8 @@ class ApiChallengeController extends Controller
         $parisListAjaxUrl = $this->generateUrl('yon_paris_list_ajax', $LastparisAjaxParams , true);
         
         
-        $session->set('parisListAjaxUrl', $parisListAjaxUrl);
+        $session->set('parisListAjaxUrl', str_replace('amp;', '', $parisListAjaxUrl));
+        
         $session->set('statusValue', $status);
         
         $session->set('dfin', $status);
@@ -205,6 +210,13 @@ class ApiChallengeController extends Controller
         if($userId){
             $options['userId'] = $userId;
         }
+        
+        $logger = new Logger('sessvalu');
+        $logger->pushHandler(new StreamHandler($this->kernel->getRootDir() . '/logs/sessvalu.log', Logger::NOTICE));
+        $logger->notice('-------------------------------------------------------------------------------------------------------------------------------------');
+        $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
+//        $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
+        
         
         $jTemplate = 'YonParisBundle:Paris:parisListAjax.json.twig';
         if(isset($from) && !empty($from)){
