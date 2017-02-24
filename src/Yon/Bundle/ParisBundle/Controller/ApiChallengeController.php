@@ -199,8 +199,6 @@ class ApiChallengeController extends Controller
         
         $session->set('statusValue', $status);
         
-        $session->set('dfin', $status);
-        
         if(isset($coucoursId) && !empty($coucoursId)){
             $options['coucoursId'] = $coucoursId;
         }
@@ -214,6 +212,7 @@ class ApiChallengeController extends Controller
         $logger->notice('-------------------------------------------------------------------------------------------------------------------------------------');
         $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
         $logger->notice('parisListAjaxUrlParam: '.  print_r($LastparisAjaxParams, true));
+        $logger->notice('parisListAjaxUrlParam: '.  print_r($session->get('ddeb'), true));
 //        $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
         
         
