@@ -63,23 +63,75 @@
                     </div>#}
                 </div>
                 <!-- /.box-header -->
-                <div class="status-filter">
-                    <label for="status"> Status:</label>
-                    <select id="status">                       
-                        <option value="">Tous les paris</option>
-                        
-                        {% for keyStatus,valueStatus in valStatus %}
-                            <option  {% if(statusValue != "")%}{% if (statusValue == keyStatus) %} selected="selected" {% endif %}{% endif %} value="{{ keyStatus }}">{{ valueStatus }}</option>
-                        {% endfor %}
-                        
-                        {#<option value="0">paris en cours</option>
-                        <option value="1">paris en attente de réponse</option>
-                        <option value="2">paris passés</option>
-                        <option value="3">paris expiré</option>
-                        <option value="4">paris à venir</option>#}                       
-                    </select>
-                </div>
-                <div class="box-body">                   
+                <!--div class="status-filter">
+                    
+                </div-->
+                <div class="box-body">  
+                    {#<div class="row">
+                        <label for="status"> Status:</label>
+                        <select id="status">                       
+                            <option value="">Tous les paris</option>
+
+                            {% for keyStatus,valueStatus in valStatus %}
+                                <option  {% if(statusValue != "")%}{% if (statusValue == keyStatus) %} selected="selected" {% endif %}{% endif %} value="{{ keyStatus }}">{{ valueStatus }}</option>
+                            {% endfor %}
+
+                            <option value="0">paris en cours</option>
+                            <option value="1">paris en attente de réponse</option>
+                            <option value="2">paris passés</option>
+                            <option value="3">paris expiré</option>
+                            <option value="4">paris à venir</option>                      
+                        </select>
+                        <label for="status"> Heure de début:</label>
+                        <input class="form-control" id="date_deb_filter" placeholder="Date de début" type="text">
+                        <label for="status"> Heure de Fin:</label>
+                        <input class="form-control" id="date_fin_filter" placeholder="Date de fin" type="text">
+                        <label for="status"> Nombre de participant:</label>
+                        <input class="form-control" id="nb_participant_filter" placeholder="Nombre de participant" type="number">
+                    </div>#}
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="status" class="col-sm-2 control-label">Status:</label>
+                            {#<input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">#}
+                            <div class="col-sm-3">
+                                <select id="status" class="form-control">                       
+                                    <option value="">Tous les paris</option>
+                                    {% for keyStatus,valueStatus in valStatus %}
+                                        <option  {% if(statusValue != "")%}{% if (statusValue == keyStatus) %} selected="selected" {% endif %}{% endif %} value="{{ keyStatus }}">{{ valueStatus }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div >
+                        </div>                       
+                        <div class="form-group">
+                            <label for="hdeb" class="col-sm-2 control-label"> Heure de début:</label>
+                            <div class="col-sm-2 form-inline">
+                               De <input type="text" id="date_deb_filter" placeholder="Heure de début" class="form-control" style="width:190px;">
+                            </div>
+                            <div class="col-sm-2 form-inline">
+                                à <input type="text"  id="date_fin_filter" placeholder="Heure de Fin" class="form-control" style="width:190px;">
+                            </div>
+                            <div class="col-sm-3">
+                                <div id=""></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nbparticipant" class="col-sm-2 control-label"> Nombre de participant:</label>
+                            <div class="col-sm-2 form-inline">
+                                De <input type="number" id="nb_participant_filter_deb" placeholder="Nombre de participant" class="form-control">
+                            </div>
+                            <div class="col-sm-2 form-inline">
+                                à <input type="number"  id="nb_participant_filter_fin" placeholder="Nombre de participant" class="form-control"{#onkeyup="comparerValeurParticipant(this);"#}>
+                            </div>
+                            <div class="col-sm-3">
+                                <div id="info_error"></div>
+                            </div>
+                            
+                        </div>
+                        <div class="box-footer">
+                            <button  class="btn btn-primary" id="btn_filter">Rechercher</button>
+                        </div>
+                    </div>
+                    <br/>
                     <table id="list-users" class="table  table-bordered table-striped">
                         <thead >
                              <tr>
@@ -128,6 +180,20 @@
             {% endif %}
               
             $(function () {
+                
+                $('#date_deb_filter').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm',
+                    //minDate: moment()
+                });
+                
+                $("#date_deb_filter").on("dp.change", function(e) {
+                    //$('#date_fin_filter').val(e.date.add(0, 'hours').format('DD/MM/YYYY HH:mm'));
+                    $('#date_fin_filter').data("DateTimePicker").minDate(moment(e.date, 'DD/MM/YYYY HH:mm'));
+                });
+                
+                $('#date_fin_filter').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm',
+                });
                 $('#list-users').DataTable(
                 {
                     "pageLength": 100,
@@ -162,7 +228,7 @@
                     },
                 });
                 datat = $("#list-users").DataTable();
-                $('#status').change(function() {
+                {#$('#status').change(function() {
                     
                     oTable = $('#list-users').dataTable();
                     var oSettings = oTable.fnSettings();
@@ -171,7 +237,42 @@
                                     'authUserId': '{{ authUserId }}'
                             });
                     oTable.fnFilter($('.dataTables_filter input').val());
-                } );
+                } );#}
+                
+                $("#btn_filter").click(function(){
+                    
+                    var status      = $('#status').val();
+                    var ddeb        = $('#date_deb_filter').val();
+                    var dfin        = $('#date_fin_filter').val();
+                    var nbpartdeb   = $('#nb_participant_filter_deb').val();
+                    var nbpartfin   = $('#nb_participant_filter_fin').val();
+                    
+                    oTable          = $('#list-users').dataTable();
+                    var oSettings   = oTable.fnSettings();
+                    oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{
+                                    'ddeb' : ddeb,
+                                    'dfin' : dfin,
+                                    'nbpartdeb' : nbpartdeb,
+                                    'nbpartfin' : nbpartfin,
+                                    'status' : status,
+                                    'authUserId': '{{ authUserId }}'
+                            });
+                    oTable.fnFilter($('.dataTables_filter input').val());
+                })
+                
+                $("#nb_participant_filter_fin").bind('input', function(){
+                    var nbParticipantFin = $(this).val();
+
+                    var nbParticipantdeb = $("#nb_participant_filter_deb").val();
+                    if (parseInt(nbParticipantFin) < parseInt(nbParticipantdeb))
+                    {
+                        $(this).val('');
+                        $("#info_error").html("<font color='red'>Veuillez saisir un nombre supérieur ou égale à "+nbParticipantdeb+"</font>");
+                    }else{
+                        $("#info_error").html("");
+                    } 
+                });
+                
             });
             
             function addChallengeToContest(chalengeId){
@@ -223,6 +324,20 @@
                     }
                 });
             }
+            
+            /*function comparerValeurParticipant(nbParticipant) {
+                var nbParticipantFin = nbParticipant;
+
+                var nbParticipantdeb = document.getElementById("nb_participant_filter_deb").value;
+                if (parseInt(nbParticipantFin.value) < parseInt(nbParticipantdeb))
+                {
+                    $('#nb_participant_filter_fin').val('');
+                    $("#info_error").html("Fin devrais supérieur à début");
+                    //alert("Filtre nombre de participant fin dévrait supérieur à celle de nombre de participant début");
+                }else{
+                    $("#info_error").html("");
+                } 
+            }*/
             
 	</script>
 {% endblock %}

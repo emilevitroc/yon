@@ -33,6 +33,28 @@ class ApiChallengeRepository extends EntityRepository
             }
         }
         
+        if ((isset($options['startDate']) && $options['startDate'] !== "") &&  (isset($options['endDate']) && $options['endDate'] !== "")) {
+            
+                $qb
+                ->andWhere('p.startDate  BETWEEN  :startDate AND :endDate ')
+                ->setParameter('startDate', $options['startDate'])
+                ->setParameter('endDate', $options['endDate']);
+            
+        }else{
+            $qb->andWhere('1=1');
+        }
+        
+        if ((isset($options['nbpartdeb']) && $options['nbpartdeb'] !== "") &&  (isset($options['nbpartfin']) && $options['nbpartfin'] !== "")) {
+            
+                $qb
+                ->andWhere('p.betsCount  BETWEEN  :nbpartdeb AND :nbpartfin ')
+                ->setParameter('nbpartdeb', $options['nbpartdeb'])
+                ->setParameter('nbpartfin', $options['nbpartfin']);
+            
+        }else{
+            $qb->andWhere('1=1');
+        }
+        
         if (isset($options['coucoursId']) && $options['coucoursId'] != "") {
             $qb
                 ->andWhere('pc.id = :coucoursId')

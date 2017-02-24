@@ -124,6 +124,11 @@ class ApiChallengeController extends Controller
         ));
         
         $status = $request->get('status', null);
+        $ddeb = $request->get('ddeb', null);
+        $dfin = $request->get('dfin', null);
+        $nbpartdeb = $request->get('nbpartdeb', null);
+        $nbpartfin = $request->get('nbpartfin', null);
+        
         $coucoursId = $request->get('coucoursId', null);
         $from = $request->get('amp;from', null);
         $userId = $request->get('authUserId', null);
@@ -132,6 +137,30 @@ class ApiChallengeController extends Controller
         $options = array(
             'search' => $request->query->get('sSearch')
         );
+        
+
+        if(isset($ddeb) && $ddeb !== ""){
+            $dDebEx = explode('/',$ddeb);
+            $anEx = explode(' ',$dDebEx[2]);
+            $resDt1 = $anEx[0].'-'.$dDebEx[1].'-'.$dDebEx[0].' '.$anEx[1];
+            $options['startDate']   = (new \DateTime($resDt1))->format('Y-m-d h:i:s');
+        }else{
+            $options['startDate'] = "";
+        }
+        
+        if(isset($dfin) && $dfin !== ""){
+            $dFinEx = explode('/',$dfin);
+            $anEx2 = explode(' ',$dFinEx[2]);
+            $resDt2 = $anEx2[0].'-'.$dFinEx[1].'-'.$dFinEx[0].' '.$anEx2[1];
+            $options['endDate']     = (new \DateTime($resDt2))->format('Y-m-d h:i:s');
+        }else{
+            $options['endDate'] = "";
+        }
+       
+        $options['nbpartdeb']     = $nbpartdeb;
+        
+        $options['nbpartfin']     = $nbpartfin;
+        
         if(isset($status) && !empty($status)){
             $options['status'] = $status;
         } else {
@@ -146,6 +175,16 @@ class ApiChallengeController extends Controller
         if($status){
             $LastparisAjaxParams['status'] = $request->get('status', null);
         }
+        
+        if($ddeb){
+            $LastparisAjaxParams['ddeb'] = $request->get('amp;ddeb', null);
+        }
+        
+        if($dfin){
+            
+            $LastparisAjaxParams['dfin'] = $request->get('amp;dfin', null);
+        }
+
         $parisListAjaxUrl = $this->generateUrl('yon_paris_list_ajax', $LastparisAjaxParams , true);
         $session->set('parisListAjaxUrl', $parisListAjaxUrl);
         $session->set('statusValue', $status);
@@ -731,8 +770,8 @@ class ApiChallengeController extends Controller
         $custHeaderContents = array('Authorization: '. $session->get ( 'yon_token'));
         $result = $curlService->curlDelete($delCouponUrl, $custHeaderContents);
         $response = json_decode($result);
-        var_dump($response);
-        die();
+        /*var_dump($response);
+        die();*/
     }
 
     /**
