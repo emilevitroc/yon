@@ -131,10 +131,10 @@ class ApiChallengeController extends Controller
         ));
         
         $status = $request->get('status', null);
-        $ddeb = $request->get('ddeb', null);
-        $dfin = $request->get('dfin', null);
-        $nbpartdeb = $request->get('nbpartdeb', null);
-        $nbpartfin = $request->get('nbpartfin', null);
+        $ddeb = $request->get('amp;ddeb', null);
+        $dfin = $request->get('amp;dfin', null);
+        $nbpartdeb = $request->get('amp;nbpartdeb', null);
+        $nbpartfin = $request->get('amp;nbpartfin', null);
         
         $coucoursId = $request->get('coucoursId', null);
         $from = $request->get('amp;from', null);
@@ -144,7 +144,16 @@ class ApiChallengeController extends Controller
         $options = array(
             'search' => $request->query->get('sSearch')
         );
-        $LastparisAjaxParams = array('authUserId'=> $userId);
+        if(isset($status) && !empty($status)){
+            $options['status'] = $status;
+            $LastparisAjaxParams['status'] = $status;
+        } else {
+            if( $status == 0 ) {
+                $options['status'] = $status;
+                $LastparisAjaxParams['status'] = $status;
+            }
+        }
+//        $LastparisAjaxParams['authUserId'] = $userId;
         
         $dateTimeZonePAris = new \DateTimeZone("Europe/Paris");
         if(isset($ddeb) && $ddeb !== ""){
@@ -172,16 +181,6 @@ class ApiChallengeController extends Controller
         $options['nbpartdeb']     = $nbpartdeb;
         
         $options['nbpartfin']     = $nbpartfin;
-        
-        if(isset($status) && !empty($status)){
-            $options['status'] = $status;
-            $LastparisAjaxParams['status'] = $status;
-        } else {
-            if( $status == 0 ) {
-                $options['status'] = $status;
-                $LastparisAjaxParams['status'] = $status;
-            }
-        }
         
 //        if($ddeb){
 //            $LastparisAjaxParams['ddeb'] = $request->get('amp;ddeb', null);

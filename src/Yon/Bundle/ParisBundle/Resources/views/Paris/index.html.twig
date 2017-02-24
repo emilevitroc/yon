@@ -245,26 +245,9 @@
                 } );#}
                 
                 $("#btn_filter").click(function(){
-                    
-                    var status      = $('#status').val();
-                    var ddeb        = $('#date_deb_filter').val();
-                    var dfin        = $('#date_fin_filter').val();
-                    var nbpartdeb   = $('#nb_participant_filter_deb').val();
-                    var nbpartfin   = $('#nb_participant_filter_fin').val();
-                    
-                    oTable          = $('#list-users').dataTable();
-                    var oSettings   = oTable.fnSettings();
-                    oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{
-                                    'ddeb' : ddeb,
-                                    'dfin' : dfin,
-                                    'nbpartdeb' : nbpartdeb,
-                                    'nbpartfin' : nbpartfin,
-                                    'status' : status,
-                                    'authUserId': '{{ authUserId }}'
-                            });
-                    oTable.fnFilter($('.dataTables_filter input').val());
+                    initDatatable();
                 })
-                
+                initDatatable();
                 /*
                 $("#nb_participant_filter_fin").bind('input', function(){
                     var nbParticipantFin = $(this).val();
@@ -281,6 +264,26 @@
                 */
                 
             });
+            
+            function initDatatable(){
+                var status      = $('#status').val();
+                var ddeb        = $('#date_deb_filter').val();
+                var dfin        = $('#date_fin_filter').val();
+                var nbpartdeb   = $('#nb_participant_filter_deb').val();
+                var nbpartfin   = $('#nb_participant_filter_fin').val();
+
+                oTable          = $('#list-users').dataTable();
+                var oSettings   = oTable.fnSettings();
+                oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{
+                                'ddeb' : ddeb,
+                                'dfin' : dfin,
+                                'nbpartdeb' : nbpartdeb,
+                                'nbpartfin' : nbpartfin,
+                                'status' : status,
+                                'authUserId': '{{ authUserId }}'
+                        });
+                oTable.fnFilter($('.dataTables_filter input').val());
+            }
             
             function addChallengeToContest(chalengeId){
                     bootbox.prompt({
