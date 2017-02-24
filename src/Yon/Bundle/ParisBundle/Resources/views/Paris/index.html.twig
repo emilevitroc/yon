@@ -3,8 +3,10 @@
 {% set menuParis = true %}
 {% set menuParisAll = true %}
 {% set statusValue = app.session.get('statusValue') %}
-{% set dfin = app.session.get('dfin') %}
 {% set ddeb = app.session.get('ddeb') %}
+{% set dfin = app.session.get('dfin') %}
+{% set nbpartdeb = app.session.get('nbpartdeb') %}
+{% set nbpartfin = app.session.get('nbpartfin') %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -120,10 +122,10 @@
                         <div class="form-group">
                             <label for="nbparticipant" class="col-sm-2 control-label"> Nombre de participant:</label>
                             <div class="col-sm-2 form-inline">
-                                De <input type="number" id="nb_participant_filter_deb" placeholder="Nombre de participant" class="form-control">
+                                De <input type="number" id="nb_participant_filter_deb" placeholder="Nombre de participant" class="form-control" value="{{ nbpartdeb }}">
                             </div>
                             <div class="col-sm-2 form-inline">
-                                à <input type="number"  id="nb_participant_filter_fin" placeholder="Nombre de participant" class="form-control"{#onkeyup="comparerValeurParticipant(this);"#}>
+                                à <input type="number"  id="nb_participant_filter_fin" placeholder="Nombre de participant" class="form-control"{#onkeyup="comparerValeurParticipant(this);"#}  value="{{ nbpartfin }}>
                             </div>
                             <div class="col-sm-3">
                                 <div id="info_error"></div>
