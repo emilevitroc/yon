@@ -33,26 +33,35 @@ class ApiChallengeRepository extends EntityRepository
             }
         }
         
-        if ((isset($options['startDate']) && $options['startDate'] !== "") &&  (isset($options['endDate']) && $options['endDate'] !== "")) {
+        if ( (isset($options['startDate']) && $options['startDate'] !== "") ) {
             
                 $qb
-                ->andWhere('p.startDate  BETWEEN  :startDate AND :endDate ')
-                ->setParameter('startDate', $options['startDate'])
+                ->andWhere('p.startDate  >=  :startDate')
+                ->setParameter('startDate', $options['startDate']);
+            
+        }
+        if ((isset($options['endDate']) && $options['endDate'] !== "")) {
+            
+                $qb
+                ->andWhere('p.startDate  <= :endDate ')
                 ->setParameter('endDate', $options['endDate']);
             
-        }else{
-            $qb->andWhere('1=1');
         }
         
-        if ((isset($options['nbpartdeb']) && $options['nbpartdeb'] !== "") &&  (isset($options['nbpartfin']) && $options['nbpartfin'] !== "")) {
+        if ((isset($options['nbpartdeb']) && $options['nbpartdeb'] !== "")) {
             
                 $qb
-                ->andWhere('p.betsCount  BETWEEN  :nbpartdeb AND :nbpartfin ')
-                ->setParameter('nbpartdeb', $options['nbpartdeb'])
+                ->andWhere('p.betsCount  >=  :nbpartdeb')
+                ->setParameter('nbpartdeb', $options['nbpartdeb']);
+            
+        }
+        
+        if ((isset($options['nbpartfin']) && $options['nbpartfin'] !== "")) {
+            
+                $qb
+                ->andWhere('p.betsCount  <= :nbpartfin ')
                 ->setParameter('nbpartfin', $options['nbpartfin']);
             
-        }else{
-            $qb->andWhere('1=1');
         }
         
         if (isset($options['coucoursId']) && $options['coucoursId'] != "") {
