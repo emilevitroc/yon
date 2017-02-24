@@ -144,6 +144,7 @@ class ApiChallengeController extends Controller
             $anEx = explode(' ',$dDebEx[2]);
             $resDt1 = $anEx[0].'-'.$dDebEx[1].'-'.$dDebEx[0].' '.$anEx[1];
             $options['startDate']   = (new \DateTime($resDt1, $dateTimeZonePAris))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+            $LastparisAjaxParams['ddeb'] = $ddeb;
         }else{
             $options['startDate'] = "";
         }
@@ -153,6 +154,7 @@ class ApiChallengeController extends Controller
             $anEx2 = explode(' ',$dFinEx[2]);
             $resDt2 = $anEx2[0].'-'.$dFinEx[1].'-'.$dFinEx[0].' '.$anEx2[1];
             $options['endDate']     = (new \DateTime($resDt2, $dateTimeZonePAris))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+            $LastparisAjaxParams['ddeb'] = $dfin;
         }else{
             $options['endDate'] = "";
         }
@@ -176,14 +178,14 @@ class ApiChallengeController extends Controller
             $LastparisAjaxParams['status'] = $request->get('status', null);
         }
         
-        if($ddeb){
-            $LastparisAjaxParams['ddeb'] = $request->get('amp;ddeb', null);
-        }
-        
-        if($dfin){
-            
-            $LastparisAjaxParams['dfin'] = $request->get('amp;dfin', null);
-        }
+//        if($ddeb){
+//            $LastparisAjaxParams['ddeb'] = $request->get('amp;ddeb', null);
+//        }
+//        
+//        if($dfin){
+//            
+//            $LastparisAjaxParams['dfin'] = $request->get('amp;dfin', null);
+//        }
 
         $parisListAjaxUrl = $this->generateUrl('yon_paris_list_ajax', $LastparisAjaxParams , true);
         $session->set('parisListAjaxUrl', $parisListAjaxUrl);

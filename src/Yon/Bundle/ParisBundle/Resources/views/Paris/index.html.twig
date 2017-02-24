@@ -3,7 +3,7 @@
 {% set menuParis = true %}
 {% set menuParisAll = true %}
 {% set statusVal = app.session.get('statusValue') %}
-{% if(statusVal == 0) %}
+{% if(statusVal is null) %}
     {% set statusValue = "" %}
 {% else %}
     {% set statusValue = app.session.get('statusValue') %}
