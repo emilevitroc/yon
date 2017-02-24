@@ -167,6 +167,8 @@ class ApiChallengeController extends Controller
             $session->set('ddeb', $ddeb);
         }else{
             $options['startDate'] = "";
+            $LastparisAjaxParams['ddeb'] = $ddeb;
+            $session->set('ddeb', $ddeb);
         }
         
         if(isset($dfin) && $dfin !== ""){
@@ -178,6 +180,8 @@ class ApiChallengeController extends Controller
             $session->set('dfin', $dfin);
         }else{
             $options['endDate'] = "";
+            $LastparisAjaxParams['dfin'] = $dfin;
+            $session->set('dfin', $dfin);
         }
        
         $options['nbpartdeb']     = $nbpartdeb;
