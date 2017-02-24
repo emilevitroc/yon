@@ -182,7 +182,7 @@ class ApiChallengeController extends Controller
         }
         
         if($status){
-            $LastparisAjaxParams['status'] = $request->get('status', null);
+            $LastparisAjaxParams['status'] = $status;
         }
         
 //        if($ddeb){
@@ -215,6 +215,7 @@ class ApiChallengeController extends Controller
         $logger->pushHandler(new StreamHandler($this->get('kernel')->getRootDir() . '/logs/sessvalu.log', Logger::NOTICE));
         $logger->notice('-------------------------------------------------------------------------------------------------------------------------------------');
         $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
+        $logger->notice('parisListAjaxUrlParam: '.  print_r($LastparisAjaxParams, true));
 //        $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
         
         
