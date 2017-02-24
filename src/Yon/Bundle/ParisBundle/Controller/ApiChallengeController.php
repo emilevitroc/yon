@@ -137,6 +137,7 @@ class ApiChallengeController extends Controller
         $options = array(
             'search' => $request->query->get('sSearch')
         );
+        $LastparisAjaxParams = array('authUserId'=> $userId);
         
         $dateTimeZonePAris = new \DateTimeZone("Europe/Paris");
         if(isset($ddeb) && $ddeb !== ""){
@@ -173,7 +174,7 @@ class ApiChallengeController extends Controller
         
         $session    = $request->getSession ();
         $routeName  = $this->getRequest()->get('_route');   
-        $LastparisAjaxParams = array('authUserId'=> $userId);
+        
         if($status){
             $LastparisAjaxParams['status'] = $request->get('status', null);
         }
