@@ -175,14 +175,12 @@ class ApiChallengeController extends Controller
         
         if(isset($status) && !empty($status)){
             $options['status'] = $status;
+            $LastparisAjaxParams['status'] = $status;
         } else {
             if( $status == 0 ) {
                 $options['status'] = $status;
+                $LastparisAjaxParams['status'] = $status;
             }
-        }
-        
-        if($status){
-            $LastparisAjaxParams['status'] = $status;
         }
         
 //        if($ddeb){
