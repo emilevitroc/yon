@@ -212,7 +212,7 @@ class ApiChallengeController extends Controller
         $logger->notice('-------------------------------------------------------------------------------------------------------------------------------------');
         $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
         $logger->notice('parisListAjaxUrlParam: '.  print_r($LastparisAjaxParams, true));
-        $logger->notice('parisListAjaxUrlParam: '.  print_r($session->get('ddeb'), true));
+        $logger->notice('statusValue: '.  print_r($session->get('statusValue'), true));
 //        $logger->notice('parisListAjaxUrl: '.$parisListAjaxUrl);
         
         
