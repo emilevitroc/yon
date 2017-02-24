@@ -109,6 +109,9 @@ class ApiChallengeController extends Controller
     
     public function parisListAjaxAction(Request $request)
     {
+        $session    = $request->getSession ();
+        $routeName  = $this->getRequest()->get('_route');   
+        
         
         $filters  = $this->getFilters($request);
         $sortings = $this->getSortings($request, array(
@@ -146,6 +149,7 @@ class ApiChallengeController extends Controller
             $resDt1 = $anEx[0].'-'.$dDebEx[1].'-'.$dDebEx[0].' '.$anEx[1];
             $options['startDate']   = (new \DateTime($resDt1, $dateTimeZonePAris))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
             $LastparisAjaxParams['ddeb'] = $ddeb;
+            $session->set('ddeb', $ddeb);
         }else{
             $options['startDate'] = "";
         }
@@ -155,7 +159,8 @@ class ApiChallengeController extends Controller
             $anEx2 = explode(' ',$dFinEx[2]);
             $resDt2 = $anEx2[0].'-'.$dFinEx[1].'-'.$dFinEx[0].' '.$anEx2[1];
             $options['endDate']     = (new \DateTime($resDt2, $dateTimeZonePAris))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
-            $LastparisAjaxParams['ddeb'] = $dfin;
+            $LastparisAjaxParams['dfin'] = $dfin;
+            $session->set('dfin', $dfin);
         }else{
             $options['endDate'] = "";
         }
@@ -172,9 +177,6 @@ class ApiChallengeController extends Controller
             }
         }
         
-        $session    = $request->getSession ();
-        $routeName  = $this->getRequest()->get('_route');   
-        
         if($status){
             $LastparisAjaxParams['status'] = $request->get('status', null);
         }
@@ -189,8 +191,12 @@ class ApiChallengeController extends Controller
 //        }
 
         $parisListAjaxUrl = $this->generateUrl('yon_paris_list_ajax', $LastparisAjaxParams , true);
+        
+        
         $session->set('parisListAjaxUrl', $parisListAjaxUrl);
         $session->set('statusValue', $status);
+        
+        $session->set('dfin', $status);
         
         if(isset($coucoursId) && !empty($coucoursId)){
             $options['coucoursId'] = $coucoursId;
