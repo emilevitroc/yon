@@ -147,10 +147,12 @@ class ApiChallengeController extends Controller
         if(isset($status) && !empty($status)){
             $options['status'] = $status;
             $LastparisAjaxParams['status'] = $status;
+            $session->set('statusValue', $status);
         } else {
             if( $status == 0 ) {
                 $options['status'] = $status;
                 $LastparisAjaxParams['status'] = $status;
+                $session->set('statusValue', $status);
             }
         }
 //        $LastparisAjaxParams['authUserId'] = $userId;
@@ -196,7 +198,6 @@ class ApiChallengeController extends Controller
         
         $session->set('parisListAjaxUrl', str_replace('amp;', '', $parisListAjaxUrl));
         
-        $session->set('statusValue', $status);
         
         if(isset($coucoursId) && !empty($coucoursId)){
             $options['coucoursId'] = $coucoursId;
