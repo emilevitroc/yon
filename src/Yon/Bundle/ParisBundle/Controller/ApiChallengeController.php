@@ -138,7 +138,7 @@ class ApiChallengeController extends Controller
             'search' => $request->query->get('sSearch')
         );
         
-        $dateTimeZonePAris = new DateTimeZone("Europe/Paris");
+        $dateTimeZonePAris = new \DateTimeZone("Europe/Paris");
         if(isset($ddeb) && $ddeb !== ""){
             $dDebEx = explode('/',$ddeb);
             $anEx = explode(' ',$dDebEx[2]);
