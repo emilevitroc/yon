@@ -182,9 +182,11 @@ class ApiChallengeController extends Controller
        
         $options['nbpartdeb']     = $nbpartdeb;
         $session->set('nbpartdeb', $nbpartdeb);
+        $LastparisAjaxParams['nbpartdeb'] = $nbpartdeb;
         
         $options['nbpartfin']     = $nbpartfin;
         $session->set('nbpartfin', $nbpartfin);
+        $LastparisAjaxParams['nbpartfin'] = $nbpartfin;
         
 //        if($ddeb){
 //            $LastparisAjaxParams['ddeb'] = $request->get('amp;ddeb', null);
