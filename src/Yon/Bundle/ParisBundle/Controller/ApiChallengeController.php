@@ -143,7 +143,7 @@ class ApiChallengeController extends Controller
             $dDebEx = explode('/',$ddeb);
             $anEx = explode(' ',$dDebEx[2]);
             $resDt1 = $anEx[0].'-'.$dDebEx[1].'-'.$dDebEx[0].' '.$anEx[1];
-            $options['startDate']   = (new \DateTime($resDt1))->setTimezone(new \DateTimeZone('Europe/Paris'))->format('Y-m-d H:i:s');
+            $options['startDate']   = (new \DateTime($resDt1))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
         }else{
             $options['startDate'] = "";
         }
