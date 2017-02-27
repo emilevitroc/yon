@@ -7,6 +7,7 @@
 {% set dfin = app.session.get('dfin') %}
 {% set nbpartdeb = app.session.get('nbpartdeb') %}
 {% set nbpartfin = app.session.get('nbpartfin') %}
+{% set hashtag = app.session.get('hashtag') %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -34,6 +35,9 @@
     }
     .status_filter{
         width:455px !important;
+    }
+    .hastag_filter{
+        width:209px !important;
     }
 </style>
 {% endblock %}
@@ -131,6 +135,12 @@
                                 <div id="info_error"></div>
                             </div>
                             
+                        </div>
+                        <div class="form-group">
+                            <label for="nbparticipant" class="col-sm-2 control-label"> HashTag:</label>
+                            <div class="col-sm-3">
+                                <input type="text"  id="hashtag_filter" placeholder="hashtag" class="form-control hastag_filter" value="{{ hashtag }}">
+                            </div>
                         </div>
                         <div class="box-footer">
                             <button  class="btn btn-primary" id="btn_filter">Rechercher</button>
@@ -244,14 +254,21 @@
                             });
                     oTable.fnFilter($('.dataTables_filter input').val());
                 } );#}
-                
+                $('#hashtag_filter').keydown(function(e) {
+                    if (e.keyCode == 32 || e.keyCode == 51) { //espace et #
+                        return false;
+                    }
+                    if($('#hashtag_filter').val().length == 0 ){
+                        $('#hashtag_filter').val("#");
+                    }
+                });
                 $("#btn_filter").click(function(){
                     var status      = $('#status').val();
                     var ddeb        = $('#date_deb_filter').val();
                     var dfin        = $('#date_fin_filter').val();
                     var nbpartdeb   = $('#nb_participant_filter_deb').val();
                     var nbpartfin   = $('#nb_participant_filter_fin').val();
-
+                    var hashtag      = $('#hashtag_filter').val();
                     oTable          = $('#list-users').dataTable();
                     var oSettings   = oTable.fnSettings();
                     oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{
@@ -260,25 +277,13 @@
                                     'nbpartdeb' : nbpartdeb,
                                     'nbpartfin' : nbpartfin,
                                     'status' : status,
+                                    'hashtag' : hashtag,
                                     'authUserId': '{{ authUserId }}'
                             });
                     oTable.fnFilter($('.dataTables_filter input').val());
                 })
-                //initDatatable();
-                /*
-                $("#nb_participant_filter_fin").bind('input', function(){
-                    var nbParticipantFin = $(this).val();
-
-                    var nbParticipantdeb = $("#nb_participant_filter_deb").val();
-                    if (parseInt(nbParticipantFin) < parseInt(nbParticipantdeb))
-                    {
-                        $(this).val('');
-                        $("#info_error").html("<font color='red'>Veuillez saisir un nombre supérieur ou égale à "+nbParticipantdeb+"</font>");
-                    }else{
-                        $("#info_error").html("");
-                    } 
-                });
-                */
+                
+                
                 
             });
             
@@ -288,7 +293,7 @@
                 var dfin        = $('#date_fin_filter').val();
                 var nbpartdeb   = $('#nb_participant_filter_deb').val();
                 var nbpartfin   = $('#nb_participant_filter_fin').val();
-
+                var hashtag      = $('#hashtag_filter').val();
                 oTable          = $('#list-users').dataTable();
                 var oSettings   = oTable.fnSettings();
                 oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{
@@ -297,6 +302,7 @@
                                 'nbpartdeb' : nbpartdeb,
                                 'nbpartfin' : nbpartfin,
                                 'status' : status,
+                                'hashtag' : hashtag,
                                 'authUserId': '{{ authUserId }}'
                         });
                 oTable.fnFilter($('.dataTables_filter input').val());

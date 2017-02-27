@@ -56,6 +56,14 @@ class ApiChallengeRepository extends EntityRepository
             
         }
         
+        if ((isset($options['hashtag']) && $options['hashtag'] !== "")) {
+            
+                $qb
+                ->andWhere('ph.tag like :hashtag')
+                ->setParameter('hashtag', '%'.$options['hashtag'].'%');
+            
+        }
+        
         if ((isset($options['nbpartfin']) && $options['nbpartfin'] !== "")) {
             
                 $qb
@@ -100,7 +108,7 @@ class ApiChallengeRepository extends EntityRepository
                 ->andWhere('p.state = :state')
                 ->setParameter('state', $options['state']);
         }
-
+       
         return $qb;
     }
     

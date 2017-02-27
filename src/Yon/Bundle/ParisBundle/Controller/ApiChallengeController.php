@@ -130,11 +130,12 @@ class ApiChallengeController extends Controller
             'pc.name',
         ));
         
-        $status = $request->get('status', null);
-        $ddeb = $request->get('ddeb', null);
-        $dfin = $request->get('dfin', null);
-        $nbpartdeb = $request->get('nbpartdeb', null);
-        $nbpartfin = $request->get('nbpartfin', null);
+        $status     = $request->get('status', null);
+        $ddeb       = $request->get('ddeb', null);
+        $dfin       = $request->get('dfin', null);
+        $hashtag    = $request->get('hashtag', null);
+        $nbpartdeb  = $request->get('nbpartdeb', null);
+        $nbpartfin  = $request->get('nbpartfin', null);
         
         $coucoursId = $request->get('coucoursId', null);
         $from = $request->get('amp;from', null);
@@ -183,7 +184,12 @@ class ApiChallengeController extends Controller
             $LastparisAjaxParams['dfin'] = $dfin;
             $session->set('dfin', $dfin);
         }
-       
+        
+
+        $options['hashtag'] = str_replace('#', '',$hashtag);
+        $session->set('hashtag', $hashtag);
+        $LastparisAjaxParams['hashtag'] = $hashtag;
+        
         $options['nbpartdeb']     = $nbpartdeb;
         $session->set('nbpartdeb', $nbpartdeb);
         $LastparisAjaxParams['nbpartdeb'] = $nbpartdeb;
