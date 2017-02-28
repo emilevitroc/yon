@@ -43,4 +43,10 @@ class ParisManager extends BaseManager
         return $query->getQuery()->getSingleResult();
     }
     
+    public function getContestByDate($options=array())
+    {    	
+        $query = $this->getRepository()->getContestByDateQueryBuilder($options);
+        return $query;
+    }
+    
 }

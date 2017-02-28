@@ -111,6 +111,55 @@ class ApiChallengeController extends Controller
         ));
     }
     
+    public function contestSearchAjaxAction(Request $request)
+    {
+        $session = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url = $this->container->get('router')->generate('yon_user_login');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+        $data = $request->request->all();
+        $options = array();
+        $ddebfilterC = $data['ddebfilterC'];
+        $dfinfilterC = $data['dfinfilterC'];
+        $dateTimeZonePAris = new \DateTimeZone("Europe/Paris");
+        if(isset($ddebfilterC) && $ddebfilterC !== ""){
+            $dDebEx = explode('/',$ddebfilterC);
+            $anEx = explode(' ',$dDebEx[2]);
+            $resDt1 = $anEx[0].'-'.$dDebEx[1].'-'.$dDebEx[0].' '.$anEx[1];
+            $options['ddebfilterC']   = (new \DateTime($resDt1, $dateTimeZonePAris))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+            $session->set('ddebfilterC', $ddebfilterC);
+        }else{
+            $options['ddebfilterC'] = "";
+            $session->set('ddebfilterC', $ddebfilterC);
+        }
+        
+        if(isset($dfinfilterC) && $dfinfilterC !== ""){
+            $dFinEx = explode('/',$dfinfilterC);
+            $anEx2 = explode(' ',$dFinEx[2]);
+            $resDt2 = $anEx2[0].'-'.$dFinEx[1].'-'.$dFinEx[0].' '.$anEx2[1];
+            $options['dfinfilterC']     = (new \DateTime($resDt2, $dateTimeZonePAris))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+            $session->set('dfinfilterC', $dfinfilterC);
+        }else{
+            $options['dfinfilterC'] = "";
+            $session->set('dfinfilterC', $dfinfilterC);
+        }
+        
+        $contestResult   = $this->get('yon_paris.paris_manager')->getContestByDate($options)->getResult();
+        $arrContest = array();
+        foreach($contestResult as $resContest){
+            $obContest = new \stdClass();
+            $obContest->id = $resContest->getId();
+            $obContest->name = $resContest->getName();
+            $obContest->description = $resContest->getDescription();
+            $arrContest[] = $obContest; 
+        }
+        $response = new Response(json_encode($arrContest));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
     public function parisListAjaxAction(Request $request)
     {
         $session    = $request->getSession ();
@@ -136,6 +185,7 @@ class ApiChallengeController extends Controller
         $hashtag    = $request->get('hashtag', null);
         $nbpartdeb  = $request->get('nbpartdeb', null);
         $nbpartfin  = $request->get('nbpartfin', null);
+        $valConcours  = $request->get('valConcours', null);
         
         $coucoursId = $request->get('coucoursId', null);
         $from = $request->get('amp;from', null);
@@ -156,6 +206,19 @@ class ApiChallengeController extends Controller
                 $session->set('statusValue', $status);
             }
         }
+        
+        if(isset($valConcours) && !empty($valConcours)){
+            $options['valConcours'] = $valConcours;
+            $LastparisAjaxParams['valConcours'] = $valConcours;
+            $session->set('valConcours', $valConcours);
+        } else {
+            if( intval($valConcours) === 0 ) {
+                $options['valConcours'] = $valConcours;
+                $LastparisAjaxParams['valConcours'] = $valConcours;
+                $session->set('valConcours', $valConcours);
+            }
+        }
+        
 //        $LastparisAjaxParams['authUserId'] = $userId;
         
         $dateTimeZonePAris = new \DateTimeZone("Europe/Paris");
@@ -1381,5 +1444,5 @@ class ApiChallengeController extends Controller
         }
         
         return new JsonResponse(array('code' => 'success'));
-    }
+    }    
 }

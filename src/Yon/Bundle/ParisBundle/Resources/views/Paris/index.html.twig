@@ -8,6 +8,9 @@
 {% set nbpartdeb = app.session.get('nbpartdeb') %}
 {% set nbpartfin = app.session.get('nbpartfin') %}
 {% set hashtag = app.session.get('hashtag') %}
+{% set ddebfilterC = app.session.get('ddebfilterC') %}
+{% set dfinfilterC = app.session.get('dfinfilterC') %}
+{% set valConcours = app.session.get('valConcours') %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -32,6 +35,9 @@
     }
     .date_filter{
         width:190px !important;
+    }
+    .date_filters{
+        width:204px !important;
     }
     .status_filter{
         width:455px !important;
@@ -142,6 +148,27 @@
                                 <input type="text"  id="hashtag_filter" placeholder="hashtag" class="form-control hastag_filter" value="{{ hashtag }}">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="hdeb" class="col-sm-2 control-label"> Heure de début concours :</label>
+                            <div class="col-sm-2 form-inline">
+                                De <input type="text" id="date_deb_filter_concours" placeholder="Heure de début concours" class="form-control date_filter" value="{{ ddebfilterC }}">
+                            </div>
+                            <div class="col-sm-2 form-inline">
+                                à <input type="text"  id="date_fin_filter_concours" placeholder="Heure de Fin concours" class="form-control date_filters"  value="{{ dfinfilterC }}">
+                            </div>
+                            <div class="col-sm-2">
+                                <div id=""><button class="btn btn-default" id="charger_concours">Charger concours</button></div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div id="">
+                                    <select id="val_concours" class="form-control">                       
+                                        <option value="0">Tous les concours</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                            
                         <div class="box-footer">
                             <button  class="btn btn-primary" id="btn_filter">Rechercher</button>
                         </div>
@@ -206,10 +233,28 @@
                     //$('#date_fin_filter').val(e.date.add(0, 'hours').format('DD/MM/YYYY HH:mm'));
                     $('#date_fin_filter').data("DateTimePicker").minDate(moment(e.date, 'DD/MM/YYYY HH:mm'));
                 });
-                
+                                
                 $('#date_fin_filter').datetimepicker({
                     format: 'DD/MM/YYYY HH:mm',
                 });
+                
+                /* Filtre date concours */
+                $('#date_deb_filter_concours').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm',
+                    //minDate: moment()
+                });
+                
+                $("#date_deb_filter_concours").on("dp.change", function(e) {
+                    //$('#date_fin_filter').val(e.date.add(0, 'hours').format('DD/MM/YYYY HH:mm'));
+                    $('#date_fin_filter_concours').data("DateTimePicker").minDate(moment(e.date, 'DD/MM/YYYY HH:mm'));
+                });
+                
+                $('#date_fin_filter_concours').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm',
+                });
+                
+                
+                
                 $('#list-users').DataTable(
                 {
                     "pageLength": 100,
@@ -268,7 +313,8 @@
                     var dfin        = $('#date_fin_filter').val();
                     var nbpartdeb   = $('#nb_participant_filter_deb').val();
                     var nbpartfin   = $('#nb_participant_filter_fin').val();
-                    var hashtag      = $('#hashtag_filter').val();
+                    var hashtag     = $('#hashtag_filter').val();
+                    var valConcours = $('#val_concours').val();
                     oTable          = $('#list-users').dataTable();
                     var oSettings   = oTable.fnSettings();
                     oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{
@@ -278,13 +324,17 @@
                                     'nbpartfin' : nbpartfin,
                                     'status' : status,
                                     'hashtag' : hashtag,
+                                    'valConcours' : valConcours,
                                     'authUserId': '{{ authUserId }}'
                             });
                     oTable.fnFilter($('.dataTables_filter input').val());
                 })
                 
                 
-                
+                $("#charger_concours").click(function(){
+                    chargerConcours();
+                });
+                chargerConcours();
             });
             
             function initDatatable(){
@@ -293,7 +343,8 @@
                 var dfin        = $('#date_fin_filter').val();
                 var nbpartdeb   = $('#nb_participant_filter_deb').val();
                 var nbpartfin   = $('#nb_participant_filter_fin').val();
-                var hashtag      = $('#hashtag_filter').val();
+                var hashtag     = $('#hashtag_filter').val();
+                var valConcours = $('#val_concours').val();
                 oTable          = $('#list-users').dataTable();
                 var oSettings   = oTable.fnSettings();
                 oSettings.sAjaxSource  = Routing.generate('yon_paris_list_ajax',{
@@ -303,11 +354,33 @@
                                 'nbpartfin' : nbpartfin,
                                 'status' : status,
                                 'hashtag' : hashtag,
+                                'valConcours' : valConcours,
                                 'authUserId': '{{ authUserId }}'
                         });
                 oTable.fnFilter($('.dataTables_filter input').val());
             }
-            
+            function chargerConcours(){
+                var ddebfilterC = $("#date_deb_filter_concours").val();
+                    var dfinfilterC = $("#date_fin_filter_concours").val();
+                    $("#val_concours").html('<option value="0">Tous les concours</option>');
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ path('apichallenge_contest_search_ajax')}}',
+                        dataType: "json",
+                        data: { ddebfilterC: ddebfilterC , dfinfilterC: dfinfilterC },
+                        success: function(response){
+                            
+                            for(i=0;i<response.length;i++){
+                                $("#val_concours").append('<option value='+response[i].id+'>'+response[i].name+'</option>');   
+                            }
+                            if($("#val_concours option[value={{ valConcours }}]").length > 0){
+                                $("#val_concours").val("{{ valConcours }}");
+                            }
+                            
+                            
+                        }
+                    });
+            }
             function addChallengeToContest(chalengeId){
                     bootbox.prompt({
                         title: "Choisir le concours à associer au paris",

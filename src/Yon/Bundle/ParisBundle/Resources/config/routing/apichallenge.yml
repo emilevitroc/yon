@@ -80,6 +80,10 @@ apichallenge_validate_all_challenge_ajax:
     path:     /validate-all-challenge-ajax
     defaults: { _controller: "YonParisBundle:ApiChallenge:validateAllChallengeAjax" }
     methods:  POST
+apichallenge_contest_search_ajax:
+    path:     /contest-search-ajax
+    defaults: { _controller: "YonParisBundle:ApiChallenge:contestSearchAjax" }
+    methods:  POST
 apichallenge_testWebservice:
     path:     /test-webservices
     defaults: { _controller: "YonParisBundle:ApiChallenge:testWebservice" }

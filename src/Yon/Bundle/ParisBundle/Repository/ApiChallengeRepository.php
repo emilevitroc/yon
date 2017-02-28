@@ -33,6 +33,12 @@ class ApiChallengeRepository extends EntityRepository
             }
         }
         
+        if (isset($options['valConcours']) && $options['valConcours'] != "" && intval($options['valConcours']) !== 0) {
+                $qb
+                ->andWhere('pcc.contest = :valConcours')
+                ->setParameter('valConcours', intval($options['valConcours']));
+            
+        } 
         if ( (isset($options['startDate']) && $options['startDate'] !== "") ) {
             
                 $qb
@@ -110,6 +116,34 @@ class ApiChallengeRepository extends EntityRepository
         }
        
         return $qb;
+    }
+    
+    public function getContestByDateQueryBuilder($options=null){
+        $query = 'select c from YonParisBundle:ApiContest c where 1=1 ';
+        
+        if ( (isset($options['ddebfilterC']) && $options['ddebfilterC'] !== "") ) {
+                $query .= ' and c.startDate  >=  :startDateparam';
+        }
+        
+        if ((isset($options['dfinfilterC']) && $options['dfinfilterC'] !== "")) {
+                $query .= ' and c.startDate  <= :endDate';
+        }
+        
+        $query .= ' order by c.id asc';
+        
+        $qb =  $this->getEntityManager()
+                     ->createQuery($query);
+        
+        if (isset($options['ddebfilterC']) && $options['ddebfilterC'] !== "" ) {
+            $qb->setParameter('startDateparam', $options['ddebfilterC']);
+        }
+        
+        if (isset($options['dfinfilterC']) && $options['dfinfilterC'] !== "" ) {
+            $qb->setParameter('endDate', $options['dfinfilterC']);
+        }        
+        
+        return $qb;
+            
     }
     
     public function getNbParisQueryBuilder($options=null)
