@@ -43,6 +43,8 @@ class MessageController extends Controller
         $data = $request->request->all();
         $options = array();
         $arrId   = array();
+        $arrFixedId   = array();
+        $arrClassement   = array();
 //        var_dump($data);
        
         if((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok')){
@@ -99,14 +101,41 @@ class MessageController extends Controller
                 
         }
         
+        // si classement checked
+        if((isset($data['classementChecked'])) && ($data['classementChecked'] == 'classement_ok')){
+            $classementOption = array();
+            if($data['classementFrom'] != ""){
+                $classementOption['minClassement'] = $data['classementFrom'];
+            }
+            if($data['classementTo'] != ""){
+                $classementOption['maxClassement'] = $data['classementTo'];
+            }
+            if($data['classementContest'] != ""){
+                $classementOption['contestId'] = $data['classementContest'];
+            }
+            
+             $usersResult   = $this->get('yon_rank.rank_manager')->getUsersBy($classementOption)->getResult();
+             if($usersResult){
+                foreach($usersResult as $usersResulti)
+                {
+                    array_push($arrClassement, $usersResulti->getUser()->getId());
+                }
+                if(count($arrId) > 0 && count($arrClassement)) {
+                    $arrId = array_intersect($arrId, $arrClassement);
+                }
+             }
+        }
         
         if((isset($data['fixIds'])) && ($data['fixIds'] == 'fixIds')){
             $tUserProfileIds = explode(',', $data['ids']);
             foreach ($tUserProfileIds as $userProfileId) {
                 $utilisateur = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:ApiUserprofile')->find($userProfileId);
                 if($utilisateur){
-                    array_push($arrId,$utilisateur->getUser()->getId());
+                    array_push($arrFixedId, $utilisateur->getUser()->getId());
                 }
+            }
+            if(count($arrId) > 0 && count($arrFixedId) ) {
+                $arrId = array_intersect($arrId, $arrFixedId);
             }
         }
         
@@ -116,7 +145,8 @@ class MessageController extends Controller
                 ((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok')) ||
                 ((isset($data['nbChallenge'])) && ($data['nbChallenge'] == 'nbChallenge_ok')) ||
                 ((isset($data['nbPlayed'])) && ($data['nbPlayed'] == 'nbPlayed_ok')) ||
-                ((isset($data['fixIds'])) && ($data['fixIds'] == 'fixIds'))
+                ((isset($data['fixIds'])) && ($data['fixIds'] == 'fixIds')) ||
+                ((isset($data['classementChecked'])) && ($data['classementChecked'] == 'classement_ok'))
           )
         {
            $data['user_ids'] = join(',',$arrId);

@@ -22,6 +22,21 @@ class ApiContestuserrankingRepository extends EntityRepository
         } else {
             //die('fsdfsd');
         }
+        
+        if ((isset($options['minClassement']) && $options['minClassement'] !== "")) {
+            
+                $qb
+                ->andWhere('ur.rank  >=  :minClassement')
+                ->setParameter('minClassement', $options['minClassement']);
+            
+        }
+        if ((isset($options['maxClassement']) && $options['maxClassement'] !== "")) {
+            
+                $qb
+                ->andWhere('ur.rank  <=  :maxClassement')
+                ->setParameter('maxClassement', $options['maxClassement']);
+            
+        }
 
         if (isset($options['search'])) {
             $qb
