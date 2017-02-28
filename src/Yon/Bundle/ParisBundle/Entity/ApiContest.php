@@ -417,4 +417,18 @@ class ApiContest
     {
         return $this->user;
     }
+    
+    public function getParisJoue() {
+        $cnt = 0;
+        if( count($this->getContestChallenge()) > 0 ){
+            foreach ($this->getContestChallenge() as $contestChallenge) {
+                $challenge = $contestChallenge->getChallenge();
+                if($challenge->getBetsCount() > 0){
+                    $cnt = $cnt + 1;
+                }
+            }
+        }
+        
+        return $cnt;
+    }
 }

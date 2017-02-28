@@ -72,6 +72,7 @@
                                 <th>Nb de paris</th>
                                 <th class="td-red">Nb de paris restant</th>
                                 <th>Nb de participants</th>
+                                <th>Nb de paris joués</th>
                                 <th>Partenaire</th>
                                 <th>Actions</th>
                             </tr>
@@ -98,6 +99,7 @@
                                     <td>{{ apiContest.plannedChallengesCount }}</td>
                                     <td class="td-red">{% if apiContest.plannedChallengesCount > 0 %}{{ apiContest.plannedChallengesCount - apiContest.contestChallenge|length }}{% endif %}</td>
                                     <td>{{ apiContest.participantsCount }}</td>
+                                    <td>{{ apiContest.getParisJoue() }}</td>
                                     <td>{{ name }}</td>
                                     <td>
                                          <a href="{{ path('apicontest_edit', { 'id': apiContest.id }) }}"><button class="btn btn-mini btn-mini-rectif"> Editer</button></a>
