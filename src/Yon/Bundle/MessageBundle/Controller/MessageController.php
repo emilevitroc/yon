@@ -87,25 +87,44 @@ class MessageController extends Controller
                 $options['d_nbpl2']   = $newDatepl->format('Y-m-d H:i:s');
             }
         }
-        
-        $userIds              = $this->get('yon_user.user_manager')->getUserIds($options);
-        
-        foreach($userIds as $res)
-        {
-            array_push($arrId,$res->getUser()->getId());
+        if(!empty($options['nbYon']) || !empty($options['nbChallenge']) || !empty($options['nbPlayed'])){
+            
+            $userIds              = $this->get('yon_user.user_manager')->getUserIds($options);
+            if($userIds){
+                foreach($userIds as $res)
+                {
+                    array_push($arrId,$res->getUser()->getId());
+                }
+            }
+                
         }
+        
+        
+        if((isset($data['fixIds'])) && ($data['fixIds'] == 'fixIds')){
+            $tUserProfileIds = explode(',', $data['ids']);
+            foreach ($tUserProfileIds as $userProfileId) {
+                $utilisateur = $this->getDoctrine()->getManager()->getRepository('YonUserBundle:ApiUserprofile')->find($userProfileId);
+                if($utilisateur){
+                    array_push($arrId,$utilisateur->getUser()->getId());
+                }
+            }
+        }
+        
         array_push($arrId,46506);
 
-        if(((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok')) || ((isset($data['nbChallenge'])) && ($data['nbChallenge'] == 'nbChallenge_ok')) || ((isset($data['nbPlayed'])) && ($data['nbPlayed'] == 'nbPlayed_ok')))
+        if(
+                ((isset($data['nbYon'])) && ($data['nbYon'] == 'nbYon_ok')) ||
+                ((isset($data['nbChallenge'])) && ($data['nbChallenge'] == 'nbChallenge_ok')) ||
+                ((isset($data['nbPlayed'])) && ($data['nbPlayed'] == 'nbPlayed_ok')) ||
+                ((isset($data['fixIds'])) && ($data['fixIds'] == 'fixIds'))
+          )
         {
            $data['user_ids'] = join(',',$arrId);
         }else{
             $data['user_ids'] = null;
         }
 
-        //var_dump($data);
-        
-        //die();
+//        var_dump($data);die();
         
         $activitiesUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('activities');
 
