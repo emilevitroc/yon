@@ -29,6 +29,30 @@ class MessageController extends Controller
         
         return $this->render('YonMessageBundle:Message:index.html.twig');
     }
+    
+    public function contestMessageAjaxAction(Request $request)
+    {
+        $session        = $request->getSession ();
+        if(!$session->get ( 'yon_token')){
+            $url        = $this->container->get('router')->generate('yon_user_login');
+            $response   = new RedirectResponse($url);
+            return $response;
+        }
+        $contestResult   = $this->get('yon_rank.rank_manager')->getAllContest()->getResult();
+        
+        $arrContest      = array();
+        foreach($contestResult as $resContest){
+            $obContest              = new \stdClass();
+            $obContest->id          = $resContest->getId();
+            $obContest->name        = $resContest->getName();
+            $obContest->description = $resContest->getDescription();
+            $arrContest[]           = $obContest; 
+        }
+        $response = new Response(json_encode($arrContest));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
     public function sendMessageAjaxAction()
     {
         $request = $this->get('request');
@@ -100,6 +124,7 @@ class MessageController extends Controller
             }
                 
         }
+        //var_dump($options);
         
         // si classement checked
         if((isset($data['classementChecked'])) && ($data['classementChecked'] == 'classement_ok')){
@@ -122,6 +147,8 @@ class MessageController extends Controller
                 }
                 if(count($arrId) > 0 && count($arrClassement)) {
                     $arrId = array_intersect($arrId, $arrClassement);
+                }elseif(count($arrId) === 0){
+                    $arrId = $arrClassement;
                 }
              }
         }
@@ -155,11 +182,11 @@ class MessageController extends Controller
         }
 
 //        var_dump($data);die();
-        
-        $activitiesUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('activities');
 
-        $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
+        $activitiesUrl = $this->container->getParameter('api_url').''.$this->container->getParameter('activities');
         
+        $custHeaderContent = array('Authorization: '. $session->get ( 'yon_token'));
+
         if($data['user_ids']){
             $result = $curlService->curlPost($activitiesUrl, $data, $custHeaderContent);
         }else{

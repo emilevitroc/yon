@@ -43,4 +43,10 @@ class RankManager extends BaseManager
         return $query->getQuery()->getSingleResult();
     }
     
+    public function getAllContest()
+    {    	
+        $query = $this->getRepository()->getContestQueryBuilder();
+        return $query;
+    }
+    
 }

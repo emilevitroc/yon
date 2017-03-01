@@ -5,3 +5,7 @@ yon_message_homepage_send_message_ajax:
     path:     /send-message-ajax
     defaults: { _controller: YonMessageBundle:Message:sendMessageAjax }
     methods:  POST
+yon_message_contest_ajax:
+    path:     /message_contest_ajax
+    defaults: { _controller: YonMessageBundle:Message:contestMessageAjax }
+    methods:  POST

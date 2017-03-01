@@ -48,6 +48,14 @@ class ApiContestuserrankingRepository extends EntityRepository
         return $qb;
     }
     
+    public function getContestQueryBuilder(){
+        $query = 'select c from YonParisBundle:ApiContest c order by c.id asc';
+        
+        $qb =  $this->getEntityManager()
+                    ->createQuery($query);
+        return $qb;
+    }
+    
     public function getNbUsersQueryBuilder($options=null)
     {
     	
