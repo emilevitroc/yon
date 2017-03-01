@@ -29,7 +29,77 @@ class ApiUserprofileRepository extends EntityRepository
 //            }
 //            
 //        }
-
+        
+        if ((isset($options['rankdeb']) && $options['rankdeb'] !== "")) {
+                $qb
+                ->andWhere('u.rank  >=  :rankdeb')
+                ->setParameter('rankdeb', $options['rankdeb']);
+        }
+        
+        if ((isset($options['rankfin']) && $options['rankfin'] !== "")) {
+                $qb
+                ->andWhere('u.rank  <= :rankfin ')
+                ->setParameter('rankfin', $options['rankfin']);
+        }
+        
+        if ((isset($options['nbparisdeb']) && $options['nbparisdeb'] !== "")) {
+                $qb
+                ->andWhere('u.challengesCount  >=  :nbparisdeb')
+                ->setParameter('nbparisdeb', $options['nbparisdeb']);
+        }
+        
+        if ((isset($options['nbparisfin']) && $options['nbparisfin'] !== "")) {
+                $qb
+                ->andWhere('u.challengesCount  <= :nbparisfin ')
+                ->setParameter('nbparisfin', $options['nbparisfin']);
+        }
+        
+        
+        if ((isset($options['nbfollowersdeb']) && $options['nbfollowersdeb'] !== "")) {
+                $qb
+                ->andWhere('u.followersCount  >=  :nbfollowersdeb')
+                ->setParameter('nbfollowersdeb', $options['nbfollowersdeb']);
+        }
+        
+        if ((isset($options['nbfollowersfin']) && $options['nbfollowersfin'] !== "")) {
+                $qb
+                ->andWhere('u.followersCount  <= :nbfollowersfin ')
+                ->setParameter('nbfollowersfin', $options['nbfollowersfin']);
+        }
+        
+        
+        if ((isset($options['nbfolloweddeb']) && $options['nbfolloweddeb'] !== "")) {
+                $qb
+                ->andWhere('u.followingsCount  >=  :nbfolloweddeb')
+                ->setParameter('nbfolloweddeb', $options['nbfolloweddeb']);
+        }
+        
+        if ((isset($options['nbfollowedfin']) && $options['nbfollowedfin'] !== "")) {
+                $qb
+                ->andWhere('u.followingsCount  <= :nbfollowedfin ')
+                ->setParameter('nbfollowedfin', $options['nbfollowedfin']);
+        }
+        
+        
+        if ((isset($options['pointsdeb']) && $options['pointsdeb'] !== "")) {
+                $qb
+                ->andWhere('u.balance  >=  :pointsdeb')
+                ->setParameter('pointsdeb', $options['pointsdeb']);
+        }
+        
+        if ((isset($options['pointsfin']) && $options['pointsfin'] !== "")) {
+                $qb
+                ->andWhere('u.balance  <= :pointsfin ')
+                ->setParameter('pointsfin', $options['pointsfin']);
+        }
+        
+        
+        if ((isset($options['valTypeUser']) && !empty($options['valTypeUser']))) {
+                $qb
+                ->andWhere('u.type  IN (:valTypeUser)')
+                ->setParameter('valTypeUser',  $options['valTypeUser'] , \Doctrine\DBAL\Connection::PARAM_STR_ARRAY);
+        }
+        
         if (isset($options['search'])) {
             $qb
                 ->andWhere('u.id = :searchId OR uh.username like :searchName OR u.phoneNumber like :searchName')

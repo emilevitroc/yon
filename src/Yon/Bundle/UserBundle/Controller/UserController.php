@@ -165,7 +165,8 @@ class UserController extends Controller
             $response = new RedirectResponse($url);
             return $response;
         }
-        
+        $ApiUserprofile = new ApiUserprofile();
+        $typeUser = $ApiUserprofile::$USER_TYPE;
 //        if($session->get ( 'privileges') == '' || ( $session->get ( 'privileges') != 'all' && !in_array($this->container->get('request')->get('_route'), explode(',', $session->get ( 'privileges')))) ){
 //            throw new AccessDeniedHttpException ();
 //        }
@@ -184,12 +185,15 @@ class UserController extends Controller
 //        var_dump($response);die;
         
 //        return $this->render('YonUserBundle:User:index.html.twig', array('utilisateurs' => $response));
-        return $this->render('YonUserBundle:User:index.html.twig');
+        return $this->render('YonUserBundle:User:index.html.twig', array(
+            'typeUser' => $typeUser
+            )
+        );
     }
     
     public function userListAjaxAction(Request $request)
     {
-        
+        $session    = $request->getSession ();
         $filters  = $this->getFilters($request);
         $sortings = $this->getSortings($request, array(
             'u.id',
@@ -203,11 +207,74 @@ class UserController extends Controller
             'u.type',
         ));
 //        $customerUid = $request->get('cust');
+        $rankdeb         = $request->get('rankdeb', null);
+        $rankfin         = $request->get('rankfin', null);
+        $nbparisdeb      = $request->get('nbparisdeb', null);
+        $nbparisfin      = $request->get('nbparisfin', null);
+        $nbfollowersdeb  = $request->get('nbfollowersdeb', null);
+        $nbfollowersfin  = $request->get('nbfollowersfin', null);
+        $nbfolloweddeb   = $request->get('nbfolloweddeb', null);
+        $nbfollowedfin   = $request->get('nbfollowedfin', null);
+        $pointsdeb       = $request->get('pointsdeb', null);
+        $pointsfin       = $request->get('pointsfin', null);
+        $valTypeUser       = $request->get('valTypeUser', null);
         
-        
+
         $options = array(
             'search' => $request->query->get('sSearch')
         );
+        
+        $options['rankdeb']             = $rankdeb;
+        $session->set('rankdeb', $rankdeb);
+        $LastUserAjaxParams['rankdeb']  = $rankdeb;
+        
+        $options['rankfin']             = $rankfin;
+        $session->set('rankfin', $rankfin);
+        $LastUserAjaxParams['rankfin']  = $rankfin;
+        
+        
+        $options['nbparisdeb']            = $nbparisdeb;
+        $session->set('nbparisdeb', $nbparisdeb);
+        $LastUserAjaxParams['nbparisdeb'] = $nbparisdeb;
+        
+        $options['nbparisfin']            = $nbparisfin;
+        $session->set('nbparisfin', $nbparisfin);
+        $LastUserAjaxParams['nbparisfin'] = $nbparisfin;
+        
+        
+        $options['nbfollowersdeb']            = $nbfollowersdeb;
+        $session->set('nbfollowersdeb', $nbfollowersdeb);
+        $LastUserAjaxParams['nbfollowersdeb'] = $nbfollowersdeb;
+        
+        $options['nbfollowersfin']            = $nbfollowersfin;
+        $session->set('nbfollowersfin', $nbfollowersfin);
+        $LastUserAjaxParams['nbfollowersfin'] = $nbfollowersfin;
+        
+        
+        $options['nbfolloweddeb']            = $nbfolloweddeb;
+        $session->set('nbfolloweddeb', $nbfolloweddeb);
+        $LastUserAjaxParams['nbfolloweddeb'] = $nbfolloweddeb;
+        
+        $options['nbfollowedfin']            = $nbfollowedfin;
+        $session->set('nbfollowedfin', $nbfollowedfin);
+        $LastUserAjaxParams['nbfollowedfin'] = $nbfollowedfin;
+        
+        
+        $options['pointsdeb']            = $pointsdeb;
+        $session->set('pointsdeb', $pointsdeb);
+        $LastUserAjaxParams['pointsdeb'] = $pointsdeb;
+        
+        $options['pointsfin']            = $pointsfin;
+        $session->set('pointsfin', $pointsfin);
+        $LastUserAjaxParams['pointsfin'] = $pointsfin;
+        
+        
+        $options['valTypeUser']            = $valTypeUser;
+        $session->set('valTypeUser', $valTypeUser);
+        $LastUserAjaxParams['valTypeUser'] = $valTypeUser;
+        
+        $userListAjaxUrl = $this->generateUrl('yon_user_list_ajax', $LastUserAjaxParams , true);
+        $session->set('userListAjaxUrl', str_replace('amp;', '', $userListAjaxUrl));
         
 //        if($customerUid){
 //            $options['customerUid'] = $customerUid;

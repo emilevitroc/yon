@@ -2,6 +2,17 @@
 {% block title %}{{ parent() }} Utillisateurs {% endblock %}
 {% set menuUsers = true %}
 {% set menuUsersAll = true %}
+{% set rankdeb = app.session.get('rankdeb') %}
+{% set rankfin = app.session.get('rankfin') %}
+{% set nbparisdeb = app.session.get('nbparisdeb') %}
+{% set nbparisfin = app.session.get('nbparisfin') %}
+{% set nbfollowersdeb = app.session.get('nbfollowersdeb') %}
+{% set nbfollowersfin = app.session.get('nbfollowersfin') %}
+{% set nbfolloweddeb = app.session.get('nbfolloweddeb') %}
+{% set nbfollowedfin = app.session.get('nbfollowedfin') %}
+{% set pointsdeb = app.session.get('pointsdeb') %}
+{% set pointsfin = app.session.get('pointsfin') %}
+{% set valTypeUser = app.session.get('valTypeUser') %}
 {% block stylesheets %}
     {{ parent() }}
 <style type="text/css">
@@ -15,6 +26,18 @@
         font-size: 2.1em;
         font-weight: bold;
         text-align: center;
+    }
+    .date_filter{
+        width:190px !important;
+    }
+    .date_filters{
+        width:204px !important;
+    }
+    .status_filter{
+        width:455px !important;
+    }
+    .hastag_filter{
+        width:209px !important;
     }
 </style>
 {% endblock %}
@@ -40,7 +63,87 @@
                     </div>
                 </div>
                 <!-- /.box-header -->
-   
+                <div class="form-horizontal">
+                    
+                    <div class="form-group">
+                        <label for="nbparticipant" class="col-sm-2 control-label">Rang:</label>
+                        <div class="col-sm-2 form-inline">
+                            De <input type="number" id="rank_filter_deb" placeholder="Rang minimum" class="form-control" value="{{ rankdeb }}">
+                        </div>
+                        <div class="col-sm-2 form-inline">
+                            à <input type="number"  id="rank_filter_fin" placeholder="Rang maximum" class="form-control" value="{{ rankfin }}">
+                        </div>
+                        <div class="col-sm-3">
+                            <div id="info_error"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nbparticipant" class="col-sm-2 control-label">Nombre de paris créés:</label>
+                        <div class="col-sm-2 form-inline">
+                            De <input type="number" id="nbparis_filter_deb" placeholder="Nb paris créés minimum" class="form-control" value="{{ nbparisdeb }}">
+                        </div>
+                        <div class="col-sm-2 form-inline">
+                            à <input type="number"  id="nbparis_filter_fin" placeholder="Nb paris créés maximum" class="form-control" value="{{ nbparisfin }}">
+                        </div>
+                        <div class="col-sm-3">
+                            <div id="info_error"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nbparticipant" class="col-sm-2 control-label">Nombre de Followers:</label>
+                        <div class="col-sm-2 form-inline">
+                            De <input type="number" id="nbfollowers_filter_deb" placeholder="Nb Followers minimum" class="form-control" value="{{ nbfollowersdeb }}">
+                        </div>
+                        <div class="col-sm-2 form-inline">
+                            à <input type="number"  id="nbfollowers_filter_fin" placeholder="Nb Followers maximum" class="form-control" value="{{ nbfollowersfin }}">
+                        </div>
+                        <div class="col-sm-3">
+                            <div id="info_error"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nbparticipant" class="col-sm-2 control-label">Nombre de Followed:</label>
+                        <div class="col-sm-2 form-inline">
+                            De <input type="number" id="nbfollowed_filter_deb" placeholder="Nb Followed minimum" class="form-control" value="{{ nbfolloweddeb }}">
+                        </div>
+                        <div class="col-sm-2 form-inline">
+                            à <input type="number"  id="nbfollowed_filter_fin" placeholder="Nb Followed maximum" class="form-control" value="{{ nbfollowedfin }}">
+                        </div>
+                        <div class="col-sm-3">
+                            <div id="info_error"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nbparticipant" class="col-sm-2 control-label">Points:</label>
+                        <div class="col-sm-2 form-inline">
+                            De <input type="number" id="points_filter_deb" placeholder="Points minimum" class="form-control" value="{{ pointsdeb }}">
+                        </div>
+                        <div class="col-sm-2 form-inline">
+                            à <input type="number"  id="points_filter_fin" placeholder="Points maximum" class="form-control" value="{{ pointsfin }}">
+                        </div>
+                        <div class="col-sm-3">
+                            <div id="info_error"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nbparticipant" class="col-sm-2 control-label">Type:</label>
+                        <div class="col-sm-10 form-inline">
+                            {% for keyTypeUser,valueTypeUser in typeUser %}
+                                <input type="checkbox" value="{{ keyTypeUser }}" id="type_user" class="type_user" {% if keyTypeUser in valTypeUser %} checked="checked"{% endif %}>{{ valueTypeUser }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="box-footer">
+                        <button  class="btn btn-primary" id="btn_filter">Rechercher</button>
+                    </div>
+                    
+                </div>
                 <div class="box-body">
                     <table id="list-users" class="table  table-bordered table-striped">
                         <thead >
@@ -83,6 +186,14 @@
     {{ parent() }}
 	<script type="text/javascript">
             $(function () {
+                
+                var routeUsers = Routing.generate('yon_user_list_ajax');
+                
+                {% if app.session.get('userListAjaxUrl') %}
+                    routeUsers = "{{ app.session.get('userListAjaxUrl')|raw}}";
+                    routeUsers = routeUsers.replace("amp;", "");
+                {% endif %}
+                
                 $('#list-users').DataTable(
                 {
                     "aoColumns": [{"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": true}, {"bSortable": false}],
@@ -90,7 +201,7 @@
                     "bProcessing": true,
                     "bServerSide": true,
                     "bFilter": true,
-                    "sAjaxSource": "{{ path('yon_user_list_ajax') }}",
+                    "sAjaxSource": routeUsers,
                     "stateSave": true,
                     "oLanguage": {
                         "sProcessing": "traitement...",
@@ -107,6 +218,43 @@
                         //do whatever  
                      },
                 });
+                
+                datat = $("#list-users").DataTable();
+                $("#btn_filter").click(function(){
+                    var valTypeUser = [];
+                    $(':checkbox:checked').each(function(i){
+                        valTypeUser[i] = $(this).val();
+                    });
+                    
+                    var rankdeb     = $('#rank_filter_deb').val();
+                    var rankfin     = $('#rank_filter_fin').val();
+                    var nbparisdeb  = $('#nbparis_filter_deb').val();
+                    var nbparisfin  = $('#nbparis_filter_fin').val();
+                    var nbfollowersdeb  = $('#nbfollowers_filter_deb').val();
+                    var nbfollowersfin  = $('#nbfollowers_filter_fin').val();
+                    var nbfolloweddeb  = $('#nbfollowed_filter_deb').val();
+                    var nbfollowedfin  = $('#nbfollowed_filter_fin').val();
+                    var pointsdeb   = $('#points_filter_deb').val();
+                    var pointsfin   = $('#points_filter_fin').val();
+                    
+                    oTable          = $('#list-users').dataTable();
+                    var oSettings   = oTable.fnSettings();
+                    oSettings.sAjaxSource  = Routing.generate('yon_user_list_ajax',{
+                                    'rankdeb' : rankdeb,
+                                    'rankfin' : rankfin,
+                                    'nbparisdeb' : nbparisdeb,
+                                    'nbparisfin' : nbparisfin,
+                                    'nbfollowersdeb' : nbfollowersdeb,
+                                    'nbfollowersfin' : nbfollowersfin,
+                                    'nbfolloweddeb' : nbfolloweddeb,
+                                    'nbfollowedfin' : nbfollowedfin,
+                                    'pointsdeb' : pointsdeb,
+                                    'pointsfin' : pointsfin,
+                                    'valTypeUser':valTypeUser,
+                                   
+                            });
+                    oTable.fnFilter($('.dataTables_filter input').val());
+                })
             });
             
 	</script>
