@@ -60,12 +60,13 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label required">Auteur</label>
-                                <div class="col-sm-5">
+                                <!--div class="col-sm-5">
                                     <input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user">
-                                </div>
-                                <div class="col-sm-5">
+                                </div-->
+                                <div class="col-sm-10">
+                                    <input  type="hidden" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user">
                                     <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
-                                </div>
+                                </div>                          
                             </div>
 {#                            {{ form_widget(form) }}#}
                             {#{{ form_row(form.title) }}#}
@@ -501,7 +502,9 @@
                 
             });
             function log( message ) {
-                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
+                    //$( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
+                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.authid) ;
+                    $( "#to_belong_to_user" ).val(message.item.firstName) ;
                 }
                 
                 function presetParisList( oParis ) {

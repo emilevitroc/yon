@@ -846,7 +846,7 @@ class ApiChallengeController extends Controller
         }else{
             $rsItems = "";
         }
-        
+        $infoUser = $apiChallenge->getUser();
         return $this->render('YonParisBundle:Paris:edit.html.twig', array(
             'apiChallenge' => $apiChallenge,
             'edit_form' => $editForm->createView(),
@@ -854,6 +854,7 @@ class ApiChallengeController extends Controller
             'isTrending' => $isTrending,
             'typeCoupon'=>$typeCoupon,
             'resultCouponChallenge'=>$rsItems,
+            'infoUser'=>$infoUser,
         ));
     }
     

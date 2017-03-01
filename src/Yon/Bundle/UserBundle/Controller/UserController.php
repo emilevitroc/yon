@@ -320,11 +320,13 @@ class UserController extends Controller
             $name->authid = $entity->getUser()->getId();
             if($entity->getUser()->getFirstName() !== ""){
                 $name->firstName = $entity->getUser()->getFirstName();
+                $name->value = $entity->getUser()->getFirstName();
             }else{
                 $name->firstName = 'Pas de nom ( ' . $entity->getPhoneNumber().' )';
+                $name->value = 'Pas de nom ( ' . $entity->getPhoneNumber().' )';
             }
 //            $name->value = $entity->getUser()->getUsername() . ' (' . $entity->getPhoneNumber().')';
-            $name->value = $entity->getId().'-'.$entity->getUser()->getUsername().'-'.$entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';
+            //$name->value = $entity->getId().'-'.$entity->getUser()->getUsername().'-'.$entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';
             
 //            $name->label = $entity->getUser()->getUsername();
             $name->label = $entity->getId().'-'.$entity->getUser()->getUsername().'-'.$entity->getDisplayUsername().' (' . $entity->getPhoneNumber().')';

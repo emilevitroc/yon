@@ -50,7 +50,7 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label required">Partenaire</label>
-                            <div class="col-sm-5">
+                            
                                 
                                 {% if(infoUser.firstName != '') %}
                                     {% set nameToDisplay = infoUser.firstName %}
@@ -58,13 +58,13 @@
                                     {% set nameToDisplay = 'Pas de nom ( '~infoUser.user.phoneNumber~' )'   %}
                                 {% endif %}
                                 
-                                <input readonly="readonly" type="text" class="form-control" id="utilisateurs_to_belong_to_user_name" value="{{ nameToDisplay }}">
+                                <!--input readonly="readonly" type="text" class="form-control" id="utilisateurs_to_belong_to_user_name" value="{{ nameToDisplay }}"-->
                                 
                                 <input  type="hidden" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiContest.user %}{{ apiContest.user.id }} {% endif %}">
                                 {#<input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiContest.user %}{{ apiContest.user.id }} {% endif %}">#}
-                            </div>
-                            <div class="col-sm-5">
-                                <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
+                            
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control"  id="to_belong_to_user" value="{{ nameToDisplay }}" placeholder="Rechercher l'utilisateur ici">
                             </div>
                         </div>
                         {{ form_widget(edit_form) }}
@@ -137,8 +137,9 @@
                     }
                   });
                 function log( message ) {
-                    $( "#utilisateurs_to_belong_to_user_name" ).val(message.item.firstName) ;
+                    {#$( "#utilisateurs_to_belong_to_user_name" ).val(message.item.firstName) ;#}
                     $( "#utilisateurs_to_belong_to_user" ).val(message.item.authid) ;
+                    $( "#to_belong_to_user" ).val(message.item.firstName) ;
                 }
                 
                 $( "#to_belong_to_user" ).autocomplete({

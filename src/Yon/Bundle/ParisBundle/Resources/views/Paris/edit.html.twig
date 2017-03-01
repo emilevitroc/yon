@@ -56,13 +56,21 @@
                     </div>
                     {{ form_start(edit_form) }}
                     <div class="box-body">
-                        <div class="form-group">
+                        <div class="form-group">                            
                             <label for="name" class="col-sm-2 control-label required">Auteur</label>
-                            <div class="col-sm-5">
+                            <!--div class="col-sm-5">
                                 <input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiChallenge.user is defined %}{{ apiChallenge.user.user.id }} {% endif %}">
-                            </div>
-                            <div class="col-sm-5">
-                                <input type="text" class="form-control"  id="to_belong_to_user" value="" placeholder="Rechercher l'utilisateur ici">
+                            </div-->
+                            {% if(infoUser.firstName != '') %}
+                                {% set nameToDisplay = infoUser.firstName %}
+                            {% else %}
+                                {% set nameToDisplay = 'Pas de nom ( '~infoUser.user.phoneNumber~' )'   %}
+                            {% endif %}
+                            <input  type="hidden" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if infoUser %}{{ infoUser.id }} {% endif %}">
+                                {#<input readonly="readonly" type="text" class="form-control"  name="to_belong_to_user" id="utilisateurs_to_belong_to_user" value="{% if apiContest.user %}{{ apiContest.user.id }} {% endif %}">#}
+                            
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control"  id="to_belong_to_user" value="{{ nameToDisplay }}" placeholder="Rechercher l'utilisateur ici">
                             </div>
                         </div>
 {#                        {{ form_widget(edit_form) }}#}
@@ -289,7 +297,7 @@
                         success: function(response){
                             if(response.name){
                                 $( "#utilisateurs_to_belong_to_user" ).val(response.userProfileId) ;
-                                $( "#to_belong_to_user" ).val("").attr('readonly','readonly');
+                                //$( "#to_belong_to_user" ).val("").attr('readonly','readonly');
 
                                 contestEndDate = moment(response.endDate, 'DD/MM/YYYY HH:mm');
                                 contestStartDate = moment(response.startDate, 'DD/MM/YYYY HH:mm');
@@ -348,7 +356,7 @@
                                 if(response.name){
                                     
                                     $( "#utilisateurs_to_belong_to_user" ).val(response.userProfileId) ;
-                                    $( "#to_belong_to_user" ).val("").attr('readonly','readonly');
+                                    //$( "#to_belong_to_user" ).val("").attr('readonly','readonly');
                                     
                                     contestEndDate = moment(response.endDate, 'DD/MM/YYYY HH:mm');
                                     var contestStartDate = moment(response.startDate, 'DD/MM/YYYY HH:mm');
@@ -471,7 +479,9 @@
                 });
                 
                 function log( message ) {
-                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
+                    //$( "#utilisateurs_to_belong_to_user" ).val(message.item.id) ;
+                    $( "#utilisateurs_to_belong_to_user" ).val(message.item.authid) ;
+                    $( "#to_belong_to_user" ).val(message.item.firstName) ;
                 }
                 
                 $( "#to_belong_to_user" ).autocomplete({
